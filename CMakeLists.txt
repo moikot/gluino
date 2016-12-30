@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 2.6)
-project(Gluino)
+project(gluino)
 
 set (CMAKE_CXX_FLAGS "-fno-rtti -fno-exceptions -std=c++11 -Isrc -Wall")
 file(GLOB_RECURSE SOURCES "src/*.cpp")
