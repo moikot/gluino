@@ -9,4 +9,9 @@ TEST_CASE("String is formatted", "[toString]")
 		auto s = Core::toString((int)10);
 		REQUIRE(s == "10");
 	}
+	SECTION("float")
+	{
+		auto s = Core::toString((float)10.1);
+		REQUIRE(s == "10.100000");
+	}
 }
