@@ -1,0 +1,22 @@
+language: cpp
+
+install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y -qq build-essential cmake curl lcov
+
+before_script:
+  - export CXX=$COMPILER
+  - git submodule update --init
+  - mkdir build
+  - cd build
+  - cmake -DCOVERALLS=ON -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Debug ..
+
+script:
+  - cmake --build .
+  - ./gluino_test
+
+after_script:
+  - cmake --build . --target coveralls
+
+notifications:
+  email: false
