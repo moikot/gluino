@@ -11,7 +11,7 @@ TEST_CASE("String is formatted", "[toString]")
 	}
 	SECTION("float")
 	{
-		auto s = Core::toString((float)10.1);
-		REQUIRE(s == "10.100000");
+		auto s = Core::toString((float)10.2);
+		REQUIRE(s == "10.200000");
 	}
 }
