@@ -48,7 +48,7 @@ before_script:
   - git submodule update --init
   - mkdir build
   - cd build
-  - cmake -DCOVERALLS=ON -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Debug ..
+  - cmake -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug ..
 
 script:
   - cmake --build .

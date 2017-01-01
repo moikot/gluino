@@ -6,14 +6,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 option(COVERALLS "Turn on coveralls support" OFF)
 option(COVERALLS_UPLOAD "Upload the generated coveralls json" ON)
 
-include(CheckCXXCompilerFlag)
-CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-if(COMPILER_SUPPORTS_CXX11)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-else()
-    message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
-endif()
-
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
 	${PROJECT_SOURCE_DIR}/coveralls-cmake/cmake)
 
@@ -37,7 +29,7 @@ add_library(gluino SHARED ${SOURCES})
 # Setup the coveralls target and tell it to gather
 # coverage data for all the lib sources.
 if (COVERALLS)
-	coveralls_setup("src/*.cpp" ${COVERALLS_UPLOAD}
+	coveralls_setup("${SOURCES}" ${COVERALLS_UPLOAD}
         "${PROJECT_SOURCE_DIR}/coveralls-cmake/cmake")
 endif()
 
