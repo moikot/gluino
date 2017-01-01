@@ -48,6 +48,8 @@ before_script:
   - git submodule update --init
   - mkdir build
   - cd build
+  - export COVERALLS_SERVICE_NAME=travis-ci
+  - export COVERALLS_REPO_TOKEN=abc12345
   - cmake -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug ..
 
 script:
