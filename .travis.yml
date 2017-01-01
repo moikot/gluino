@@ -52,7 +52,6 @@ before_script:
 
 script:
   - cmake --build .
-  - ./gluino_test
 
 after_script:
   - cmake --build . --target coveralls
