@@ -16,6 +16,7 @@ matrix:
 install:
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq build-essential cmake curl lcov
+  - gem install coveralls-lcov
 
 before_script:
   - export CXX=$COMPILER
@@ -26,9 +27,13 @@ before_script:
 
 script:
   - cmake --build .
-
-after_script:
   - cmake --build . --target coveralls
+
+after_success:
+  - lcov --directory . --capture --output-file coverage.info
+  - lcov --remove coverage.info 'tests/*' '/usr/*' --output-file coverage.info
+  - lcov --list coverage.info
+  - coveralls-lcov coverage.info
 
 notifications:
   email: false
