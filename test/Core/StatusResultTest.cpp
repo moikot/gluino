@@ -1,20 +1,16 @@
 
-#include "Catch/catch.hpp"
+#include <gtest/gtest.h>
 
 #include "Core/StatusResult.hpp"
 
 using namespace Core;
 
-TEST_CASE("StatusResult is created", "[StatusResult]")
-{
-	SECTION("Status code is retained")
-	{
-    auto result = StatusResult::makeUnique(StatusCode::OK, "test");
-		REQUIRE(result->getStatusCode() == StatusCode::OK);
-	}
-	SECTION("Message is retainer")
-	{
-    auto result = StatusResult::makeUnique(StatusCode::OK, "test");
-    REQUIRE(result->getMessage() == "test");
-	}
+TEST(StatusResult, Status_Code_Retained) {
+  auto result = StatusResult::makeUnique(StatusCode::OK, "test");
+  ASSERT_EQ(result->getStatusCode(), StatusCode::OK);
+}
+
+TEST(StatusResult, Message_Retained) {
+  auto result = StatusResult::makeUnique(StatusCode::OK, "test");
+  ASSERT_EQ(result->getMessage(), "test");
 }
