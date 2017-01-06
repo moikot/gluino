@@ -15,7 +15,13 @@ before_install:
 - sudo apt-get -qq update
 
 install:
-- sudo apt-get install -y -qq build-essential cmake lcov
+- sudo apt-get install -y -qq build-essential cmake
+# install latest LCOV (1.9 was failing)
+- cd ${TRAVIS_BUILD_DIR}
+- wget http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz
+- tar xf lcov_1.11.orig.tar.gz
+- sudo make -C lcov-1.11/ install
+# Install latest coveralls-lcov
 - gem install coveralls-lcov
 
 before_script:
