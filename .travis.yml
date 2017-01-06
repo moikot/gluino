@@ -1,4 +1,4 @@
-sudo: required 
+sudo: required
 dist: precise
 language: cpp
 
@@ -21,6 +21,7 @@ install:
 - gem install coveralls-lcov
 
 before_script:
+- export CXX=$COMPILER
 - cd ${TRAVIS_BUILD_DIR}
 - lcov --directory . --zerocounters
 
