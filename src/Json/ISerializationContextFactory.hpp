@@ -16,7 +16,7 @@ namespace Json {
 
 class ISerializationContextFactory {
   public:
-    virtual ~ISerializationContextFactory() {}
+    virtual ~ISerializationContextFactory();
 
     virtual Core::StatusResult::Unique create(
       const ISerializationService& serializationService,
