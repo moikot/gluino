@@ -7,7 +7,7 @@
 #ifndef CORE_I_LOOPED_SERVICE_HPP
 #define CORE_I_LOOPED_SERVICE_HPP
 
-#include "IEntity.hpp"
+#include "Core/TypeInfo.hpp"
 
 namespace Core {
 

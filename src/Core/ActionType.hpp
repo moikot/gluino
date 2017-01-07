@@ -19,15 +19,14 @@ public:
   static const ActionType Update;
   static const ActionType Delete;
 
-  std::string  getId() const { return id; }
-
   bool operator==(const ActionType& other) const {
     return id == other.id;
   }
-
   bool operator!=(const ActionType& other) const {
     return !(*this == other);
   }
+
+  std::string getId() const { return id; }
 
   static ActionType getById(std::string id) {
     if (id == Get.getId())
