@@ -5,12 +5,6 @@
 
 using namespace Core;
 
-MessageQueue::MessageQueue() {
-}
-
-MessageQueue::~MessageQueue() {
-}
-
 void
 MessageQueue::loop() {
   while (!messages.empty())
@@ -70,7 +64,6 @@ void
 MessageQueue::processRequest(const Request& request) {
   Logger::message("Processing a request from '" + request.getSender() + "'");
   ActionResult::Unique result;
-  std::list<QueueClient::Shared> deletedControllers;
   auto controller = getController(request);
   if (controller) {
     result = controller->processRequest(request);
