@@ -1,0 +1,18 @@
+{
+  "name": "Gluino",
+  "description": "Middleware library for implementing CQRS",
+  "keywords": "async, middleware, queue, cqrs",
+  "authors":
+  {
+    "name": "Sergey Anisimov",
+    "maintainer": true
+  },
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/anisimovsergey/gluino.git"
+  },
+  "version": "1.0.0",
+  "frameworks": "*",
+  "platforms":"*"
+}
