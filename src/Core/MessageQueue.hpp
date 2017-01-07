@@ -35,7 +35,6 @@ class MessageQueue : public IMessageQueue {
 
   private:
     class MessageComparer {
-        bool reverse;
       public:
         bool operator() (const Message::Shared& lhs, const Message::Shared&rhs) const
         {
