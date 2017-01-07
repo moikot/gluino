@@ -17,7 +17,7 @@
 namespace Core {
 
   template<typename ... Args>
-  std::string stringFormat(const std::string format, Args ... args) {
+  std::string stringFormat(const std::string& format, Args ... args) {
     char buffer [0];
     size_t size = snprintf(buffer, 0, format.c_str(), args ...);
     std::unique_ptr<char[]> buf(new char[size + 1]);
