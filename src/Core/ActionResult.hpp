@@ -2,8 +2,8 @@
 
 // MIT License
 //
-// Moikot
-// https://github.com/anisimovsergey/moikot
+// Gluino
+// https://github.com/anisimovsergey/gluino
 
 #ifndef CORE_ACTION_RESULT_HPP
 #define CORE_ACTION_RESULT_HPP

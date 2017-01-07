@@ -1,8 +1,8 @@
 // Copyright Sergey Anisimov 2016-2017
 // MIT License
 //
-// Moikot
-// https://github.com/anisimovsergey/moikot
+// Gluino
+// https://github.com/anisimovsergey/gluino
 
 #ifndef JSON_SERIALIZATION_SERVICE_HPP
 #define JSON_SERIALIZATION_SERVICE_HPP

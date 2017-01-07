@@ -1,8 +1,8 @@
 // Copyright Sergey Anisimov 2016-2017
 // MIT License
 //
-// Moikot
-// https://github.com/anisimovsergey/moikot
+// Gluino
+// https://github.com/anisimovsergey/gluino
 
 #ifndef CORE_I_MESSAGE_QUEUE_HPP
 #define CORE_I_MESSAGE_QUEUE_HPP

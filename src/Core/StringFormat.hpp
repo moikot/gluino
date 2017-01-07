@@ -2,8 +2,8 @@
 
 // MIT License
 //
-// Moikot
-// https://github.com/anisimovsergey/moikot
+// Gluino
+// https://github.com/anisimovsergey/gluino
 
 #ifndef CORE_STRING_FORMAT_HPP
 #define CORE_STRING_FORMAT_HPP
