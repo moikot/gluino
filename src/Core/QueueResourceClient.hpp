@@ -16,7 +16,7 @@ class QueueResourceClient {
   TYPE_PTRS(QueueResourceClient)
   typedef typename T::Unique TUnique;
   public:
-    QueueResourceClient(QueueClient::Shared queueClient);
+    explicit QueueResourceClient(QueueClient::Shared queueClient);
 
     StatusResult::Unique getResource();
     StatusResult::Unique createResource(TUnique resource);

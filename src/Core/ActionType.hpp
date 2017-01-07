@@ -42,7 +42,7 @@ public:
   }
 
 private:
-  ActionType(const std::string& id) : id(id) {
+  explicit ActionType(const std::string& id) : id(id) {
   }
 
   std::string  id;

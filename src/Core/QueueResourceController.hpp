@@ -23,7 +23,7 @@ class QueueResourceController {
 
   public:
 
-    QueueResourceController(QueueController::Shared queueController) :
+    explicit QueueResourceController(QueueController::Shared queueController) :
       queueController(queueController), typeId(T::TypeId) {
       queueController->setCanProcessRequest(
         std::bind(&QueueResourceController<T>::canProcessReqiest, this, std::placeholders::_1));

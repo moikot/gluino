@@ -19,7 +19,7 @@ namespace Json {
 class SerializationService : public ISerializationService {
   TYPE_PTRS(SerializationService)
   public:
-    SerializationService(
+    explicit SerializationService(
       std::shared_ptr<const ISerializationContextFactory> contextFactory);
 
     // From ISerializationService
