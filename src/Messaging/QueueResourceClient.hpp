@@ -4,12 +4,12 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef CORE_QUEUE_RESOURCE_CLIENT_HPP
-#define CORE_QUEUE_RESOURCE_CLIENT_HPP
+#ifndef MESSAGING_QUEUE_RESOURCE_CLIENT_HPP
+#define MESSAGING_QUEUE_RESOURCE_CLIENT_HPP
 
 #include "QueueClient.hpp"
 
-namespace Core {
+namespace Messaging {
 
 template <typename T>
 class QueueResourceClient {
@@ -171,5 +171,4 @@ QueueResourceClient<T>::onNotification(const Notification& notification) {
 
 }
 
-#include "QueueResourceClient.ipp"
-#endif /* end of include guard: CORE_QUEUE_RESOURCE_CLIENT_HPP */
+#endif /* end of include guard: MESSAGING_QUEUE_RESOURCE_CLIENT_HPP */
