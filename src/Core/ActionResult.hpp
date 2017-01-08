@@ -14,9 +14,18 @@
 namespace Core {
 
 class ActionResult : public IEntity {
-TYPE_PTRS_ABSTRACT(ActionResult)
-public:
-  virtual StatusCode getStatusCode() const = 0;
+  TYPE_PTRS_ABSTRACT(ActionResult)
+
+  public:
+    virtual StatusCode getStatusCode() const {
+      return statusCode;
+    }
+
+  protected:
+    ActionResult(StatusCode statusCode);
+
+  private:
+    const StatusCode statusCode;
 };
 
 }

@@ -26,10 +26,6 @@ public:
                const std::string& message,
                StatusResult::Unique innerResult);
 
-  virtual StatusCode getStatusCode() const override {
-    return statusCode;
-  }
-
   bool isOk() const {
     return getStatusCode() == StatusCode::OK;
   }
@@ -47,7 +43,6 @@ public:
   }
 
 private:
-  const StatusCode            statusCode;
   const std::string           message;
   const StatusResult::Unique  innerResult;
 };
