@@ -18,4 +18,4 @@ foreach(f ${SOURCES})
     source_group("${SRCGR}" FILES ${f})
 endforeach()
 
-add_library(gluino SHARED ${SOURCES})
+add_library(gluino STATIC ${SOURCES})
