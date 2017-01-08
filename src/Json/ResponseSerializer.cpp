@@ -28,9 +28,6 @@ ResponseSerializer::serialize(
 }
 
 Core::StatusResult::Unique
-ResponseSerializer::deserialize(
-  Response::Unique& response,
-  ISerializationContext& context) const {
-
+ResponseSerializer::deserialize(Response::Unique&, ISerializationContext&) const {
   return StatusResult::NotImplemented();
 }

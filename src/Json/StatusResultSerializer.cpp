@@ -30,9 +30,6 @@ StatusResultSerializer::serialize(const StatusResult& statusResult,
 }
 
 Core::StatusResult::Unique
-StatusResultSerializer::deserialize(
-  StatusResult::Unique& statusResult,
-  ISerializationContext& context) const {
-
+StatusResultSerializer::deserialize(StatusResult::Unique&, ISerializationContext&) const {
   return StatusResult::NotImplemented();
 }

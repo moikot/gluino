@@ -23,9 +23,6 @@ ObjectResultSerializer::serialize(
 }
 
 Core::StatusResult::Unique
-ObjectResultSerializer::deserialize(
-  ObjectResult::Unique& objectResult,
-  ISerializationContext& context) const {
-
+ObjectResultSerializer::deserialize(ObjectResult::Unique&, ISerializationContext&) const {
   return StatusResult::NotImplemented();
 }

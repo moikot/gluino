@@ -34,11 +34,11 @@ class QueueController {
     bool canProcessRequest(const Request& request);
     ActionResult::Unique processRequest(const Request& request);
 
-    void setCanProcessRequest(std::function<bool(const Request&)> canProcessRequestHandler) {
-      this->canProcessRequestHandler = canProcessRequestHandler;
+    void setCanProcessRequest(std::function<bool(const Request&)> handler) {
+      this->canProcessRequestHandler = handler;
     }
-    void setProcessRequest(std::function<ActionResult::Unique(const Request&)> processRequest) {
-      this->processRequestHandler = processRequest;
+    void setProcessRequest(std::function<ActionResult::Unique(const Request&)> handler) {
+      this->processRequestHandler = handler;
     }
 
   private:

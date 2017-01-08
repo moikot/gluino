@@ -17,7 +17,7 @@ public:
   virtual ~IEntity();
   virtual const char* getTypeId() const = 0;
 
-  static bool isType(const std::string& typeId) {
+  static bool isType(const std::string&) {
     return false;
   }
 };

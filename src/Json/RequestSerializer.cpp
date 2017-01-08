@@ -8,9 +8,7 @@ using namespace Json;
 #define FIELD_CONTENT "content"
 
 Core::StatusResult::Unique
-RequestSerializer::serialize(
-  const Request& request,
-  ISerializationContext& context) const {
+RequestSerializer::serialize(const Request&, ISerializationContext&) const {
   return StatusResult::NotImplemented();
 }
 

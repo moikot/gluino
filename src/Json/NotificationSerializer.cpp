@@ -31,9 +31,6 @@ NotificationSerializer::serialize(
 }
 
 Core::StatusResult::Unique
-NotificationSerializer::deserialize(
-  Notification::Unique& notification,
-  ISerializationContext& context) const {
-
+NotificationSerializer::deserialize(Notification::Unique&, ISerializationContext&) const {
   return StatusResult::NotImplemented();
 }
