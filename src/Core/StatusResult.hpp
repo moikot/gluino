@@ -14,13 +14,16 @@ namespace Core {
 
 class StatusResult : public ActionResult {
 TYPE_INFO(StatusResult, ActionResult, "statusResult")
+
 public:
   static StatusResult::Unique OK();
   static StatusResult::Unique NotImplemented();
 
-  StatusResult(const StatusCode& statusCode, const std::string& message);
+  StatusResult(const StatusCode& statusCode,
+               const std::string& message);
 
-  StatusResult(const StatusCode& statusCode, const std::string& message,
+  StatusResult(const StatusCode& statusCode,
+               const std::string& message,
                StatusResult::Unique innerResult);
 
   virtual StatusCode getStatusCode() const override {
@@ -51,4 +54,4 @@ private:
 
 }
 
-#endif /* end of include guard: CORE_ACTION_RESULT_HPP */
+#endif /* end of include guard: CORE_STATUS_RESULT_HPP */

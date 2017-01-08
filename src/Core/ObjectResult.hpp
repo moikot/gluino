@@ -13,11 +13,10 @@
 namespace Core {
 
 class ObjectResult : public ActionResult {
-  TYPE_INFO(ObjectResult, ActionResult, "objectResult")
+TYPE_INFO(ObjectResult, ActionResult, "objectResult")
 
 public:
-  ObjectResult(StatusCode statusCode, IEntity::Unique entity) :
-    statusCode(statusCode), entity(std::move(entity)) {}
+  ObjectResult(StatusCode statusCode, IEntity::Unique entity);
 
   virtual StatusCode getStatusCode() const override {
     return statusCode;

@@ -1,9 +1,9 @@
 
 #include <gtest/gtest.h>
 
-#include "Core/ActionType.hpp"
+#include "Messaging/ActionType.hpp"
 
-using namespace Core;
+using namespace Messaging;
 
 TEST(ActionType, Same_Action_Types_Are_Equal) {
   auto type1 = ActionType::getById(ActionType::Unknown.getId());

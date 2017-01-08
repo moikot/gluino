@@ -1,6 +1,4 @@
-lib/
 build/
-
 CMakeCache.txt
 CMakeFiles
 CMakeScripts
