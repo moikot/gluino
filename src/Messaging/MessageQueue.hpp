@@ -19,11 +19,8 @@ namespace Core {
 class MessageQueue : public IMessageQueue {
   TYPE_PTRS(MessageQueue)
   public:
-    MessageQueue();
-    ~MessageQueue();
-
     // From ILoopedService
-    virtual void loop() override;
+    virtual void idle() override;
 
     // From IMessageQueue
     virtual StatusResult::Unique sendMessage(Message::Shared message) override;
@@ -52,8 +49,12 @@ class MessageQueue : public IMessageQueue {
 
     QueueClient::Shared     getClient(std::string clientId);
     QueueController::Shared getController(const Request& request);
-    Response::Shared        createResponseFor(const Request& request,
-      ActionResult::Unique result, const QueueController* controller);
+    
+    Response::Shared        createResponseFor(
+                              const Request&          request,
+                              ActionResult::Unique    result,
+                              const QueueController*  controller
+                            );
 };
 
 }

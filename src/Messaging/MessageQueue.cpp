@@ -5,8 +5,12 @@
 
 using namespace Core;
 
+namespace {
+  static const std::string messageQueueSenderId = "messageQueue";
+}
+
 void
-MessageQueue::loop() {
+MessageQueue::idle() {
   while (!messages.empty())
   {
     auto message = messages.top();
@@ -150,15 +154,15 @@ Response::Shared
 MessageQueue::createResponseFor(const Request& request,
   ActionResult::Unique result, const QueueController* controller) {
 
-  std::string sender("messageQueue");
+  std::string sender(messageQueueSenderId);
   if (controller)
     sender = controller->getId();
 
-  auto response = Response::makeShared(
-    sender,
-    request.getSender(),
-    request.getActionType(),
-    request.getResource(),
-    std::move(result));
-  return response;
+  return Response::makeShared(
+          sender,
+          request.getSender(),
+          request.getActionType(),
+          request.getResource(),
+          std::move(result)
+         );
 }
