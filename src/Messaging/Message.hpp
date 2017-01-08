@@ -16,6 +16,7 @@ namespace Core {
 
 class Message : public IEntity {
   TYPE_INFO(Message, IEntity, "message")
+  
   public:
     enum class Priority {High, Mid, Low};
 
@@ -26,11 +27,13 @@ class Message : public IEntity {
     Priority        getPriority() const { return priority; }
 
   protected:
-    Message(std::string sender,
-            std::string receiver,
-            ActionType actionType,
-            std::string resource,
-            Priority priority);
+    Message(
+      std::string sender,
+      std::string receiver,
+      ActionType actionType,
+      std::string resource,
+      Priority priority
+    );
 
   private:
     std::string sender;
