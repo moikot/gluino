@@ -4,14 +4,14 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef JSON_SERIALIZER_HPP
-#define JSON_SERIALIZER_HPP
+#ifndef SERIALIZATION_SERIALIZER_HPP
+#define SERIALIZATION_SERIALIZER_HPP
 
 #include "ISerializer.hpp"
 
 #include "Core/StatusResult.hpp"
 
-namespace Json {
+namespace Serialization {
 
 template <typename T>
 class Serializer : public ISerializer {
@@ -62,4 +62,4 @@ class Serializer : public ISerializer {
 
 }
 
-#endif /* end of include guard: JSON_SERIALIZER_HPP */
+#endif /* end of include guard: SERIALIZATION_SERIALIZER_HPP */

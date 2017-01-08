@@ -4,13 +4,13 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef CORE_RESPONSE_HPP
-#define CORE_RESPONSE_HPP
+#ifndef MESSAGING_RESPONSE_HPP
+#define MESSAGING_RESPONSE_HPP
 
 #include "Message.hpp"
-#include "ActionResult.hpp"
+#include "Core/ActionResult.hpp"
 
-namespace Core {
+namespace Messaging {
 
 class Response : public Message {
   TYPE_INFO(Response, Message, "response")
@@ -20,15 +20,15 @@ class Response : public Message {
       std::string receiver,
       ActionType actionType,
       std::string resource,
-      ActionResult::Unique result
+      Core::ActionResult::Unique result
     );
 
-    const ActionResult& getResult() const { return *result; }
+    const Core::ActionResult& getResult() const { return *result; }
 
   private:
-    ActionResult::Unique result;
+    Core::ActionResult::Unique result;
 };
 
 }
 
-#endif /* end of include guard: CORE_RESPONSE_HPP */
+#endif /* end of include guard: MESSAGING_RESPONSE_HPP */

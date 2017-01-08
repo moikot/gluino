@@ -4,17 +4,17 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef CORE_QUEUE_CLIENT_HPP
-#define CORE_QUEUE_CLIENT_HPP
+#ifndef MESSAGING_QUEUE_CLIENT_HPP
+#define MESSAGING_QUEUE_CLIENT_HPP
 
-#include "StatusResult.hpp"
+#include "Core/StatusResult.hpp"
 #include "Message.hpp"
 #include "Response.hpp"
 #include "Notification.hpp"
 
 #include <functional>
 
-namespace Core {
+namespace Messaging {
 
 class IMessageQueue;
 
@@ -25,7 +25,7 @@ class QueueClient {
 
     std::string getId() { return clientId; }
 
-    StatusResult::Unique sendMessage(Message::Shared request);
+    Core::StatusResult::Unique sendMessage(Message::Shared request);
 
     void onResponse(const Response& response);
     void onNotification(const Notification& notification);
@@ -47,4 +47,4 @@ class QueueClient {
 
 }
 
-#endif /* end of include guard: CORE_QUEUE_CLIENT_HPP */
+#endif /* end of include guard: MESSAGING_QUEUE_CLIENT_HPP */

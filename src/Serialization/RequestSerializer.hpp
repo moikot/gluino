@@ -4,27 +4,27 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef JSON_REQUEST_SERIALIZER_HPP
-#define JSON_REQUEST_SERIALIZER_HPP
+#ifndef SERIALIZATION_REQUEST_SERIALIZER_HPP
+#define SERIALIZATION_REQUEST_SERIALIZER_HPP
 
 #include "Serializer.hpp"
-#include "Core/Request.hpp"
+#include "Messaging/Request.hpp"
 
-namespace Json {
+namespace Serialization {
 
-class RequestSerializer : public Serializer<Core::Request> {
+class RequestSerializer : public Serializer<Messaging::Request> {
   TYPE_PTRS(RequestSerializer)
   protected:
     // From Serializer
     virtual Core::StatusResult::Unique serialize(
-      const Core::Request& request,
+      const Messaging::Request& request,
       ISerializationContext& context) const override;
 
     virtual Core::StatusResult::Unique deserialize(
-      Core::Request::Unique& request,
+      Messaging::Request::Unique& request,
       ISerializationContext& context) const override;
 };
 
 }
 
-#endif /* end of include guard: JSON_SETTINGS_SERIALIZER_HPP */
+#endif /* end of include guard: SERIALIZATION_SETTINGS_SERIALIZER_HPP */

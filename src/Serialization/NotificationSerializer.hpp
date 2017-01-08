@@ -4,27 +4,27 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef JSON_NOTIFICATION_SERIALIZER_HPP
-#define JSON_NOTIFICATION_SERIALIZER_HPP
+#ifndef SERIALIZATION_NOTIFICATION_SERIALIZER_HPP
+#define SERIALIZATION_NOTIFICATION_SERIALIZER_HPP
 
 #include "Serializer.hpp"
-#include "Core/Notification.hpp"
+#include "Messaging/Notification.hpp"
 
-namespace Json {
+namespace Serialization {
 
-class NotificationSerializer : public Serializer<Core::Notification> {
+class NotificationSerializer : public Serializer<Messaging::Notification> {
   TYPE_PTRS(NotificationSerializer)
   protected:
     // From Serializer
     virtual Core::StatusResult::Unique serialize(
-      const Core::Notification& notification,
+      const Messaging::Notification& notification,
       ISerializationContext& context) const override;
 
     virtual Core::StatusResult::Unique deserialize(
-      Core::Notification::Unique& notification,
+      Messaging::Notification::Unique& notification,
       ISerializationContext& context) const override;
 };
 
 }
 
-#endif /* end of include guard: JSON_NOTIFICATION_SERIALIZER_HPP */
+#endif /* end of include guard: SERIALIZATION_NOTIFICATION_SERIALIZER_HPP */

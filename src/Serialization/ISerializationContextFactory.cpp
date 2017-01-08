@@ -1,6 +1,6 @@
 #include "ISerializationContextFactory.hpp"
 
-using namespace Json;
+using namespace Serialization;
 
 ISerializationContextFactory::~ISerializationContextFactory() {
 }

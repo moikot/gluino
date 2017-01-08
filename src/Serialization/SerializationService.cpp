@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-using namespace Json;
+using namespace Serialization;
 using namespace Core;
 
 #define TYPE_FIELD "type"

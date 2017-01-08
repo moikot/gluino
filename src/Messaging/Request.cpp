@@ -1,6 +1,6 @@
 #include "Request.hpp"
 
-using namespace Core;
+using namespace Messaging;
 
 Request::Request(std::string sender, Request::Unique request) :
   Message(sender, "", request->getActionType(), request->getResource(), Priority::High),

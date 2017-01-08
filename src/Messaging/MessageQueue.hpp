@@ -4,8 +4,8 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef CORE_MESSAGE_QUEUE_HPP
-#define CORE_MESSAGE_QUEUE_HPP
+#ifndef MESSAGING_MESSAGE_QUEUE_HPP
+#define MESSAGING_MESSAGE_QUEUE_HPP
 
 #include "IMessageQueue.hpp"
 
@@ -14,7 +14,7 @@
 #include <vector>
 #include <functional>
 
-namespace Core {
+namespace Messaging {
 
 class MessageQueue : public IMessageQueue {
   TYPE_PTRS(MessageQueue)
@@ -23,7 +23,7 @@ class MessageQueue : public IMessageQueue {
     virtual void idle() override;
 
     // From IMessageQueue
-    virtual StatusResult::Unique sendMessage(Message::Shared message) override;
+    virtual Core::StatusResult::Unique sendMessage(Message::Shared message) override;
 
     virtual QueueClient::Shared createClient(std::string clinetId) override;
     virtual void removeClient(QueueClient::Shared client) override;
@@ -52,11 +52,11 @@ class MessageQueue : public IMessageQueue {
     
     Response::Shared        createResponseFor(
                               const Request&          request,
-                              ActionResult::Unique    result,
+                              Core::ActionResult::Unique    result,
                               const QueueController*  controller
                             );
 };
 
 }
 
-#endif /* end of include guard: CORE_MESSAGE_QUEUE_HPP */
+#endif /* end of include guard: MESSAGING_MESSAGE_QUEUE_HPP */

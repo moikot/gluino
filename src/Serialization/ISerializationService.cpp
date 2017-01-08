@@ -1,6 +1,6 @@
 #include "ISerializationService.hpp"
 
-using namespace Json;
+using namespace Serialization;
 
 ISerializationService::~ISerializationService() {
 }

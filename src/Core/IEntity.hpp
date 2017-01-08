@@ -29,8 +29,8 @@ public:
     @param typeId The class type.
     @return True if this class is the class of a particular type; false otherwise.
   */
-  static bool isType(const std::string& typeId) {
-    return false; // Returns allways false for IEntity
+  static bool isType(const std::string&) {
+    return false; // Returns always false for IEntity
   }
 };
 

@@ -1,20 +1,19 @@
 #include "RequestSerializer.hpp"
 
 using namespace Core;
-using namespace Json;
+using namespace Messaging;
+using namespace Serialization;
 
 #define FIELD_ACTION "action"
 #define FIELD_RESOURCE "resource"
 #define FIELD_CONTENT "content"
 
-Core::StatusResult::Unique
-RequestSerializer::serialize(
-  const Request& request,
-  ISerializationContext& context) const {
+StatusResult::Unique
+RequestSerializer::serialize(const Request&, ISerializationContext&) const {
   return StatusResult::NotImplemented();
 }
 
-Core::StatusResult::Unique
+StatusResult::Unique
 RequestSerializer::deserialize(
   Request::Unique& request,
   ISerializationContext& context) const {

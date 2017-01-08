@@ -2,6 +2,7 @@
 #include "IMessageQueue.hpp"
 
 using namespace Core;
+using namespace Messaging;
 
 QueueController::QueueController(std::string controllerId, IMessageQueue& messageQueue) :
   controllerId(controllerId), messageQueue(messageQueue) {

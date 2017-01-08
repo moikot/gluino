@@ -1,6 +1,6 @@
 #include "ActionType.hpp"
 
-using namespace Core;
+using namespace Messaging;
 
 const ActionType ActionType::Unknown  = ActionType("unknown");
 const ActionType ActionType::Get      = ActionType("get");

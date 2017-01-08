@@ -1,13 +1,14 @@
 #include "ResponseSerializer.hpp"
 
 using namespace Core;
-using namespace Json;
+using namespace Messaging;
+using namespace Serialization;
 
 #define FIELD_ACTION "action"
 #define FIELD_RESOURCE "resource"
 #define FIELD_RESULT "result"
 
-Core::StatusResult::Unique
+StatusResult::Unique
 ResponseSerializer::serialize(
   const Response& response,
   ISerializationContext& context) const {
@@ -27,10 +28,7 @@ ResponseSerializer::serialize(
   return StatusResult::OK();
 }
 
-Core::StatusResult::Unique
-ResponseSerializer::deserialize(
-  Response::Unique& response,
-  ISerializationContext& context) const {
-
+StatusResult::Unique
+ResponseSerializer::deserialize(Response::Unique&, ISerializationContext&) const {
   return StatusResult::NotImplemented();
 }

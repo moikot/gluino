@@ -4,8 +4,8 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef JSON_I_SERIALIZATION_SERVICE_HPP
-#define JSON_I_SERIALIZATION_SERVICE_HPP
+#ifndef SERIALIZATION_I_SERIALIZATION_SERVICE_HPP
+#define SERIALIZATION_I_SERIALIZATION_SERVICE_HPP
 
 #include "ISerializationContext.hpp"
 
@@ -13,7 +13,7 @@
 
 #include <memory>
 
-namespace Json {
+namespace Serialization {
 
 class ISerializationService {
   TYPE_PTRS_ABSTRACT(ISerializationService)

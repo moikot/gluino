@@ -4,12 +4,12 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef CORE_NOTIFICATION_HPP
-#define CORE_NOTIFICATION_HPP
+#ifndef MESSAGING_NOTIFICATION_HPP
+#define MESSAGING_NOTIFICATION_HPP
 
 #include "Message.hpp"
 
-namespace Core {
+namespace Messaging {
 
 class Notification : public Message {
   TYPE_INFO(Notification, Message, "notification")
@@ -25,4 +25,4 @@ class Notification : public Message {
 
 }
 
-#endif /* end of include guard: CORE_NOTIFICATION_HPP */
+#endif /* end of include guard: MESSAGING_NOTIFICATION_HPP */

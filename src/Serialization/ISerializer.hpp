@@ -4,15 +4,15 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef JSON_I_SERIALIZER_HPP
-#define JSON_I_SERIALIZER_HPP
+#ifndef SERIALIZATION_I_SERIALIZER_HPP
+#define SERIALIZATION_I_SERIALIZER_HPP
 
 #include "Core/IEntity.hpp"
 #include "ISerializationContext.hpp"
 
 #include "memory"
 
-namespace Json {
+namespace Serialization {
 
 class ISerializer {
   public:
@@ -31,4 +31,4 @@ class ISerializer {
 
 }
 
-#endif /* end of include guard: JSON_I_SERIALIZER_HPP */
+#endif /* end of include guard: SERIALIZATION_I_SERIALIZER_HPP */

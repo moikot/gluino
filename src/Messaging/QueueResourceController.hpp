@@ -4,15 +4,15 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef CORE_QUEUE_RESOURCE_CONTROLLER_HPP
-#define CORE_QUEUE_RESOURCE_CONTROLLER_HPP
+#ifndef MESSAGING_QUEUE_RESOURCE_CONTROLLER_HPP
+#define MESSAGING_QUEUE_RESOURCE_CONTROLLER_HPP
 
 #include "QueueController.hpp"
-#include "Logger.hpp"
+#include "Core/Logger.hpp"
 
 #include <set>
 
-namespace Core {
+namespace Messaging {
 
 class IMessageQueue;
 
@@ -121,4 +121,4 @@ class QueueResourceController {
 
 }
 
-#endif /* end of include guard: CORE_QUEUE_RESOURCE_CONTROLLER_HPP */
+#endif /* end of include guard: MESSAGING_QUEUE_RESOURCE_CONTROLLER_HPP */

@@ -4,12 +4,12 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef CORE_REQUEST_HPP
-#define CORE_REQUEST_HPP
+#ifndef MESSAGING_REQUEST_HPP
+#define MESSAGING_REQUEST_HPP
 
 #include "Message.hpp"
 
-namespace Core {
+namespace Messaging {
 
 class Request : public Message {
   TYPE_INFO(Request, Message, "request")
@@ -30,4 +30,4 @@ class Request : public Message {
 
 }
 
-#endif /* end of include guard: CORE_MESSAGE_HPP */
+#endif /* end of include guard: MESSAGING_MESSAGE_HPP */

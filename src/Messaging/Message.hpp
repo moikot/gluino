@@ -4,17 +4,17 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef CORE_MESSAGE_HPP
-#define CORE_MESSAGE_HPP
+#ifndef MESSAGING_MESSAGE_HPP
+#define MESSAGING_MESSAGE_HPP
 
-#include "IEntity.hpp"
 #include "ActionType.hpp"
+#include "Core/IEntity.hpp"
 
 #include <string>
 
-namespace Core {
+namespace Messaging {
 
-class Message : public IEntity {
+class Message : public Core::IEntity {
   TYPE_INFO(Message, IEntity, "message")
   
   public:
@@ -46,4 +46,4 @@ class Message : public IEntity {
 
 }
 
-#endif /* end of include guard: CORE_MESSAGE_HPP */
+#endif /* end of include guard: MESSAGING_MESSAGE_HPP */

@@ -4,13 +4,13 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef JSON_STATUS_SERIALIZER_HPP
-#define JSON_STATUS_SERIALIZER_HPP
+#ifndef SERIALIZATION_STATUS_SERIALIZER_HPP
+#define SERIALIZATION_STATUS_SERIALIZER_HPP
 
 #include "Serializer.hpp"
 #include "Core/ActionResult.hpp"
 
-namespace Json {
+namespace Serialization {
 
 class StatusResultSerializer : public Serializer<Core::StatusResult> {
   TYPE_PTRS(StatusResultSerializer)
@@ -27,4 +27,4 @@ class StatusResultSerializer : public Serializer<Core::StatusResult> {
 
 }
 
-#endif /* end of include guard: JSON_STATUS_SERIALIZER_HPP */
+#endif /* end of include guard: SERIALIZATION_STATUS_SERIALIZER_HPP */

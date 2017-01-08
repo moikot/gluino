@@ -2,6 +2,7 @@
 #include "IMessageQueue.hpp"
 
 using namespace Core;
+using namespace Messaging;
 
 QueueClient::QueueClient(std::string clientId, IMessageQueue& messageQueue) :
   clientId(clientId), messageQueue(messageQueue) {

@@ -4,12 +4,12 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef CORE_ACTION_TYPE_HPP
-#define CORE_ACTION_TYPE_HPP
+#ifndef MESSAGING_ACTION_TYPE_HPP
+#define MESSAGING_ACTION_TYPE_HPP
 
 #include <string>
 
-namespace Core {
+namespace Messaging {
 
 class ActionType {
 public:
@@ -49,4 +49,4 @@ private:
 
 }
 
-#endif /* end of include guard: CORE_ACTION_TYPE_HPP */
+#endif /* end of include guard: MESSAGING_ACTION_TYPE_HPP */

@@ -4,13 +4,13 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef JSON_LIST_SERIALIZER_HPP
-#define JSON_LIST_SERIALIZER_HPP
+#ifndef SERIALIZATION_LIST_SERIALIZER_HPP
+#define SERIALIZATION_LIST_SERIALIZER_HPP
 
 #include "Core/List.hpp"
 #include "Serializer.hpp"
 
-namespace Json {
+namespace Serialization {
 
 template<typename T>
 class ListSerializer : public Serializer<T> {
@@ -38,4 +38,4 @@ class ListSerializer : public Serializer<T> {
 
 }
 
-#endif /* end of include guard: JSON_LIST_SERIALIZER_HPP */
+#endif /* end of include guard: SERIALIZATION_LIST_SERIALIZER_HPP */

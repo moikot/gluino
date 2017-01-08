@@ -4,15 +4,15 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef JSON_I_SERIALIZATION_CONTEXT_FACTORY_HPP
-#define JSON_I_SERIALIZATION_CONTEXT_FACTORY_HPP
+#ifndef SERIALIZATION_I_SERIALIZATION_CONTEXT_FACTORY_HPP
+#define SERIALIZATION_I_SERIALIZATION_CONTEXT_FACTORY_HPP
 
 #include "ISerializationContext.hpp"
 #include "ISerializationService.hpp"
 
 #include <memory>
 
-namespace Json {
+namespace Serialization {
 
 class ISerializationContextFactory {
   public:
@@ -29,4 +29,4 @@ class ISerializationContextFactory {
 
 }
 
-#endif /* end of include guard: JSON_I_SERIALIZATION_CONTEXT_FACTORY_HPP */
+#endif /* end of include guard: SERIALIZATION_I_SERIALIZATION_CONTEXT_FACTORY_HPP */

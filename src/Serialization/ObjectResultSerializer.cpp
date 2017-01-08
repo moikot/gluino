@@ -1,7 +1,7 @@
 #include "ObjectResultSerializer.hpp"
 
 using namespace Core;
-using namespace Json;
+using namespace Serialization;
 
 #define FIELD_CODE "code"
 #define FIELD_OBJECT "object"
@@ -23,9 +23,6 @@ ObjectResultSerializer::serialize(
 }
 
 Core::StatusResult::Unique
-ObjectResultSerializer::deserialize(
-  ObjectResult::Unique& objectResult,
-  ISerializationContext& context) const {
-
+ObjectResultSerializer::deserialize(ObjectResult::Unique&, ISerializationContext&) const {
   return StatusResult::NotImplemented();
 }

@@ -4,14 +4,14 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef JSON_OBJECT_RESULT_SERIALIZER_HPP
-#define JSON_OBJECT_RESULT_SERIALIZER_HPP
+#ifndef SERIALIZATION_OBJECT_RESULT_SERIALIZER_HPP
+#define SERIALIZATION_OBJECT_RESULT_SERIALIZER_HPP
 
 #include "Serializer.hpp"
 #include "Core/ObjectResult.hpp"
 #include "Core/ObjectResult.hpp"
 
-namespace Json {
+namespace Serialization {
 
 class ObjectResultSerializer : public Serializer<Core::ObjectResult> {
   TYPE_PTRS(ObjectResultSerializer)
@@ -28,4 +28,4 @@ class ObjectResultSerializer : public Serializer<Core::ObjectResult> {
 
 }
 
-#endif /* end of include guard: JSON_OBJECT_RESULT_SERIALIZER_HPP */
+#endif /* end of include guard: SERIALIZATION_OBJECT_RESULT_SERIALIZER_HPP */

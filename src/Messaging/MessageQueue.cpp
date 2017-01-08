@@ -1,9 +1,10 @@
 #include "MessageQueue.hpp"
 
-#include "Casting.hpp"
-#include "Logger.hpp"
+#include "Core/Casting.hpp"
+#include "Core/Logger.hpp"
 
 using namespace Core;
+using namespace Messaging;
 
 namespace {
   static const std::string messageQueueSenderId = "messageQueue";

@@ -1,15 +1,16 @@
 #include "NotificationSerializer.hpp"
 
 using namespace Core;
-using namespace Json;
+using namespace Messaging;
+using namespace Serialization;
 
 #define FIELD_ACTION "action"
 #define FIELD_RESOURCE "resource"
 #define FIELD_CONTENT "content"
 
-Core::StatusResult::Unique
+StatusResult::Unique
 NotificationSerializer::serialize(
-  const Notification& notification,
+  const Messaging::Notification& notification,
   ISerializationContext& context) const {
 
   auto result = context.setValue(FIELD_ACTION, notification.getActionType().getId());
@@ -30,10 +31,7 @@ NotificationSerializer::serialize(
   return StatusResult::OK();
 }
 
-Core::StatusResult::Unique
-NotificationSerializer::deserialize(
-  Notification::Unique& notification,
-  ISerializationContext& context) const {
-
+StatusResult::Unique
+NotificationSerializer::deserialize(Notification::Unique&, ISerializationContext&) const {
   return StatusResult::NotImplemented();
 }

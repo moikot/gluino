@@ -4,20 +4,20 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef CORE_I_MESSAGE_QUEUE_HPP
-#define CORE_I_MESSAGE_QUEUE_HPP
+#ifndef MESSAGING_I_MESSAGE_QUEUE_HPP
+#define MESSAGING_I_MESSAGE_QUEUE_HPP
 
-#include "IService.hpp"
 #include "Message.hpp"
 #include "QueueClient.hpp"
 #include "QueueController.hpp"
+#include "Core/IService.hpp"
 
-namespace Core {
+namespace Messaging {
 
 /**
   The message queue interface.
 */
-class IMessageQueue : public IService {
+class IMessageQueue : public Core::IService {
   TYPE_PTRS_ABSTRACT(IMessageQueue)
   public:
 
@@ -27,7 +27,7 @@ class IMessageQueue : public IService {
       @param message The message to add to the queue.
       @return The result of the operation.
     */
-    virtual StatusResult::Unique sendMessage(Message::Shared message) = 0;
+    virtual Core::StatusResult::Unique sendMessage(Message::Shared message) = 0;
 
     /**
       Creates a new queue client for sending requests and getting responses.
@@ -62,4 +62,4 @@ class IMessageQueue : public IService {
 
 }
 
-#endif /* end of include guard: CORE_I_MESSAGE_QUEUE_HPP */
+#endif /* end of include guard: MESSAGING_I_MESSAGE_QUEUE_HPP */

@@ -4,13 +4,13 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef JSON_I_SERIALIZATION_CONTEXT_HPP
-#define JSON_I_SERIALIZATION_CONTEXT_HPP
+#ifndef SERIALIZATION_I_SERIALIZATION_CONTEXT_HPP
+#define SERIALIZATION_I_SERIALIZATION_CONTEXT_HPP
 
 #include "Core/ActionResult.hpp"
 #include "Core/IList.hpp"
 
-namespace Json {
+namespace Serialization {
 
 class ISerializationContext {
   TYPE_PTRS_ABSTRACT(ISerializationContext)

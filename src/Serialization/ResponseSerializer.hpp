@@ -4,27 +4,27 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef JSON_RESPONSE_SERIALIZER_HPP
-#define JSON_RESPONSE_SERIALIZER_HPP
+#ifndef SERIALIZATION_RESPONSE_SERIALIZER_HPP
+#define SERIALIZATION_RESPONSE_SERIALIZER_HPP
 
 #include "Serializer.hpp"
-#include "Core/Response.hpp"
+#include "Messaging/Response.hpp"
 
-namespace Json {
+namespace Serialization {
 
-class ResponseSerializer : public Serializer<Core::Response> {
+class ResponseSerializer : public Serializer<Messaging::Response> {
   TYPE_PTRS(ResponseSerializer)
   protected:
     // From Serializer
     virtual Core::StatusResult::Unique serialize(
-      const Core::Response& response,
+      const Messaging::Response& response,
       ISerializationContext& context) const override;
 
     virtual Core::StatusResult::Unique deserialize(
-      Core::Response::Unique& response,
+      Messaging::Response::Unique& response,
       ISerializationContext& context) const override;
 };
 
 }
 
-#endif /* end of include guard: JSON_SETTINGS_SERIALIZER_HPP */
+#endif /* end of include guard: SERIALIZATION_SETTINGS_SERIALIZER_HPP */
