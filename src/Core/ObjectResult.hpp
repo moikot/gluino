@@ -18,16 +18,11 @@ TYPE_INFO(ObjectResult, ActionResult, "objectResult")
 public:
   ObjectResult(StatusCode statusCode, IEntity::Unique entity);
 
-  virtual StatusCode getStatusCode() const override {
-    return statusCode;
-  }
-
   const IEntity& getObject() const {
     return *entity;
   }
 
 private:
-  const StatusCode statusCode;
   const IEntity::Unique entity;
 };
 
