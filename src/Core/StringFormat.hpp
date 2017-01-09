@@ -1,5 +1,4 @@
 // Copyright Sergey Anisimov 2016-2017
-
 // MIT License
 //
 // Gluino
@@ -7,8 +6,6 @@
 
 #ifndef CORE_STRING_FORMAT_HPP
 #define CORE_STRING_FORMAT_HPP
-
-#include "Core/Logger.hpp"
 
 #include <string>
 #include <memory>
