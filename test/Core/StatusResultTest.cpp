@@ -5,6 +5,14 @@
 
 using namespace Core;
 
+TEST(StatusResult, OK_Status_Result_Has_OK_Status_Code) {
+  ASSERT_EQ(StatusCode::OK, StatusResult::OK()->getStatusCode());
+}
+
+TEST(StatusResult, NotImplimented_Status_Result_Has_NotImplemented_Status_Code) {
+  ASSERT_EQ(StatusCode::NotImplemented, StatusResult::NotImplemented()->getStatusCode());
+}
+
 TEST(StatusResult, Is_OK_When_Status_Code_Is_OK) {
   auto result = StatusResult::makeUnique(StatusCode::OK, "test");
   ASSERT_TRUE(result->isOk());
