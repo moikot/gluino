@@ -11,6 +11,9 @@
 
 namespace Core {
 
+/**
+  The base class for all the domain objects.
+*/
 class IEntity {
 TYPE_PTRS_ABSTRACT(IEntity)
 public:
@@ -29,8 +32,8 @@ public:
     @param typeId The class type.
     @return True if this class is the class of a particular type; false otherwise.
   */
-  static bool isType(const std::string&) {
-    return false; // Returns always false for IEntity
+  virtual bool isType(const std::string& typeId) const {
+    return false; // Returns allways false for IEntity
   }
 };
 

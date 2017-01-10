@@ -21,18 +21,18 @@ public: \
   \
   virtual const char* getTypeId() const override { return TypeId; } \
   \
-  static  bool        isType(const std::string& typeId) { \
+  virtual bool        isType(const std::string& typeId) const override { \
     return (typeId == ClassTypeId || SuperClass::isType(typeId)); \
   } \
   \
   static Class* cast(Core::IEntity* entity) { \
-    if (Class::isType(entity->getTypeId())) \
+    if (entity->isType(Class::TypeId)) \
       return static_cast<Class*>(entity); \
     return nullptr; \
   } \
   \
   static const Class* cast(const Core::IEntity* entity) { \
-    if (Class::isType(entity->getTypeId())) \
+    if (entity->isType(Class::TypeId)) \
       return static_cast<const Class*>(entity); \
     return nullptr; \
   } \

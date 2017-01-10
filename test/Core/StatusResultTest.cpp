@@ -1,4 +1,3 @@
-
 #include <gtest/gtest.h>
 
 #include "Core/StatusResult.hpp"
