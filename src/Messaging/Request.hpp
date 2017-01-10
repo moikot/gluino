@@ -11,17 +11,22 @@
 
 namespace Messaging {
 
+/**
+  The request message.
+*/
 class Request : public Message {
   TYPE_INFO(Request, Message, "request")
   public:
-    // Incomming requests
-    Request(std::string sender, Request::Unique request);
-    Request(ActionType actionType, std::string resource, IEntity::Unique content);
+    Request(
+      std::string sender,
+      ActionType actionType,
+      std::string resource,
+      IEntity::Unique content
+    );
 
-    // Internal requests
-    Request(std::string sender, ActionType actionType, std::string resource);
-    Request(std::string sender, ActionType actionType, std::string resource, IEntity::Unique content);
-
+    /**
+      The request payload.
+    */
     const IEntity* getContent() const { return content.get(); };
 
   private:

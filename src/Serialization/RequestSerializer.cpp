@@ -40,6 +40,6 @@ RequestSerializer::deserialize(
       return result;
   }
 
-  request = Request::makeUnique(actionType, resource, std::move(content));
+  request = Request::makeUnique("", actionType, resource, std::move(content));
   return StatusResult::OK();
 }
