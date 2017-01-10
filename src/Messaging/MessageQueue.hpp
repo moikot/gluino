@@ -16,18 +16,40 @@
 
 namespace Messaging {
 
+/**
+  The message queue.
+*/
 class MessageQueue : public IMessageQueue {
   TYPE_PTRS(MessageQueue)
   public:
-    // From ILoopedService
+    /**
+      This method should be called for dispatching the messages.
+    */
     virtual void idle() override;
 
-    // From IMessageQueue
+    /**
+      Adds a message to the queue.
+    */
     virtual Core::StatusResult::Unique sendMessage(Message::Shared message) override;
 
+    /**
+      Creates a queue client.
+    */
     virtual QueueClient::Shared createClient(std::string clinetId) override;
+
+    /**
+      Removes the queue client.
+    */
     virtual void removeClient(QueueClient::Shared client) override;
+
+    /**
+      Creates a queue controller.
+    */
     virtual QueueController::Shared createController(std::string controllerId) override;
+
+    /**
+      Removes the queue controller.
+    */
     virtual void removeController(QueueController::Shared controller) override;
 
   private:
@@ -49,7 +71,7 @@ class MessageQueue : public IMessageQueue {
 
     QueueClient::Shared     getClient(std::string clientId);
     QueueController::Shared getController(const Request& request);
-    
+
     Response::Shared        createResponseFor(
                               const Request&          request,
                               Core::ActionResult::Unique    result,
