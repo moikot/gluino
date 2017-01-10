@@ -49,4 +49,4 @@ foreach(f ${TEST_SOURCES})
 endforeach()
 
 add_executable(gluino_test ${TEST_SOURCES})
-target_link_libraries(gluino_test gluino gtest_main)
+target_link_libraries(gluino_test gluino gtest_main gmock_main)

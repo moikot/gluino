@@ -78,7 +78,7 @@ QueueResourceClient<T>::QueueResourceClient(QueueClient::Shared queueClient) :
 template <typename T>
 StatusResult::Unique
 QueueResourceClient<T>::getResource() {
-  auto request = Request::makeShared(queueClient->getId(), ActionType::Get, typeId);
+  auto request = Request::makeShared(queueClient->getId(), ActionType::Get, typeId, nullptr);
   return queueClient->sendMessage(request);
 }
 
@@ -99,7 +99,7 @@ QueueResourceClient<T>::updateResource(TUnique resource) {
 template <typename T>
 StatusResult::Unique
 QueueResourceClient<T>::deleteResource() {
-  auto request = Request::makeShared(queueClient->getId(), ActionType::Delete, typeId);
+  auto request = Request::makeShared(queueClient->getId(), ActionType::Delete, typeId, nullptr);
   return queueClient->sendMessage(request);
 }
 
