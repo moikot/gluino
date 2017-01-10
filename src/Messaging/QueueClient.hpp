@@ -25,7 +25,11 @@ class QueueClient {
 
     std::string getId() { return clientId; }
 
-    Core::StatusResult::Unique sendMessage(Message::Shared request);
+    Core::StatusResult::Unique sendRequest(
+        ActionType actionType,
+        std::string resource,
+        Core::IEntity::Unique content
+      );
 
     void onResponse(const Response& response);
     void onNotification(const Notification& notification);
