@@ -4,25 +4,36 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef MESSAGING_NOTIFICATION_HPP
-#define MESSAGING_NOTIFICATION_HPP
+#ifndef CORE_NOTIFICATION_HPP
+#define CORE_NOTIFICATION_HPP
 
 #include "Message.hpp"
 
 namespace Messaging {
 
+/**
+  The notification message.
+*/
 class Notification : public Message {
   TYPE_INFO(Notification, Message, "notification")
   public:
-    Notification(std::string sender, std::string receiver,
-      ActionType actionType, std::string resource, IEntity::Shared result);
+    Notification(
+      std::string sender,
+      std::string receiver,
+      ActionType  actionType,
+      std::string resource,
+      IEntity::Shared content
+    );
 
-    const IEntity* getContent() const { return result.get(); };
+    /**
+      The notification payload.
+    */
+    const IEntity* getContent() const { return content.get(); };
 
   private:
-    IEntity::Shared result;
+    IEntity::Shared content;
 };
 
 }
 
-#endif /* end of include guard: MESSAGING_NOTIFICATION_HPP */
+#endif /* end of include guard: CORE_NOTIFICATION_HPP */

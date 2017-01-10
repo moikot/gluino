@@ -9,11 +9,11 @@ using namespace Core;
 namespace {
 
 class BaseClass : public IEntity {
-  TYPE_INFO(BaseClass, IEntity, "BaseClass")
+  TYPE_INFO(BaseClass, IEntity, "base")
 };
 
 class DerivedClass : public BaseClass {
-  TYPE_INFO(DerivedClass, BaseClass, "DerivedClass")
+  TYPE_INFO(DerivedClass, BaseClass, "derived")
 };
 
 }

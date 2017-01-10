@@ -12,17 +12,23 @@
 
 namespace Messaging {
 
+/**
+  The response message.
+*/
 class Response : public Message {
   TYPE_INFO(Response, Message, "response")
   public:
     Response(
-      std::string sender,
-      std::string receiver,
-      ActionType actionType,
-      std::string resource,
+      std::string   sender,
+      std::string   receiver,
+      ActionType    actionType,
+      std::string   resource,
       Core::ActionResult::Unique result
     );
 
+    /**
+      The result of the action.
+    */
     const Core::ActionResult& getResult() const { return *result; }
 
   private:
