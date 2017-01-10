@@ -1,7 +1,7 @@
 #ifndef MESSAGE_QUEUE_MOCK_HPP
 #define MESSAGE_QUEUE_MOCK_HPP
 
-#include "gmock/gmock.h"
+#include <gmock/gmock.h>
 
 #include "Messaging/IMessageQueue.hpp"
 
