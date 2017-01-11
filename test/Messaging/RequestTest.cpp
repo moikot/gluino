@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+#include "catch.hpp"
 
 #include "Messaging/Request.hpp"
 
@@ -16,24 +16,27 @@ namespace {
 
 }
 
-TEST(Request, Sender_Retained) {
-  auto response = createRequest(nullptr);
-  ASSERT_EQ(response->getSender(), "sender");
-}
+TEST_CASE("Request can be constructed", "[Request]") {
 
-TEST(Request, ActionType_Retained) {
-  auto response = createRequest(nullptr);
-  ASSERT_EQ(response->getActionType(), ActionType::Get);
-}
+  auto request = createRequest(nullptr);
 
-TEST(Request, Resource_Retained) {
-  auto response = createRequest(nullptr);
-  ASSERT_EQ(response->getResource(), "resource");
-}
+  SECTION("sender retained") {
+    REQUIRE(request->getSender() == "sender");
+  }
 
-TEST(Request, Result_Retained) {
-  auto content = Content::makeUnique();
-  auto contentPtr = content.get();
-  auto response = createRequest(std::move(content));
-  ASSERT_EQ(response->getContent(), contentPtr);
+  SECTION("action type retained") {
+    REQUIRE(request->getActionType() == ActionType::Get);
+  }
+
+  SECTION("resource retained") {
+    REQUIRE(request->getResource() == "resource");
+  }
+
+  SECTION("result retained") {
+    auto content = Content::makeUnique();
+    auto contentPtr = content.get();
+    auto response = createRequest(std::move(content));
+    REQUIRE(response->getContent() == contentPtr);
+  }
+
 }

@@ -1,19 +1,29 @@
-#include <gtest/gtest.h>
+#include "catch.hpp" 
 
-#include "Core/StatusResult.hpp"
 #include "Core/ObjectResult.hpp"
 
 using namespace Core;
 
-TEST(ObjectResult, Status_Code_Retained) {
-  auto obj = StatusResult::makeUnique(StatusCode::OK, "test");
-  auto result = ObjectResult::makeUnique(StatusCode::OK, std::move(obj));
-  ASSERT_EQ(result->getStatusCode(), StatusCode::OK);
+namespace {
+
+  class ObjectClass : public IEntity {
+    TYPE_INFO(ObjectClass, IEntity, "base")
+  };
+
 }
 
-TEST(ObjectResult, Object_Retained) {
-  auto obj = StatusResult::makeUnique(StatusCode::OK, "test");
+TEST_CASE("ObjectResult can be constructed", "[ObjectResult]") {
+  
+  auto obj = ObjectClass::makeUnique();
   auto objPtr = obj.get();
   auto result = ObjectResult::makeUnique(StatusCode::OK, std::move(obj));
-  ASSERT_EQ(&result->getObject(), objPtr);
+
+  SECTION("status code retained") {
+    REQUIRE(result->getStatusCode() == StatusCode::OK);
+  }
+
+  SECTION("object retained") {
+    REQUIRE(&result->getObject() == objPtr);
+  }
+
 }

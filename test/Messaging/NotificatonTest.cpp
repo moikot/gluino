@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+#include "catch.hpp"
 
 #include "Messaging/Notification.hpp"
 
@@ -16,28 +16,30 @@ namespace {
 
 }
 
-TEST(Notification, Sender_Retained) {
-  auto notification = createNotification(nullptr);
-  ASSERT_EQ(notification->getSender(), "sender");
-}
+TEST_CASE("Notification can be constructed", "[Notification]") {
 
-TEST(Notification, Receiver_Retained) {
   auto notification = createNotification(nullptr);
-  ASSERT_EQ(notification->getReceiver(), "receiver");
-}
 
-TEST(Notification, ActionType_Retained) {
-  auto notification = createNotification(nullptr);
-  ASSERT_EQ(notification->getActionType(), ActionType::Get);
-}
+  SECTION("sender retained") {
+    REQUIRE(notification->getSender()  == "sender");
+  }
 
-TEST(Notification, Resource_Retained) {
-  auto notification = createNotification(nullptr);
-  ASSERT_EQ(notification->getResource(), "resource");
-}
+  SECTION("receiver retained") {
+    REQUIRE(notification->getReceiver() == "receiver");
+  }
 
-TEST(Notification, Content_Retained) {
-  auto content = Content::makeShared();
-  auto notification = createNotification(content);
-  ASSERT_EQ(notification->getContent(), content.get());
+  SECTION("action type retained") {
+    REQUIRE(notification->getActionType() == ActionType::Get);
+  }
+
+  SECTION("resource retained") {
+    REQUIRE(notification->getResource() == "resource");
+  }
+
+  SECTION("content retained") {
+    auto content = Content::makeShared();
+    auto notification = createNotification(content);
+    REQUIRE(notification->getContent() == content.get());
+  }
+
 }

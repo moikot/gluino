@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+#include "catch.hpp"
 
 #include "Core/StatusResult.hpp"
 #include "Messaging/Response.hpp"
@@ -14,28 +14,30 @@ namespace {
 
 }
 
-TEST(Response, Sender_Retained) {
-  auto response = createResponse(nullptr);
-  ASSERT_EQ(response->getSender(), "sender");
-}
+TEST_CASE("Response can be constructed", "[Response]") {
 
-TEST(Response, Receiver_Retained) {
-  auto response = createResponse(nullptr);
-  ASSERT_EQ(response->getReceiver(), "receiver");
-}
+  auto result = createResponse(nullptr);
 
-TEST(Response, ActionType_Retained) {
-  auto response = createResponse(nullptr);
-  ASSERT_EQ(response->getActionType(), ActionType::Get);
-}
+  SECTION("sender retained") {
+    REQUIRE(result->getSender() == "sender");
+  }
 
-TEST(Response, Resource_Retained) {
-  auto response = createResponse(nullptr);
-  ASSERT_EQ(response->getResource(), "resource");
-}
+  SECTION("receiver retained") {
+    REQUIRE(result->getReceiver() == "receiver");
+  }
 
-TEST(Response, Result_Retained) {
-  auto result = StatusResult::OK();
-  auto response = createResponse(std::move(result));
-  ASSERT_EQ(response->getResult().getStatusCode(), StatusCode::OK);
+  SECTION("action type retained") {
+    REQUIRE(result->getActionType() == ActionType::Get);
+  }
+
+  SECTION("resource retained") {
+    REQUIRE(result->getResource() == "resource");
+  }
+
+  SECTION("result retained") {
+    auto result = StatusResult::OK();
+    auto response = createResponse(std::move(result));
+    REQUIRE(response->getResult().getStatusCode() == StatusCode::OK);
+  }
+
 }

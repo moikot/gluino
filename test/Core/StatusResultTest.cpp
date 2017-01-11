@@ -1,55 +1,69 @@
-#include <gtest/gtest.h>
+#include "catch.hpp" 
 
 #include "Core/StatusResult.hpp"
 
 using namespace Core;
 
-TEST(StatusResult, OK_Status_Result_Has_OK_Status_Code) {
-  ASSERT_EQ(StatusCode::OK, StatusResult::OK()->getStatusCode());
+TEST_CASE("static creators", "[StatusResult]") {
+
+  SECTION("OK status result has OK status code") {
+    REQUIRE(StatusResult::OK()->getStatusCode() == StatusCode::OK);
+  }
+
+  SECTION("NotImplemented status result has NotImplemented status code") {
+    REQUIRE(StatusResult::NotImplemented()->getStatusCode() == StatusCode::NotImplemented);
+  }
+
 }
 
-TEST(StatusResult, NotImplimented_Status_Result_Has_NotImplemented_Status_Code) {
-  ASSERT_EQ(StatusCode::NotImplemented, StatusResult::NotImplemented()->getStatusCode());
-}
-
-TEST(StatusResult, Is_OK_When_Status_Code_Is_OK) {
+TEST_CASE("StatusResult can be constructed", "[StatusResult]") {
+  
   auto result = StatusResult::makeUnique(StatusCode::OK, "test");
-  ASSERT_TRUE(result->isOk());
+
+  SECTION("status code retained") {
+    REQUIRE(result->getStatusCode() == StatusCode::OK);
+  }
+
+  SECTION("message retained") {
+    REQUIRE(result->getMessage() == "test");
+  }
+
+  SECTION("inner result is null by default") {
+    REQUIRE(result->getInnerReuslt() == nullptr);
+  }
+
+  SECTION("inner result is retained") {
+    auto innerPtr = result.get();
+    auto outer = StatusResult::makeUnique(StatusCode::OK, "test", std::move(result));
+    REQUIRE(outer->getInnerReuslt() == innerPtr);
+  }
+
 }
 
-TEST(StatusResult, Is_Not_OK_When_Status_Code_Is_Not_OK) {
-  auto result = StatusResult::makeUnique(StatusCode::Accepted, "test");
-  ASSERT_FALSE(result->isOk());
+TEST_CASE("StatusResult isOK method", "[StatusResult]") {
+  
+  SECTION("is OK when status code is OK") {
+    auto result = StatusResult::makeUnique(StatusCode::OK, "test");
+    REQUIRE(result->isOk());
+  }
+
+  SECTION("is not OK when status code is not OK") {
+    auto result = StatusResult::makeUnique(StatusCode::Accepted, "test");
+    REQUIRE(!result->isOk());
+  }
+
 }
 
-TEST(StatusResult, Is_Accepted_When_Status_Code_Is_Accepted) {
-  auto result = StatusResult::makeUnique(StatusCode::Accepted, "test");
-  ASSERT_TRUE(result->isAccepted());
-}
+TEST_CASE("StatusResult isAccepted method", "[StatusResult]") {
 
-TEST(StatusResult, Is_Not_Accepted_When_Status_Code_Is_Not_Accepted) {
-  auto result = StatusResult::makeUnique(StatusCode::OK, "test");
-  ASSERT_FALSE(result->isAccepted());
-}
+  SECTION("is accepted when status code is Accepted") {
+    auto result = StatusResult::makeUnique(StatusCode::Accepted, "test");
+    REQUIRE(result->isAccepted());
+  }
 
-TEST(StatusResult, Status_Code_Retained) {
-  auto result = StatusResult::makeUnique(StatusCode::OK, "test");
-  ASSERT_EQ(result->getStatusCode(), StatusCode::OK);
-}
+  SECTION("is not accepted when status code is not Accepted") {
+    auto result = StatusResult::makeUnique(StatusCode::OK, "test");
+    REQUIRE(!result->isAccepted());
+  }
 
-TEST(StatusResult, Message_Retained) {
-  auto result = StatusResult::makeUnique(StatusCode::OK, "test");
-  ASSERT_EQ(result->getMessage(), "test");
-}
-
-TEST(StatusResult, Inner_Result_Is_Null_By_Default) {
-  auto result = StatusResult::makeUnique(StatusCode::OK, "test");
-  ASSERT_EQ(result->getInnerReuslt(), nullptr);
-}
-
-TEST(StatusResult, Inner_Result_Is_Retained) {
-  auto inner = StatusResult::makeUnique(StatusCode::OK, "test");
-  auto innerPtr = inner.get();
-  auto result = StatusResult::makeUnique(StatusCode::OK, "test", std::move(inner));
-  ASSERT_EQ(result->getInnerReuslt(), innerPtr);
 }

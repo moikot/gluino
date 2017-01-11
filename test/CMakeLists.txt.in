@@ -1,15 +1,28 @@
 cmake_minimum_required(VERSION 2.8.2)
 
-project(googletest-download NONE)
+project(test-mock-download NONE)
 
 include(ExternalProject)
-ExternalProject_Add(googletest
-  GIT_REPOSITORY    https://github.com/google/googletest.git
+
+ExternalProject_Add(catch
+  GIT_REPOSITORY    https://github.com/philsquared/catch.git
   GIT_TAG           master
-  SOURCE_DIR        "${CMAKE_BINARY_DIR}/googletest-src"
-  BINARY_DIR        "${CMAKE_BINARY_DIR}/googletest-build"
+  SOURCE_DIR        "${CMAKE_BINARY_DIR}/catch"
+  BINARY_DIR        ""
   CONFIGURE_COMMAND ""
   BUILD_COMMAND     ""
   INSTALL_COMMAND   ""
   TEST_COMMAND      ""
 )
+
+ExternalProject_Add(fakeit
+  GIT_REPOSITORY    https://github.com/eranpeer/fakeit.git
+  GIT_TAG           master
+  SOURCE_DIR        "${CMAKE_BINARY_DIR}/fakeit"
+  BINARY_DIR        ""
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND     ""
+  INSTALL_COMMAND   ""
+  TEST_COMMAND      ""
+)
+
