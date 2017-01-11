@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+#include "catch.hpp" 
 
 #include "Core/IEntity.hpp"
 #include "Core/Memory.hpp"
@@ -8,55 +8,63 @@ using namespace Core;
 
 namespace {
 
-class BaseClass : public IEntity {
-  TYPE_INFO(BaseClass, IEntity, "base")
-};
+  class BaseClass : public IEntity {
+	  TYPE_INFO(BaseClass, IEntity, "base")
+  };
 
-class DerivedClass : public BaseClass {
-  TYPE_INFO(DerivedClass, BaseClass, "derived")
-};
+  class DerivedClass : public BaseClass {
+	  TYPE_INFO(DerivedClass, BaseClass, "derived")
+  };
 
 }
 
-TEST(Casting, Unique_To_Unique_Succeeds) {
-  BaseClass::Unique base = DerivedClass::makeUnique();
-  auto basePtr = base.get();
-  auto derived = castToUnique<DerivedClass>(std::move(base));
-  ASSERT_EQ(base.get(), nullptr);
-  ASSERT_EQ(derived.get(), basePtr);
+TEST_CASE("successful casting", "[Casting]") {
+
+	SECTION("unique to unique casting succeeds") {
+		BaseClass::Unique base = DerivedClass::makeUnique();
+		auto basePtr = base.get();
+		auto derived = castToUnique<DerivedClass>(std::move(base));
+		REQUIRE(base.get() == nullptr);
+		REQUIRE(derived.get(), basePtr);
+	}
+
+	SECTION("unique to shared casting succeeds") {
+		BaseClass::Unique base = DerivedClass::makeUnique();
+		auto basePtr = base.get();
+		auto derived = castToShared<DerivedClass>(std::move(base));
+		REQUIRE(base.get() == nullptr);
+		REQUIRE(derived.get(), basePtr);
+	}
+
+	SECTION("shared to shared casting succeeds") {
+		BaseClass::Shared base = DerivedClass::makeShared();
+		auto derived = castToShared<DerivedClass>(base);
+		REQUIRE(base.get() == base.get());
+	}
+
 }
 
-TEST(Casting, Unique_To_Unique_Fails) {
-  auto base = BaseClass::makeUnique();
-  auto derived = castToUnique<DerivedClass>(std::move(base));
-  ASSERT_NE(base.get(), nullptr);
-  ASSERT_EQ(derived.get(), nullptr);
-}
+TEST_CASE("unsuccessful casting", "[Casting]") {
 
-TEST(Casting, Unique_To_Shared_Succeeds) {
-  BaseClass::Unique base = DerivedClass::makeUnique();
-  auto basePtr = base.get();
-  auto derived = castToShared<DerivedClass>(std::move(base));
-  ASSERT_EQ(base.get(), nullptr);
-  ASSERT_EQ(derived.get(), basePtr);
-}
+	SECTION("unique to unique casting fails") {
+		auto base = BaseClass::makeUnique();
+		auto derived = castToUnique<DerivedClass>(std::move(base));
+		REQUIRE(base.get() != nullptr);
+		REQUIRE(derived.get() == nullptr);
+	}
 
-TEST(Casting, Unique_To_Shared_Fails) {
-  auto base = BaseClass::makeUnique();
-  auto derived = castToShared<DerivedClass>(std::move(base));
-  ASSERT_NE(base.get(), nullptr);
-  ASSERT_EQ(derived.get(), nullptr);
-}
+	SECTION("unique to shared casting fails") {
+		auto base = BaseClass::makeUnique();
+		auto derived = castToShared<DerivedClass>(std::move(base));
+		REQUIRE(base.get() != nullptr);
+		REQUIRE(derived.get() == nullptr);
+	}
 
-TEST(Casting, Shared_To_Shared_Succeeds) {
-  BaseClass::Shared base = DerivedClass::makeShared();
-  auto derived = castToShared<DerivedClass>(base);
-  ASSERT_EQ(derived.get(), base.get());
-}
+	SECTION("shared to shared casting fails") {
+		auto base = BaseClass::makeShared();
+		auto derived = castToShared<DerivedClass>(base);
+		REQUIRE(base.get() != nullptr);
+		REQUIRE(derived.get() == nullptr);
+	}
 
-TEST(Casting, Shared_To_Shared_Fails) {
-  auto base = BaseClass::makeShared();
-  auto derived = castToShared<DerivedClass>(base);
-  ASSERT_NE(base.get(), nullptr);
-  ASSERT_EQ(derived.get(), nullptr);
 }
