@@ -25,7 +25,7 @@ TEST_CASE("successful casting", "[Casting]") {
 		auto basePtr = base.get();
 		auto derived = castToUnique<DerivedClass>(std::move(base));
 		REQUIRE(base.get() == nullptr);
-		REQUIRE(derived.get(), basePtr);
+		REQUIRE(derived.get() == basePtr);
 	}
 
 	SECTION("unique to shared casting succeeds") {
@@ -33,7 +33,7 @@ TEST_CASE("successful casting", "[Casting]") {
 		auto basePtr = base.get();
 		auto derived = castToShared<DerivedClass>(std::move(base));
 		REQUIRE(base.get() == nullptr);
-		REQUIRE(derived.get(), basePtr);
+		REQUIRE(derived.get() == basePtr);
 	}
 
 	SECTION("shared to shared casting succeeds") {
