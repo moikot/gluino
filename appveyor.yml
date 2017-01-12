@@ -23,7 +23,7 @@ clone_folder: c:\projects\gluino
 platform: x64
 
 # build Configuration, i.e. Debug, Release, etc.
-configuration: Release
+configuration: Debug
 
 # scripts to run before build
 before_build:
