@@ -33,4 +33,4 @@ before_build:
   - cmake ..
 
 build:
-  project: RUN_TESTS.vcxproj
+  project: c:\projects\gluino\build\RUN_TESTS.vcxproj
