@@ -21,6 +21,8 @@ clone_folder: c:\projects\gluino
 
 # scripts to run before build
 before_build:
+  # deleting Xamarin targets
+  - del "C:\Program Files (x86)\MSBuild\14.0\Microsoft.Common.targets\ImportAfter\Xamarin.Common.targets"
   - cd c:\projects\gluino
   - mkdir build
   - cd build
