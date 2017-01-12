@@ -22,27 +22,27 @@ TEST_CASE("equality", "[ActionType]") {
 
 TEST_CASE("getting action type by id", "[ActionType]") {
 
-  SECTION("can get by Get id") {
+  SECTION("can get Get action type") {
     auto type = ActionType::getById(ActionType::Get.getId());
     REQUIRE(type == ActionType::Get);
   }
 
-  SECTION("can get by Create id") {
+  SECTION("can get Create action type") {
     auto type = ActionType::getById(ActionType::Create.getId());
     REQUIRE(type == ActionType::Create);
   }
 
-  SECTION("can get by Update id") {
+  SECTION("can get Update action type") {
     auto type = ActionType::getById(ActionType::Update.getId());
     REQUIRE(type == ActionType::Update);
   }
 
-  SECTION("can get by Delete id") {
+  SECTION("can get Delete action type") {
     auto type = ActionType::getById(ActionType::Delete.getId());
     REQUIRE(type == ActionType::Delete);
   }
 
-  SECTION("can get by Unknown id") {
+  SECTION("can get Unknown action type") {
     auto type = ActionType::getById(ActionType::Unknown.getId());
     REQUIRE(type == ActionType::Unknown);
   }
