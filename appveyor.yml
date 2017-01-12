@@ -33,4 +33,8 @@ before_build:
   - cmake ..
 
 build:
-  project: c:\projects\gluino\build\RUN_TESTS.vcxproj
+  project: c:\projects\gluino\build\gluino.sln
+
+# scripts to run after build
+after_build:
+  - msbuild c:\projects\gluino\build\RUN_TESTS.vcxproj
