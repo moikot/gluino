@@ -70,7 +70,6 @@ class QueueResourceController {
   private:
     QueueController::Shared queueController;
     std::string typeId;
-    std::set<std::string> senders;
     std::function<Core::ActionResult::Unique()> onGetRequestHandler;
     std::function<Core::StatusResult::Unique(const T&)> onCreateRequestHandler;
     std::function<Core::StatusResult::Unique(const T&)> onUpdateRequestHandler;
@@ -83,12 +82,7 @@ class QueueResourceController {
     ActionResult::Unique processRequest(const Request& request) {
       if (request.getActionType() == ActionType::Get) {
         if (onGetRequestHandler) {
-          auto result = onGetRequestHandler();
-          auto statusResult = StatusResult::cast(result.get());
-          if (statusResult && statusResult->isAccepted()) {
-              senders.insert(request.getSender());
-          }
-          return result;
+          return onGetRequestHandler();
         }
         return StatusResult::NotImplemented();
       }
