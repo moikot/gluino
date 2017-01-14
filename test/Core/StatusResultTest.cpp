@@ -1,4 +1,4 @@
-#include "catch.hpp" 
+#include "catch.hpp"
 
 #include "Core/StatusResult.hpp"
 
@@ -17,7 +17,7 @@ TEST_CASE("static creators", "[StatusResult]") {
 }
 
 TEST_CASE("StatusResult can be constructed", "[StatusResult]") {
-  
+
   auto result = StatusResult::makeUnique(StatusCode::OK, "test");
 
   SECTION("status code retained") {
@@ -41,7 +41,7 @@ TEST_CASE("StatusResult can be constructed", "[StatusResult]") {
 }
 
 TEST_CASE("StatusResult isOK method", "[StatusResult]") {
-  
+
   SECTION("is OK when status code is OK") {
     auto result = StatusResult::makeUnique(StatusCode::OK, "test");
     REQUIRE(result->isOk());
@@ -50,20 +50,6 @@ TEST_CASE("StatusResult isOK method", "[StatusResult]") {
   SECTION("is not OK when status code is not OK") {
     auto result = StatusResult::makeUnique(StatusCode::Accepted, "test");
     REQUIRE(!result->isOk());
-  }
-
-}
-
-TEST_CASE("StatusResult isAccepted method", "[StatusResult]") {
-
-  SECTION("is accepted when status code is Accepted") {
-    auto result = StatusResult::makeUnique(StatusCode::Accepted, "test");
-    REQUIRE(result->isAccepted());
-  }
-
-  SECTION("is not accepted when status code is not Accepted") {
-    auto result = StatusResult::makeUnique(StatusCode::OK, "test");
-    REQUIRE(!result->isAccepted());
   }
 
 }

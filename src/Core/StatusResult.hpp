@@ -30,10 +30,6 @@ public:
     return getStatusCode() == StatusCode::OK;
   }
 
-  bool isAccepted() const {
-    return getStatusCode() == StatusCode::Accepted;
-  }
-
   std::string getMessage() const {
     return message;
   }
