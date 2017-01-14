@@ -7,7 +7,7 @@
 #ifndef SERIALIZATION_I_SERIALIZATION_CONTEXT_HPP
 #define SERIALIZATION_I_SERIALIZATION_CONTEXT_HPP
 
-#include "Core/ActionResult.hpp"
+#include "Core/StatusResult.hpp"
 #include "Core/IList.hpp"
 
 namespace Serialization {

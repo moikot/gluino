@@ -30,7 +30,7 @@ QueueController::canProcessRequest(const Request& request) {
   return false;
 }
 
-ActionResult::Unique
+IEntity::Unique
 QueueController::processRequest(const Request& request) {
   if (processRequestHandler)
     return processRequestHandler(request);

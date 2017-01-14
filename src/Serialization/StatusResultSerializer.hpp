@@ -8,7 +8,7 @@
 #define SERIALIZATION_STATUS_SERIALIZER_HPP
 
 #include "Serializer.hpp"
-#include "Core/ActionResult.hpp"
+#include "Core/StatusResult.hpp"
 
 namespace Serialization {
 

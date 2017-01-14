@@ -8,7 +8,7 @@
 #define MESSAGING_RESPONSE_HPP
 
 #include "Message.hpp"
-#include "Core/ActionResult.hpp"
+#include "Core/IEntity.hpp"
 
 namespace Messaging {
 
@@ -19,20 +19,20 @@ class Response : public Message {
   TYPE_INFO(Response, Message, "response")
   public:
     Response(
-      std::string   sender,
-      std::string   receiver,
-      ActionType    actionType,
-      std::string   resource,
-      Core::ActionResult::Unique result
+      std::string       sender,
+      std::string       receiver,
+      ActionType        actionType,
+      std::string       resource,
+      IEntity::Unique   content
     );
 
     /**
       The result of the action.
     */
-    const Core::ActionResult& getResult() const { return *result; }
+    const IEntity& getResult() const { return *content; }
 
   private:
-    Core::ActionResult::Unique result;
+    IEntity::Unique content;
 };
 
 }

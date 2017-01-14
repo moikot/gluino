@@ -8,7 +8,7 @@ using namespace Messaging;
 
 namespace {
 
-  Response::Unique createResponse(Core::ActionResult::Unique result) {
+  Response::Unique createResponse(Core::StatusResult::Unique result) {
     return Response::makeUnique("sender", "receiver", ActionType::Get, "resource", std::move(result));
   }
 
@@ -36,8 +36,9 @@ TEST_CASE("Response can be constructed", "[Response]") {
 
   SECTION("result retained") {
     auto result = StatusResult::OK();
+    auto resultPtr = result.get();
     auto response = createResponse(std::move(result));
-    REQUIRE(response->getResult().getStatusCode() == StatusCode::OK);
+    REQUIRE(&response->getResult() == resultPtr);
   }
 
 }

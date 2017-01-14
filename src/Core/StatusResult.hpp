@@ -8,12 +8,13 @@
 #ifndef CORE_STATUS_RESULT_HPP
 #define CORE_STATUS_RESULT_HPP
 
-#include "ActionResult.hpp"
+#include "IEntity.hpp"
+#include "StatusCode.hpp"
 
 namespace Core {
 
-class StatusResult : public ActionResult {
-TYPE_INFO(StatusResult, ActionResult, "statusResult")
+class StatusResult : public IEntity {
+TYPE_INFO(StatusResult, IEntity, "statusResult")
 
 public:
   static StatusResult::Unique OK();
@@ -30,6 +31,10 @@ public:
     return getStatusCode() == StatusCode::OK;
   }
 
+  virtual StatusCode getStatusCode() const {
+    return statusCode;
+  }
+
   std::string getMessage() const {
     return message;
   }
@@ -39,6 +44,7 @@ public:
   }
 
 private:
+  const StatusCode            statusCode;
   const std::string           message;
   const StatusResult::Unique  innerResult;
 };

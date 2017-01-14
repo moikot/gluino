@@ -68,7 +68,7 @@ MessageQueue::removeController(QueueController::Shared controller) {
 void
 MessageQueue::processRequest(const Request& request) {
   Logger::message("Processing a request from '" + request.getSender() + "'");
-  ActionResult::Unique result;
+  IEntity::Unique result;
   auto controller = getController(request);
   if (controller) {
     result = controller->processRequest(request);
@@ -153,7 +153,7 @@ MessageQueue::getController(const Request& request) {
 
 Response::Shared
 MessageQueue::createResponseFor(const Request& request,
-  ActionResult::Unique result, const QueueController* controller) {
+  IEntity::Unique result, const QueueController* controller) {
 
   std::string sender(messageQueueSenderId);
   if (controller)

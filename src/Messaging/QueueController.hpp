@@ -9,7 +9,6 @@
 
 #include "Request.hpp"
 #include "Notification.hpp"
-#include "Core/ActionResult.hpp"
 #include "Core/StatusResult.hpp"
 
 #include <functional>
@@ -32,12 +31,12 @@ class QueueController {
       std::string resource, Core::IEntity::Shared result);
 
     bool canProcessRequest(const Request& request);
-    Core::ActionResult::Unique processRequest(const Request& request);
+    Core::IEntity::Unique processRequest(const Request& request);
 
     void setCanProcessRequest(std::function<bool(const Request&)> handler) {
       this->canProcessRequestHandler = handler;
     }
-    void setProcessRequest(std::function<Core::ActionResult::Unique(const Request&)> handler) {
+    void setProcessRequest(std::function<Core::IEntity::Unique(const Request&)> handler) {
       this->processRequestHandler = handler;
     }
 
@@ -45,7 +44,7 @@ class QueueController {
     std::string controllerId;
     IMessageQueue& messageQueue;
     std::function<bool(const Request&)> canProcessRequestHandler;
-    std::function<Core::ActionResult::Unique(const Request&)> processRequestHandler;
+    std::function<Core::IEntity::Unique(const Request&)> processRequestHandler;
 };
 
 }

@@ -74,7 +74,7 @@ class MessageQueue : public IMessageQueue {
 
     Response::Shared        createResponseFor(
                               const Request&          request,
-                              Core::ActionResult::Unique    result,
+                              Core::IEntity::Unique   result,
                               const QueueController*  controller
                             );
 };

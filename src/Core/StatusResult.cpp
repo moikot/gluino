@@ -13,10 +13,10 @@ StatusResult::NotImplemented() {
 }
 
 StatusResult::StatusResult(const StatusCode& statusCode, const std::string& message) :
-  ActionResult(statusCode), message(message) {
+  statusCode(statusCode), message(message) {
 }
 
 StatusResult::StatusResult(const StatusCode& statusCode, const std::string& message,
              StatusResult::Unique innerResult) :
-  ActionResult(statusCode), message(message), innerResult(std::move(innerResult)) {
+  statusCode(statusCode), message(message), innerResult(std::move(innerResult)) {
 }

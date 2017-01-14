@@ -49,7 +49,7 @@ TEST_CASE("resource request is sent", "[QueueClient]") {
     REQUIRE(request->getActionType() == ActionType::Get);
     REQUIRE(request->getResource() == "resource");
     REQUIRE(request->getContent() == contentPtr);
-    return StatusResult::OK(); 
+    return StatusResult::OK();
   });
 
   auto client = QueueClient::makeUnique("id", messageQueue.get());
@@ -63,6 +63,7 @@ TEST_CASE("responce handler is invoked", "[QueueClient]") {
   Mock<IMessageQueue> messageQueue;
   auto client = QueueClient::makeUnique("id", messageQueue.get());
   auto result = StatusResult::OK();
+  auto resultPtr = result.get();
 
   Mock<EventSink> eventSink;
   When(Method(eventSink, onResponse)).Do([=](const Response& response) {
@@ -70,7 +71,7 @@ TEST_CASE("responce handler is invoked", "[QueueClient]") {
     REQUIRE(response.getReceiver() == "receiver");
     REQUIRE(response.getActionType() == ActionType::Get);
     REQUIRE(response.getResource() == "resource");
-    REQUIRE(response.getResult().getStatusCode() == StatusCode::OK);
+    REQUIRE(&response.getResult() == resultPtr);
     return StatusResult::OK();
   });
 
@@ -80,7 +81,7 @@ TEST_CASE("responce handler is invoked", "[QueueClient]") {
   client->onResponse(response);
 
   Verify(Method(eventSink, onResponse));
-  
+
 }
 
 TEST_CASE("notification handler is invoked", "[QueueClient]") {
