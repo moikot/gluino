@@ -23,10 +23,7 @@ RequestSerializer::deserialize(
   if (!result->isOk())
     return result;
 
-  ActionType actionType = ActionType::getById(actionTypeStr);
-  if (actionType == ActionType::Unknown)
-    return StatusResult::makeUnique(StatusCode::BadRequest,
-      "Action type '" + actionTypeStr + "' is not supported.");
+  ActionType actionType = ActionType(actionTypeStr);
 
   std::string resource;
   result = context.getStringValue(FIELD_RESOURCE, resource);

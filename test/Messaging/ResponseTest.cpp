@@ -13,7 +13,7 @@ namespace {
   };
 
   Response::Unique createResponse(Core::IEntity::Shared content) {
-    return Response::makeUnique("sender", "receiver", ActionType::Get, "resource", content);
+    return Response::makeUnique("sender", "receiver", ActionType("get"), "resource", content);
   }
 
 }
@@ -32,7 +32,7 @@ TEST_CASE("Response can be constructed", "[Response]") {
   }
 
   SECTION("action type retained") {
-    REQUIRE(response->getActionType() == ActionType::Get);
+    REQUIRE(response->getActionType() == ActionType("get"));
   }
 
   SECTION("resource retained") {

@@ -11,7 +11,7 @@ namespace {
   };
 
   Event::Unique createEvent(Core::IEntity::Shared content) {
-    return Event::makeUnique("sender", ActionType::Get, "resource", content);
+    return Event::makeUnique("sender", ActionType("get"), "resource", content);
   }
 
 }
@@ -26,7 +26,7 @@ TEST_CASE("Event can be constructed", "[Event]") {
   }
 
   SECTION("action type retained") {
-    REQUIRE(event->getActionType() == ActionType::Get);
+    REQUIRE(event->getActionType() == ActionType("get"));
   }
 
   SECTION("resource retained") {

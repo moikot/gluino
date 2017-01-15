@@ -11,40 +11,28 @@
 
 namespace Messaging {
 
+/**
+  The action type (e.g. get/create/update/delete etc.)
+*/
 class ActionType {
 public:
-  static const ActionType Unknown;
-  static const ActionType Get;
-  static const ActionType Create;
-  static const ActionType Update;
-  static const ActionType Delete;
+  explicit ActionType(const std::string& type) : type(type) {
+  }
+
+  /**
+    The action type.
+  */
+  std::string getType() const { return type; }
 
   bool operator==(const ActionType& other) const {
-    return id == other.id;
+    return type == other.type;
   }
   bool operator!=(const ActionType& other) const {
     return !(*this == other);
   }
 
-  std::string getId() const { return id; }
-
-  static ActionType getById(std::string id) {
-    if (id == Get.getId())
-      return ActionType::Get;
-    if (id == Update.getId())
-      return ActionType::Update;
-    if (id == Create.getId())
-      return ActionType::Create;
-    if (id == Delete.getId())
-      return ActionType::Delete;
-    return ActionType::Unknown;
-  }
-
 private:
-  explicit ActionType(const std::string& id) : id(id) {
-  }
-
-  std::string  id;
+  std::string  type;
 };
 
 }

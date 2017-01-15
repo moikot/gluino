@@ -103,7 +103,7 @@ MessageQueue::processResponse(const Response& response) {
 void
 MessageQueue::processEvent(const Event& event) {
   auto sender = event.getSender();
-  Logger::message("Broadcating a notification from '" + sender + "'.");
+  Logger::message("Broadcating an event from '" + sender + "'.");
   std::list<QueueClient::Shared> deletedClients;
   for(auto client: clients) {
     if (!client.unique()) {

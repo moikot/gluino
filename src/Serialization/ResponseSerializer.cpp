@@ -13,7 +13,7 @@ ResponseSerializer::serialize(
   const Response& response,
   ISerializationContext& context) const {
 
-  auto result = context.setValue(FIELD_ACTION, response.getActionType().getId());
+  auto result = context.setValue(FIELD_ACTION, response.getActionType().getType());
   if (!result->isOk())
     return result;
 

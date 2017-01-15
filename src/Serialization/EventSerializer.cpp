@@ -13,7 +13,7 @@ EventSerializer::serialize(
   const Messaging::Event& event,
   ISerializationContext& context) const {
 
-  auto result = context.setValue(FIELD_ACTION, event.getActionType().getId());
+  auto result = context.setValue(FIELD_ACTION, event.getActionType().getType());
   if (!result->isOk())
     return result;
 
