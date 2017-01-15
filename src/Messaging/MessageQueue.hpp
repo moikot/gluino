@@ -11,8 +11,6 @@
 
 #include <queue>
 #include <list>
-#include <vector>
-#include <functional>
 
 namespace Messaging {
 
@@ -28,9 +26,19 @@ class MessageQueue : public IMessageQueue {
     virtual void idle() override;
 
     /**
-      Adds a message to the queue.
+      Adds a request to the queue.
     */
-    virtual Core::StatusResult::Unique sendMessage(Message::Shared message) override;
+    virtual Core::StatusResult::Unique addRequest(Request::Shared request) override;
+
+    /**
+      Adds a response to the queue.
+    */
+    virtual Core::StatusResult::Unique addResponse(Response::Shared response) override;
+
+    /**
+      Adds a event to the queue.
+    */
+    virtual Core::StatusResult::Unique addEvent(Event::Shared event) override;
 
     /**
       Creates a queue client.
@@ -53,21 +61,16 @@ class MessageQueue : public IMessageQueue {
     virtual void removeController(QueueController::Shared controller) override;
 
   private:
-    class MessageComparer {
-      public:
-        bool operator() (const Message::Shared& lhs, const Message::Shared&rhs) const
-        {
-          return (lhs->getPriority() > rhs->getPriority());
-        }
-    };
+    std::queue<Request::Shared> requests;
+    std::queue<Response::Shared> responses;
+    std::queue<Event::Shared> events;
 
-    std::priority_queue<Message::Shared, std::vector<Message::Shared>, MessageComparer> messages;
     std::list<QueueClient::Shared> clients;
     std::list<QueueController::Shared> controllers;
 
     void processRequest(const Request& request);
     void processResponse(const Response& response);
-    void processNotification(const Notification& notification);
+    void processEvent(const Event& event);
 
     QueueClient::Shared     getClient(std::string clientId);
     QueueController::Shared getController(const Request& request);

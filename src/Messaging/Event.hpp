@@ -4,8 +4,8 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef MESSAGING_REQUEST_HPP
-#define MESSAGING_REQUEST_HPP
+#ifndef CORE_NOTIFICATION_HPP
+#define CORE_NOTIFICATION_HPP
 
 #include "ActionType.hpp"
 #include "Core/IEntity.hpp"
@@ -13,12 +13,12 @@
 namespace Messaging {
 
 /**
-  The request message.
+  The notification message.
 */
-class Request : public Core::IEntity {
-  TYPE_INFO(Request, IEntity, "request")
+class Event : public Core::IEntity {
+  TYPE_INFO(Event, IEntity, "notification")
   public:
-    Request(
+    Event(
       std::string     sender,
       ActionType      actionType,
       std::string     resource,
@@ -26,7 +26,7 @@ class Request : public Core::IEntity {
     );
 
     /**
-      The request sender.
+      The notification sender.
     */
     std::string getSender() const { return sender; };
 
@@ -41,7 +41,7 @@ class Request : public Core::IEntity {
     std::string getResource() const { return resource; }
 
     /**
-      The request content.
+      The notification content.
     */
     const IEntity* getContent() const { return content.get(); };
 
@@ -54,4 +54,4 @@ class Request : public Core::IEntity {
 
 }
 
-#endif /* end of include guard: MESSAGING_MESSAGE_HPP */
+#endif /* end of include guard: CORE_NOTIFICATION_HPP */

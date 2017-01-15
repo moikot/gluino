@@ -7,7 +7,6 @@
 #ifndef MESSAGING_I_MESSAGE_QUEUE_HPP
 #define MESSAGING_I_MESSAGE_QUEUE_HPP
 
-#include "Message.hpp"
 #include "QueueClient.hpp"
 #include "QueueController.hpp"
 #include "Core/IService.hpp"
@@ -22,12 +21,28 @@ class IMessageQueue : public Core::IService {
   public:
 
     /**
-      Adds a new message to the message queue.
+      Adds a new request to the message queue.
 
-      @param message The message to add to the queue.
+      @param message The request to add to the queue.
       @return The result of the operation.
     */
-    virtual Core::StatusResult::Unique sendMessage(Message::Shared message) = 0;
+    virtual Core::StatusResult::Unique addRequest(Request::Shared request) = 0;
+
+    /**
+      Adds a new response to the message queue.
+
+      @param message The response to add to the queue.
+      @return The result of the operation.
+    */
+    virtual Core::StatusResult::Unique addResponse(Response::Shared response) = 0;
+
+    /**
+      Adds a new event to the message queue.
+
+      @param message The event to add to the queue.
+      @return The result of the operation.
+    */
+    virtual Core::StatusResult::Unique addEvent(Event::Shared event) = 0;
 
     /**
       Creates a new queue client for sending requests and getting responses.

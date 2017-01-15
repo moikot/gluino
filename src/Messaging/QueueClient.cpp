@@ -11,17 +11,19 @@ QueueClient::QueueClient(std::string clientId, IMessageQueue& messageQueue) :
 StatusResult::Unique
 QueueClient::sendRequest(ActionType actionType, std::string resource, IEntity::Unique content) {
   auto request = Request::makeShared(clientId, actionType, resource, std::move(content));
-  return messageQueue.sendMessage(request);
+  return messageQueue.addRequest(request);
 }
 
 void
 QueueClient::onResponse(const Response& response) {
-  if (onResponseHandler)
+  if (onResponseHandler) {
     onResponseHandler(response);
+  }
 }
 
 void
-QueueClient::onNotification(const Notification& notification) {
-  if (onNotificationHandler)
-    onNotificationHandler(notification);
+QueueClient::onEvent(const Event& event) {
+  if (onEventHandler) {
+    onEventHandler(event);
+  }
 }

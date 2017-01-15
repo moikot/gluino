@@ -8,9 +8,8 @@
 #define MESSAGING_QUEUE_CLIENT_HPP
 
 #include "Core/StatusResult.hpp"
-#include "Message.hpp"
 #include "Response.hpp"
-#include "Notification.hpp"
+#include "Event.hpp"
 
 #include <functional>
 
@@ -32,21 +31,21 @@ class QueueClient {
       );
 
     void onResponse(const Response& response);
-    void onNotification(const Notification& notification);
+    void onEvent(const Event& event);
 
     void setOnResponse(std::function<void(const Response&)> onResponse) {
       onResponseHandler = onResponse;
     }
 
-    void setOnNotification(std::function<void(const Notification&)> onNotification) {
-      onNotificationHandler = onNotification;
+    void setOnEvent(std::function<void(const Event&)> onEvent) {
+      onEventHandler = onEvent;
     }
 
   private:
     std::string clientId;
     IMessageQueue& messageQueue;
     std::function<void(const Response&)> onResponseHandler;
-    std::function<void(const Notification&)> onNotificationHandler;
+    std::function<void(const Event&)> onEventHandler;
 };
 
 }

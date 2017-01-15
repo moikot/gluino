@@ -6,39 +6,42 @@
 using namespace Core;
 using namespace Messaging;
 
+
 namespace {
 
-  Response::Unique createResponse(Core::StatusResult::Unique result) {
-    return Response::makeUnique("sender", "receiver", ActionType::Get, "resource", std::move(result));
+  class Content : public Core::IEntity {
+    TYPE_INFO(Content, Core::IEntity, "content")
+  };
+
+  Response::Unique createResponse(Core::IEntity::Shared content) {
+    return Response::makeUnique("sender", "receiver", ActionType::Get, "resource", content);
   }
 
 }
 
 TEST_CASE("Response can be constructed", "[Response]") {
 
-  auto result = createResponse(nullptr);
+  auto content = Content::makeShared();
+  auto response = createResponse(content);
 
   SECTION("sender retained") {
-    REQUIRE(result->getSender() == "sender");
+    REQUIRE(response->getSender() == "sender");
   }
 
   SECTION("receiver retained") {
-    REQUIRE(result->getReceiver() == "receiver");
+    REQUIRE(response->getReceiver() == "receiver");
   }
 
   SECTION("action type retained") {
-    REQUIRE(result->getActionType() == ActionType::Get);
+    REQUIRE(response->getActionType() == ActionType::Get);
   }
 
   SECTION("resource retained") {
-    REQUIRE(result->getResource() == "resource");
+    REQUIRE(response->getResource() == "resource");
   }
 
-  SECTION("result retained") {
-    auto result = StatusResult::OK();
-    auto resultPtr = result.get();
-    auto response = createResponse(std::move(result));
-    REQUIRE(&response->getResult() == resultPtr);
+  SECTION("content retained") {
+    REQUIRE(&response->getContent() == content.get());
   }
 
 }

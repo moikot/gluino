@@ -19,7 +19,7 @@ namespace {
 
   struct EventSink {
     virtual void onResponse(const Response&) = 0;
-    virtual void onNotification(const Notification&) const = 0;
+    virtual void onEvent(const Event&) const = 0;
   };
 
 }
@@ -41,11 +41,8 @@ TEST_CASE("resource request is sent", "[QueueClient]") {
   auto content = Content::makeUnique();
   auto contentPtr = content.get();
 
-  When(Method(messageQueue, sendMessage)).Do([=](Message::Shared message) {
-    auto request = castToShared<Request>(message);
-
+  When(Method(messageQueue, addRequest)).Do([=](Request::Shared request) {
     REQUIRE(request->getSender() == "id");
-    REQUIRE(request->getReceiver() == "");
     REQUIRE(request->getActionType() == ActionType::Get);
     REQUIRE(request->getResource() == "resource");
     REQUIRE(request->getContent() == contentPtr);
@@ -55,7 +52,7 @@ TEST_CASE("resource request is sent", "[QueueClient]") {
   auto client = QueueClient::makeUnique("id", messageQueue.get());
   client->sendRequest(ActionType::Get, "resource", std::move(content));
 
-  Verify(Method(messageQueue, sendMessage));
+  Verify(Method(messageQueue, addRequest));
 }
 
 TEST_CASE("responce handler is invoked", "[QueueClient]") {
@@ -71,7 +68,7 @@ TEST_CASE("responce handler is invoked", "[QueueClient]") {
     REQUIRE(response.getReceiver() == "receiver");
     REQUIRE(response.getActionType() == ActionType::Get);
     REQUIRE(response.getResource() == "resource");
-    REQUIRE(&response.getResult() == resultPtr);
+    REQUIRE(&response.getContent() == resultPtr);
     return StatusResult::OK();
   });
 
@@ -84,27 +81,26 @@ TEST_CASE("responce handler is invoked", "[QueueClient]") {
 
 }
 
-TEST_CASE("notification handler is invoked", "[QueueClient]") {
+TEST_CASE("event handler is invoked", "[QueueClient]") {
 
   Mock<IMessageQueue> messageQueue;
   auto client = QueueClient::makeUnique("id", messageQueue.get());
   auto content = Content::makeShared();
 
   Mock<EventSink> eventSink;
-  When(Method(eventSink, onNotification)).Do([=](const Notification& notification) {
-    REQUIRE(notification.getSender() == "sender");
-    REQUIRE(notification.getReceiver() == "receiver");
-    REQUIRE(notification.getActionType() == ActionType::Get);
-    REQUIRE(notification.getResource() == "resource");
-    REQUIRE(notification.getContent() == content.get());
+  When(Method(eventSink, onEvent)).Do([=](const Event& event) {
+    REQUIRE(event.getSender() == "sender");
+    REQUIRE(event.getActionType() == ActionType::Get);
+    REQUIRE(event.getResource() == "resource");
+    REQUIRE(event.getContent() == content.get());
     return StatusResult::OK();
   });
 
-  client->setOnNotification(std::bind(&EventSink::onNotification, &eventSink.get(), _1));
+  client->setOnEvent(std::bind(&EventSink::onEvent, &eventSink.get(), _1));
 
-  Notification notification("sender", "receiver", ActionType::Get, "resource", content);
-  client->onNotification(notification);
+  Event event("sender", ActionType::Get, "resource", content);
+  client->onEvent(event);
 
-  Verify(Method(eventSink, onNotification));
+  Verify(Method(eventSink, onEvent));
 
 }

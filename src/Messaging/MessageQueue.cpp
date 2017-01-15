@@ -12,32 +12,40 @@ namespace {
 
 void
 MessageQueue::idle() {
-  while (!messages.empty())
+  while (!requests.empty())
   {
-    auto message = messages.top();
-    messages.pop();
-    auto request = castToShared<Request>(message);
-    if (request) {
-      processRequest(*request);
-      continue;
-    }
-    auto response = castToShared<Response>(message);
-    if (response) {
-      processResponse(*response);
-      continue;
-    }
-    auto notification = castToShared<Notification>(message);
-    if (notification) {
-      processNotification(*notification);
-      continue;
-    }
-    Logger::error("Unknown message type '" + std::string(message->getTypeId()) + "'.");
+    auto request = requests.front();
+    requests.pop();
+    processRequest(*request);
+  }
+  while (!responses.empty())
+  {
+    auto response = responses.front();
+    responses.pop();
+    processResponse(*response);
+  }
+  while (!events.empty()) {
+    auto event = events.front();
+    events.pop();
+    processEvent(*event);
   }
 }
 
 StatusResult::Unique
-MessageQueue::sendMessage(Message::Shared message) {
-  messages.push(message);
+MessageQueue::addRequest(Request::Shared request) {
+  requests.push(request);
+  return StatusResult::OK();
+}
+
+StatusResult::Unique
+MessageQueue::addResponse(Response::Shared response) {
+  responses.push(response);
+  return StatusResult::OK();
+}
+
+StatusResult::Unique
+MessageQueue::addEvent(Event::Shared event) {
+  events.push(event);
   return StatusResult::OK();
 }
 
@@ -77,7 +85,7 @@ MessageQueue::processRequest(const Request& request) {
     result = StatusResult::makeUnique(StatusCode::NotFound, "Unable to find a controller.");
   }
   auto response = createResponseFor(request, std::move(result), controller.get());
-  messages.push(response);
+  responses.push(response);
 }
 
 void
@@ -94,28 +102,19 @@ MessageQueue::processResponse(const Response& response) {
 }
 
 void
-MessageQueue::processNotification(const Notification& notification) {
-  auto sender = notification.getSender();
-  auto receiver = notification.getReceiver();
-  if (receiver != "") {
-    Logger::message("Sending a notification from '" + sender + "' to '" + receiver + "'.");
-    auto client = getClient(receiver);
-    if (client) {
-	    client->onNotification(notification);
+MessageQueue::processEvent(const Event& event) {
+  auto sender = event.getSender();
+  Logger::message("Broadcating a notification from '" + sender + "'.");
+  std::list<QueueClient::Shared> deletedClients;
+  for(auto client: clients) {
+    if (!client.unique()) {
+	    client->onEvent(event);
+    } else {
+      deletedClients.push_back(client);
     }
-  } else {
-    Logger::message("Broadcating a notification from '" + sender + "'.");
-    std::list<QueueClient::Shared> deletedClients;
-    for(auto client: clients) {
-      if (!client.unique()) {
-  	    client->onNotification(notification);
-      } else {
-        deletedClients.push_back(client);
-      }
-    }
-    for(auto client: deletedClients) {
-      clients.remove(client);
-    }
+  }
+  for(auto client: deletedClients) {
+    clients.remove(client);
   }
 }
 

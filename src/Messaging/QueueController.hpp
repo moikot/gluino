@@ -8,7 +8,7 @@
 #define MESSAGING_QUEUE_CONTROLLER_HPP
 
 #include "Request.hpp"
-#include "Notification.hpp"
+#include "Event.hpp"
 #include "Core/StatusResult.hpp"
 
 #include <functional>
@@ -24,10 +24,7 @@ class QueueController {
 
     std::string getId() const { return controllerId; }
 
-    Core::StatusResult::Unique sendNotification(std::string receiver,
-      ActionType actionType, std::string resource, Core::IEntity::Shared result);
-
-    Core::StatusResult::Unique broadcastNotification(ActionType actionType,
+    Core::StatusResult::Unique sendEvent(ActionType actionType,
       std::string resource, Core::IEntity::Shared result);
 
     bool canProcessRequest(const Request& request);

@@ -6,7 +6,7 @@ using namespace Serialization;
 
 #define FIELD_ACTION "action"
 #define FIELD_RESOURCE "resource"
-#define FIELD_RESULT "result"
+#define FIELD_CONTENT "content"
 
 StatusResult::Unique
 ResponseSerializer::serialize(
@@ -21,7 +21,7 @@ ResponseSerializer::serialize(
   if (!result->isOk())
     return result;
 
-  result = context.setValue(FIELD_RESULT, response.getResult());
+  result = context.setValue(FIELD_CONTENT, response.getContent());
   if (!result->isOk())
     return result;
 

@@ -8,20 +8,20 @@
 #define SERIALIZATION_NOTIFICATION_SERIALIZER_HPP
 
 #include "Serializer.hpp"
-#include "Messaging/Notification.hpp"
+#include "Messaging/Event.hpp"
 
 namespace Serialization {
 
-class NotificationSerializer : public Serializer<Messaging::Notification> {
-  TYPE_PTRS(NotificationSerializer)
+class EventSerializer : public Serializer<Messaging::Event> {
+  TYPE_PTRS(EventSerializer)
   protected:
     // From Serializer
     virtual Core::StatusResult::Unique serialize(
-      const Messaging::Notification& notification,
+      const Messaging::Event& event,
       ISerializationContext& context) const override;
 
     virtual Core::StatusResult::Unique deserialize(
-      Messaging::Notification::Unique& notification,
+      Messaging::Event::Unique& event,
       ISerializationContext& context) const override;
 };
 

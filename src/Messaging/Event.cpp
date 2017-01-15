@@ -1,16 +1,14 @@
-#include "Response.hpp"
+#include "Event.hpp"
 
 using namespace Messaging;
 
-Response::Response(
+Event::Event(
   std::string sender,
-  std::string receiver,
   ActionType actionType,
   std::string resource,
   IEntity::Shared content
 ) :
   sender(sender),
-  receiver(receiver),
   actionType(actionType),
   resource(resource),
   content(content) {
