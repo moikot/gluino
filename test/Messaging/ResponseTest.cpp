@@ -13,7 +13,7 @@ namespace {
   };
 
   Response::Unique createResponse(Core::IEntity::Shared content) {
-    return Response::makeUnique("get", "sender", "receiver", "resource", content);
+    return Response::makeUnique("get", "receiver", "resource", content);
   }
 
 }
@@ -29,10 +29,6 @@ TEST_CASE("Response can be constructed", "[Response]") {
 
   SECTION("request type retained") {
     REQUIRE(response->getRequestType() == "get");
-  }
-
-  SECTION("sender retained") {
-    REQUIRE(response->getSender() == "sender");
   }
 
   SECTION("receiver retained") {

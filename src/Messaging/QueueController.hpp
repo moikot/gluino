@@ -20,9 +20,7 @@ class IMessageQueue;
 class QueueController {
   TYPE_PTRS(QueueController)
   public:
-    QueueController(std::string controllerId, IMessageQueue& messageQueue);
-
-    std::string getId() const { return controllerId; }
+    QueueController(IMessageQueue& messageQueue);
 
     Core::StatusResult::Unique sendEvent(std::string type,
       std::string resource, Core::IEntity::Shared result);
@@ -38,7 +36,6 @@ class QueueController {
     }
 
   private:
-    std::string controllerId;
     IMessageQueue& messageQueue;
     std::function<bool(const Request&)> canProcessRequestHandler;
     std::function<Core::IEntity::Unique(const Request&)> processRequestHandler;

@@ -53,7 +53,7 @@ class MessageQueue : public IMessageQueue {
     /**
       Creates a queue controller.
     */
-    virtual QueueController::Shared createController(std::string controllerId) override;
+    virtual QueueController::Shared createController() override;
 
     /**
       Removes the queue controller.
@@ -77,8 +77,7 @@ class MessageQueue : public IMessageQueue {
 
     void sendResponseFor(
       const Request&          request,
-      Core::IEntity::Unique   result,
-      const QueueController*  controller
+      Core::IEntity::Unique   result
     );
 };
 

@@ -4,15 +4,13 @@
 using namespace Core;
 using namespace Messaging;
 
-QueueController::QueueController(std::string controllerId, IMessageQueue& messageQueue) :
-  controllerId(controllerId), messageQueue(messageQueue) {
-
+QueueController::QueueController(IMessageQueue& messageQueue) : messageQueue(messageQueue) {
 }
 
 StatusResult::Unique
 QueueController::sendEvent(std::string type,
   std::string resource, IEntity::Shared result) {
-  auto event = Event::makeShared(type, controllerId, resource, result);
+  auto event = Event::makeShared(type, resource, result);
   return messageQueue.addEvent(event);
 }
 

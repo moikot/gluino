@@ -19,7 +19,6 @@ class Response : public Core::IEntity {
   public:
     Response(
       std::string       requestType,
-      std::string       sender,
       std::string       receiver,
       std::string       resource,
       IEntity::Shared   content
@@ -29,11 +28,6 @@ class Response : public Core::IEntity {
       The request type (create, get, update, delete etc.).
     */
     std::string getRequestType() const { return requestType; }
-
-    /**
-      The response sender.
-    */
-    std::string getSender() const { return sender; };
 
     /**
       The response receiver.
@@ -52,7 +46,6 @@ class Response : public Core::IEntity {
 
   private:
     std::string     requestType;
-    std::string     sender;
     std::string     receiver;
     std::string     resource;
     IEntity::Shared content;

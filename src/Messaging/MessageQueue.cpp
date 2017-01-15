@@ -57,8 +57,8 @@ MessageQueue::createClient(std::string clientId) {
 }
 
 QueueController::Shared
-MessageQueue::createController(std::string controllerId) {
-  auto controller = QueueController::makeShared(controllerId, *this);
+MessageQueue::createController() {
+  auto controller = QueueController::makeShared(*this);
   controllers.push_back(controller);
   return controller;
 }
@@ -84,14 +84,13 @@ MessageQueue::processRequest(const Request& request) {
     Logger::error("Unable to find a controller.");
     result = StatusResult::makeUnique(StatusCode::NotFound, "Unable to find a controller.");
   }
-  sendResponseFor(request, std::move(result), controller.get());
+  sendResponseFor(request, std::move(result));
 }
 
 void
 MessageQueue::processResponse(const Response& response) {
-  auto sender = response.getSender();
   auto receiver = response.getReceiver();
-  Logger::message("Processing a response from '" + sender + "' to '" + receiver + "'");
+  Logger::message("Processing a response to '" + receiver + "'");
   auto client = getClient(receiver);
   if (client) {
     client->onResponse(response);
@@ -102,8 +101,7 @@ MessageQueue::processResponse(const Response& response) {
 
 void
 MessageQueue::processEvent(const Event& event) {
-  auto sender = event.getSender();
-  Logger::message("Broadcating an event from '" + sender + "'.");
+  Logger::message("Broadcating event '" + event.getEventType() + "'.");
   std::list<QueueClient::Shared> deletedClients;
   for(auto client: clients) {
     if (!client.unique()) {
@@ -150,16 +148,9 @@ MessageQueue::getController(const Request& request) {
 }
 
 void
-MessageQueue::sendResponseFor(const Request& request,
-  IEntity::Unique result, const QueueController* controller) {
-
-  std::string sender(messageQueueSenderId);
-  if (controller)
-    sender = controller->getId();
-
+MessageQueue::sendResponseFor(const Request& request, IEntity::Unique result) {
   auto response = Response::makeShared(
           request.getRequestType(),
-          sender,
           request.getSender(),
           request.getResource(),
           std::move(result)

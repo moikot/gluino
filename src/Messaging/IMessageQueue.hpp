@@ -65,7 +65,7 @@ class IMessageQueue : public Core::IService {
       @param clientId The unique controller identifier.
       @return The queue client.
     */
-    virtual QueueController::Shared createController(std::string controllerId) = 0;
+    virtual QueueController::Shared createController() = 0;
 
     /**
       Removes a queue controller from the queue.

@@ -19,7 +19,6 @@ class Event : public Core::IEntity {
   public:
     Event(
       std::string     eventType,
-      std::string     sender,
       std::string     resource,
       IEntity::Shared content
     );
@@ -28,11 +27,6 @@ class Event : public Core::IEntity {
       The event type (created, updated, deleted stc.).
     */
     std::string getEventType() const { return eventType; }
-
-    /**
-      The notification sender.
-    */
-    std::string getSender() const { return sender; };
 
     /**
       The resource.
@@ -46,7 +40,6 @@ class Event : public Core::IEntity {
 
   private:
     std::string     eventType;
-    std::string     sender;
     std::string     resource;
     IEntity::Shared content;
 };

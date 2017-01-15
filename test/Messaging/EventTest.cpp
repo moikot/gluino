@@ -11,7 +11,7 @@ namespace {
   };
 
   Event::Unique createEvent(Core::IEntity::Shared content) {
-    return Event::makeUnique("created", "sender", "resource", content);
+    return Event::makeUnique("created", "resource", content);
   }
 
 }
@@ -27,10 +27,6 @@ TEST_CASE("Event can be constructed", "[Event]") {
 
   SECTION("event type retained") {
     REQUIRE(event->getEventType() == "created");
-  }
-
-  SECTION("sender retained") {
-    REQUIRE(event->getSender()  == "sender");
   }
 
   SECTION("resource retained") {
