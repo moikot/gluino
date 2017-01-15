@@ -12,7 +12,7 @@ namespace {
   };
 
   Request::Unique createRequest(IEntity::Shared content) {
-    return Request::makeUnique("sender", ActionType("get"), "resource", content);
+    return Request::makeUnique("get", "sender", "resource", content);
   }
 
 }
@@ -22,12 +22,12 @@ TEST_CASE("Request can be constructed", "[Request]") {
   auto content = Content::makeShared();
   auto request = createRequest(content);
 
-  SECTION("sender retained") {
-    REQUIRE(request->getSender() == "sender");
+  SECTION("request type retained") {
+    REQUIRE(request->getRequestType() == "get");
   }
 
-  SECTION("action type retained") {
-    REQUIRE(request->getActionType() == ActionType("get"));
+  SECTION("sender retained") {
+    REQUIRE(request->getSender() == "sender");
   }
 
   SECTION("resource retained") {

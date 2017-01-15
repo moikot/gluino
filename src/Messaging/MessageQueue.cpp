@@ -158,9 +158,9 @@ MessageQueue::sendResponseFor(const Request& request,
     sender = controller->getId();
 
   auto response = Response::makeShared(
+          request.getRequestType(),
           sender,
           request.getSender(),
-          request.getActionType(),
           request.getResource(),
           std::move(result)
          );

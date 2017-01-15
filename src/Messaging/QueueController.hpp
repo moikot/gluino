@@ -24,7 +24,7 @@ class QueueController {
 
     std::string getId() const { return controllerId; }
 
-    Core::StatusResult::Unique sendEvent(ActionType actionType,
+    Core::StatusResult::Unique sendEvent(std::string type,
       std::string resource, Core::IEntity::Shared result);
 
     bool canProcessRequest(const Request& request);

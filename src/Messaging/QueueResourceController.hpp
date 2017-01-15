@@ -49,22 +49,22 @@ class QueueResourceController {
 
     void sendGetNotification(Core::ActionResult::Shared result) {
       for(auto sender: senders) {
-        queueController->sendNotification(sender, ActionType::Get, typeId, result);
+        queueController->sendNotification(sender, Action::Get, typeId, result);
       }
       senders.clear();
     }
 
     void sendCreateNotification(TUnique object) {
-      queueController->broadcastNotification(ActionType::Create, typeId, std::move(object));
+      queueController->broadcastNotification(Action::Create, typeId, std::move(object));
     }
 
     void sendUpdateNotification(TUnique object) {
-      queueController->broadcastNotification(ActionType::Update, typeId, std::move(object));
+      queueController->broadcastNotification(Action::Update, typeId, std::move(object));
     }
 
     void sendDeleteNotification() {
       auto result = StatusResult::makeUnique(StatusCode::NoContent, "The resource was deleted");
-      queueController->broadcastNotification(ActionType::Delete, typeId, std::move(result));
+      queueController->broadcastNotification(Action::Delete, typeId, std::move(result));
     }
 
   private:
@@ -80,13 +80,13 @@ class QueueResourceController {
     }
 
     ActionResult::Unique processRequest(const Request& request) {
-      if (request.getActionType() == ActionType::Get) {
+      if (request.getAction() == Action::Get) {
         if (onGetRequestHandler) {
           return onGetRequestHandler();
         }
         return StatusResult::NotImplemented();
       }
-      if (request.getActionType() == ActionType::Create) {
+      if (request.getAction() == Action::Create) {
         if (onCreateRequestHandler) {
           auto object = T::cast(request.getContent());
           if (object)
@@ -95,7 +95,7 @@ class QueueResourceController {
         }
         return StatusResult::NotImplemented();
       }
-      if (request.getActionType() == ActionType::Update) {
+      if (request.getAction() == Action::Update) {
         if (onUpdateRequestHandler) {
           auto object = T::cast(request.getContent());
           if (object)
@@ -104,7 +104,7 @@ class QueueResourceController {
         }
         return StatusResult::NotImplemented();
       }
-      if (request.getActionType() == ActionType::Delete) {
+      if (request.getAction() == Action::Delete) {
         if (onDeleteRequestHandler)
           return onDeleteRequestHandler();
         return StatusResult::NotImplemented();

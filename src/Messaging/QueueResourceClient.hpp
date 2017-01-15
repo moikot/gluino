@@ -78,32 +78,32 @@ QueueResourceClient<T>::QueueResourceClient(QueueClient::Shared queueClient) :
 template <typename T>
 StatusResult::Unique
 QueueResourceClient<T>::getResource() {
-  return queueClient->sendRequest(ActionType::Get, typeId, nullptr);
+  return queueClient->sendRequest(Action::Get, typeId, nullptr);
 }
 
 template <typename T>
 StatusResult::Unique
 QueueResourceClient<T>::createResource(TUnique resource) {
-  return queueClient->sendRequest(ActionType::Create, typeId, resource);
+  return queueClient->sendRequest(Action::Create, typeId, resource);
 }
 
 template <typename T>
 StatusResult::Unique
 QueueResourceClient<T>::updateResource(TUnique resource) {
-  return queueClient->sendRequest(ActionType::Update, typeId, resource);
+  return queueClient->sendRequest(Action::Update, typeId, resource);
 }
 
 template <typename T>
 StatusResult::Unique
 QueueResourceClient<T>::deleteResource() {
-  return queueClient->sendRequest(ActionType::Delete, typeId, nullptr);
+  return queueClient->sendRequest(Action::Delete, typeId, nullptr);
 }
 
 template <typename T>
 void
 QueueResourceClient<T>::onResponse(const Response& response) {
-  auto actionType = response.getActionType();
-  if (actionType == ActionType::Get) {
+  auto Action = response.getAction();
+  if (Action == Action::Get) {
     auto status = StatusResult::cast(&response.getResult());
     if (status && onGetStatusResponseHandler) {
       onGetStatusResponseHandler(*status);
@@ -124,15 +124,15 @@ QueueResourceClient<T>::onResponse(const Response& response) {
       }
     }
   }
-  else if (actionType == ActionType::Create) {
+  else if (Action == Action::Create) {
     if (onCreateResponseHandler)
       onCreateResponseHandler(response);
   }
-  else if (actionType == ActionType::Update) {
+  else if (Action == Action::Update) {
     if (onUpdateResponseHandler)
       onUpdateResponseHandler(response);
   }
-  else if (actionType == ActionType::Delete) {
+  else if (Action == Action::Delete) {
     if (onDeleteResponseHandler)
       onDeleteResponseHandler(response);
   }
@@ -141,7 +141,7 @@ QueueResourceClient<T>::onResponse(const Response& response) {
 template <typename T>
 void
 QueueResourceClient<T>::onNotification(const Notification& notification) {
-  if (notification.getActionType() == ActionType::Create) {
+  if (notification.getAction() == Action::Create) {
     if (onCreateNotificationHandler) {
       auto object = T::cast(notification.getContent());
       if (object)
@@ -150,7 +150,7 @@ QueueResourceClient<T>::onNotification(const Notification& notification) {
         Logger::error("Expeceted content of '" + std::string(T::TypeId) + "' type.");
     }
   }
-  else if (notification.getActionType() == ActionType::Update) {
+  else if (notification.getAction() == Action::Update) {
     if (onUpdateNotificationHandler) {
       auto object = T::cast(notification.getContent());
       if (object)
@@ -159,7 +159,7 @@ QueueResourceClient<T>::onNotification(const Notification& notification) {
         Logger::error("Expeceted content of '" + std::string(T::TypeId) + "' type.");
     }
   }
-  else if (notification.getActionType() == ActionType::Delete) {
+  else if (notification.getAction() == Action::Delete) {
     if (onDeleteNotificationHandler)
       onDeleteNotificationHandler();
   }

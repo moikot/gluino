@@ -10,9 +10,9 @@ QueueController::QueueController(std::string controllerId, IMessageQueue& messag
 }
 
 StatusResult::Unique
-QueueController::sendEvent(ActionType actionType,
+QueueController::sendEvent(std::string type,
   std::string resource, IEntity::Shared result) {
-  auto event = Event::makeShared(controllerId, actionType, resource, result);
+  auto event = Event::makeShared(type, controllerId, resource, result);
   return messageQueue.addEvent(event);
 }
 

@@ -3,15 +3,15 @@
 using namespace Messaging;
 
 Response::Response(
+  std::string requestType,
   std::string sender,
   std::string receiver,
-  ActionType actionType,
   std::string resource,
   IEntity::Shared content
 ) :
+  requestType(requestType),
   sender(sender),
   receiver(receiver),
-  actionType(actionType),
   resource(resource),
   content(content) {
 }
