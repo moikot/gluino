@@ -15,7 +15,7 @@ namespace Messaging {
   The notification message.
 */
 class Event : public Core::IEntity {
-  TYPE_INFO(Event, IEntity, "notification")
+  TYPE_INFO(Event, IEntity, "event")
   public:
     Event(
       std::string     eventType,

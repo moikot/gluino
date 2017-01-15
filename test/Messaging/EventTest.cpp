@@ -21,6 +21,10 @@ TEST_CASE("Event can be constructed", "[Event]") {
   auto content = Content::makeShared();
   auto event = createEvent(content);
 
+  SECTION("type is correct") {
+    REQUIRE(event->getTypeId() == "event");
+  }
+
   SECTION("event type retained") {
     REQUIRE(event->getEventType() == "created");
   }

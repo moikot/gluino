@@ -23,6 +23,10 @@ TEST_CASE("Response can be constructed", "[Response]") {
   auto content = Content::makeShared();
   auto response = createResponse(content);
 
+  SECTION("type is correct") {
+    REQUIRE(response->getTypeId() == "response");
+  }
+
   SECTION("request type retained") {
     REQUIRE(response->getRequestType() == "get");
   }
