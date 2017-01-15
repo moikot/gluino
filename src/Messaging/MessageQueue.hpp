@@ -75,11 +75,11 @@ class MessageQueue : public IMessageQueue {
     QueueClient::Shared     getClient(std::string clientId);
     QueueController::Shared getController(const Request& request);
 
-    Response::Shared        createResponseFor(
-                              const Request&          request,
-                              Core::IEntity::Unique   result,
-                              const QueueController*  controller
-                            );
+    void sendResponseFor(
+      const Request&          request,
+      Core::IEntity::Unique   result,
+      const QueueController*  controller
+    );
 };
 
 }

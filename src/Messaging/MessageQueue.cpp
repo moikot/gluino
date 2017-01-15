@@ -84,8 +84,7 @@ MessageQueue::processRequest(const Request& request) {
     Logger::error("Unable to find a controller.");
     result = StatusResult::makeUnique(StatusCode::NotFound, "Unable to find a controller.");
   }
-  auto response = createResponseFor(request, std::move(result), controller.get());
-  responses.push(response);
+  sendResponseFor(request, std::move(result), controller.get());
 }
 
 void
@@ -150,19 +149,21 @@ MessageQueue::getController(const Request& request) {
   return queueController;
 }
 
-Response::Shared
-MessageQueue::createResponseFor(const Request& request,
+void
+MessageQueue::sendResponseFor(const Request& request,
   IEntity::Unique result, const QueueController* controller) {
 
   std::string sender(messageQueueSenderId);
   if (controller)
     sender = controller->getId();
 
-  return Response::makeShared(
+  auto response = Response::makeShared(
           sender,
           request.getSender(),
           request.getActionType(),
           request.getResource(),
           std::move(result)
          );
+
+  responses.push(response);
 }
