@@ -6,7 +6,6 @@
 using namespace Core;
 using namespace Messaging;
 
-
 namespace {
 
   class Content : public Core::IEntity {

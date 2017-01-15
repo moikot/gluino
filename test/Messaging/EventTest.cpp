@@ -18,7 +18,8 @@ namespace {
 
 TEST_CASE("Event can be constructed", "[Event]") {
 
-  auto event = createEvent(nullptr);
+  auto content = Content::makeShared();
+  auto event = createEvent(content);
 
   SECTION("sender retained") {
     REQUIRE(event->getSender()  == "sender");
@@ -33,8 +34,6 @@ TEST_CASE("Event can be constructed", "[Event]") {
   }
 
   SECTION("content retained") {
-    auto content = Content::makeShared();
-    auto event = createEvent(content);
     REQUIRE(event->getContent() == content.get());
   }
 
