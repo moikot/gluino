@@ -35,4 +35,6 @@ class QueueResourceClient {
     void onEvent(const Event& response);
 };
 
+}
+
 #endif /* end of include guard: MESSAGING_QUEUE_RESOURCE_CLIENT_HPP */

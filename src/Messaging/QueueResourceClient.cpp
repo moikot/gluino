@@ -46,5 +46,3 @@ QueueResourceClient::onEvent(const Event& event) {
 
   // Go through all the event handlers
 }
-
-}
