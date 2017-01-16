@@ -23,29 +23,31 @@ class QueueResourceController {
     Core::StatusResult::Unique sendEvent(std::string eventType, Core::IEntity::Unique content);
 
     void addOnRequest(std::string requestType, std::function<Core::IEntity::Unique()> onRequest) {
-      handlers.push_back(RequestHandlerVoid::makeUnique(requestType, onRequest));
+      handlers.push_back(ResourceRequestHandlerVoid::makeUnique(requestType, onRequest));
     }
 
     template<class T>
     void addOnRequest(std::string requestType, std::function<Core::IEntity::Unique(const T&)> onRequest) {
-      handlers.push_back(RequestHandler<T>::makeUnique(requestType, onRequest));
+      handlers.push_back(ResourceRequestHandler<T>::makeUnique(requestType, onRequest));
     }
 
   private:
     const std::string resource;
     QueueController& queueController;
 
-    class IRequestHandler {
-      TYPE_PTRS_ABSTRACT(IRequestHandler)
+    class IResourceRequestHandler {
+      TYPE_PTRS_ABSTRACT(IResourceRequestHandler)
       virtual std::string getRequestType() = 0;
       virtual std::string getContentType() = 0;
-      virtual Core::IEntity::Unique makeRequest(Core::IEntity* content) = 0;
+      virtual Core::IEntity::Unique makeRequest(const Request& request) = 0;
     };
 
-    class RequestHandlerVoid : public IRequestHandler {
-      TYPE_PTRS(RequestHandlerVoid)
+    std::vector<IResourceRequestHandler::Unique> handlers;
+
+    class ResourceRequestHandlerVoid : public IResourceRequestHandler {
+      TYPE_PTRS(ResourceRequestHandlerVoid)
       public:
-        RequestHandlerVoid(
+        ResourceRequestHandlerVoid(
           std::string requestType,
           std::function<Core::IEntity::Unique()> onRequest) :
           requestType(requestType),
@@ -60,7 +62,7 @@ class QueueResourceController {
           return "";
         }
 
-        virtual Core::IEntity::Unique makeRequest(Core::IEntity* content) override {
+        virtual Core::IEntity::Unique makeRequest(const Request& request) override {
             return onRequest();
         }
 
@@ -70,10 +72,10 @@ class QueueResourceController {
     };
 
     template<class T>
-    class RequestHandler : public IRequestHandler {
-      TYPE_PTRS(RequestHandler)
+    class ResourceRequestHandler : public IResourceRequestHandler {
+      TYPE_PTRS(ResourceRequestHandler)
       public:
-        RequestHandler(
+        ResourceRequestHandler(
           std::string requestType,
           std::function<Core::IEntity::Unique(const T&)> onRequest) :
           requestType(requestType),
@@ -88,8 +90,8 @@ class QueueResourceController {
           return T::getType();
         }
 
-        virtual Core::IEntity::Unique makeRequest(Core::IEntity* content) override {
-          return onRequest(content);
+        virtual Core::IEntity::Unique makeRequest(const Request& request) override {
+          return onRequest(request.getContent());
         }
 
       private:
@@ -97,10 +99,8 @@ class QueueResourceController {
         std::function<Core::IEntity::Unique(const T&)> onRequest;
     };
 
-    std::vector<IRequestHandler::Unique> handlers;
-
-    RequestFunction getRequestHandler(const Request& request);
-    RequestFunction getRequestHandler2(std::string requestType, std::string contentType);
+    RequestHandler getRequestHandler(const Request& request);
+    RequestHandler getResourceRequestHandler(std::string requestType, std::string contentType);
 };
 
 }

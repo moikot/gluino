@@ -125,9 +125,9 @@ MessageQueue::getClient(std::string clientId) {
   return queueClient;
 }
 
-RequestFunction
+RequestHandler
 MessageQueue::getRequestHandler(const Request& request) {
-  RequestFunction func;
+  RequestHandler func;
   QueueController::Shared queueController;
   for(auto controller: controllers) {
     func = controller->getRequestHandler(request);

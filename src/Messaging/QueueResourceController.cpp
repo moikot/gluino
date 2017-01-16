@@ -3,10 +3,12 @@
 using namespace Core;
 using namespace Messaging;
 
+using namespace std::placeholders;
+
 QueueResourceController::QueueResourceController(std::string resource, QueueController& queueController) :
   resource(resource), queueController(queueController) {
   queueController.setRequestHandler(
-    std::bind(&QueueResourceController::getRequestHandler, this, std::placeholders::_1));
+    std::bind(&QueueResourceController::getRequestHandler, this, _1));
 }
 
 Core::StatusResult::Unique
@@ -19,7 +21,7 @@ QueueResourceController::sendEvent(std::string eventType, Core::IEntity::Unique 
   return queueController.sendEvent(eventType, resource, std::move(content));
 }
 
-RequestFunction
+RequestHandler
 QueueResourceController::getRequestHandler(const Request& request) {
   if (request.getResource() != resource) {
     return nullptr;
@@ -30,10 +32,17 @@ QueueResourceController::getRequestHandler(const Request& request) {
   if (request.getContent())
     contentType = request.getContent()->getTypeId();
 
-  return getRequestHandler2(requestType, contentType);
+  return getResourceRequestHandler(requestType, contentType);
 }
 
-RequestFunction
-QueueResourceController::getRequestHandler2(std::string requestType, std::string contentType) {
+RequestHandler
+QueueResourceController::getResourceRequestHandler(std::string requestType, std::string contentType) {
+
+  for(auto& handler: handlers) {
+    if (handler->getRequestType() == requestType &&
+        handler->getContentType() == contentType) {
+          return std::bind(&IResourceRequestHandler::makeRequest, handler.get(), _1);
+        }
+  }
   return nullptr;
 }

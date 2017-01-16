@@ -30,7 +30,6 @@ QueueResourceClient::onResponse(const Response& response) {
   auto requestType = response.getRequestType();
   auto contentType = response.getContent().getTypeId();
 
-  // Go through all the response handlers
 }
 
 void

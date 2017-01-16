@@ -4,8 +4,8 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef CORE_NOTIFICATION_HPP
-#define CORE_NOTIFICATION_HPP
+#ifndef MESSAGING_EVENT_HPP
+#define MESSAGING_EVENT_HPP
 
 #include "Core/IEntity.hpp"
 
@@ -46,4 +46,4 @@ class Event : public Core::IEntity {
 
 }
 
-#endif /* end of include guard: CORE_NOTIFICATION_HPP */
+#endif /* end of include guard: MESSAGING_EVENT_HPP */

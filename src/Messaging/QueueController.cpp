@@ -14,7 +14,7 @@ QueueController::sendEvent(std::string type,
   return messageQueue.addEvent(event);
 }
 
-RequestFunction
+RequestHandler
 QueueController::getRequestHandler(const Request& request) {
   if (requestHandler)
     return requestHandler(request);
