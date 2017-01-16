@@ -9,8 +9,8 @@ QueueClient::QueueClient(std::string clientId, IMessageQueue& messageQueue) :
 }
 
 StatusResult::Unique
-QueueClient::sendRequest(std::string type, std::string resource, IEntity::Unique content) {
-  auto request = Request::makeShared(type, clientId, resource, std::move(content));
+QueueClient::sendRequest(std::string requestType, std::string resource, IEntity::Unique content) {
+  auto request = Request::makeShared(requestType, clientId, resource, std::move(content));
   return messageQueue.addRequest(request);
 }
 

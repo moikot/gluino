@@ -24,7 +24,7 @@ public: \
   \
   virtual const std::string& getTypeId() const override { return TypeId(); } \
   \
-  virtual bool        isType(const std::string& typeId) const override { \
+  virtual bool isType(const std::string& typeId) const override { \
     return (typeId == ClassTypeId || SuperClass::isType(typeId)); \
   } \
   \

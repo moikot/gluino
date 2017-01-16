@@ -17,28 +17,28 @@ namespace Messaging {
 
 class IMessageQueue;
 
+typedef std::function<Core::IEntity::Unique(const Request&)> RequestHandler;
+
 class QueueController {
   TYPE_PTRS(QueueController)
   public:
     QueueController(IMessageQueue& messageQueue);
 
-    Core::StatusResult::Unique sendEvent(std::string type,
-      std::string resource, Core::IEntity::Shared result);
+    Core::StatusResult::Unique sendEvent(
+      std::string eventType,
+      std::string resource,
+      Core::IEntity::Shared content
+    );
 
-    bool canProcessRequest(const Request& request);
-    Core::IEntity::Unique processRequest(const Request& request);
+    RequestHandler getRequestHandler(const Request& request);
 
-    void setCanProcessRequest(std::function<bool(const Request&)> handler) {
-      this->canProcessRequestHandler = handler;
-    }
-    void setProcessRequest(std::function<Core::IEntity::Unique(const Request&)> handler) {
-      this->processRequestHandler = handler;
+    void setRequestHandler(std::function<RequestHandler(const Request&)> requestHandler) {
+      this->requestHandler = requestHandler;
     }
 
   private:
     IMessageQueue& messageQueue;
-    std::function<bool(const Request&)> canProcessRequestHandler;
-    std::function<Core::IEntity::Unique(const Request&)> processRequestHandler;
+    std::function<RequestHandler(const Request&)> requestHandler;
 };
 
 }

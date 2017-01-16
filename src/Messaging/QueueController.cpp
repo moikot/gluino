@@ -14,16 +14,9 @@ QueueController::sendEvent(std::string type,
   return messageQueue.addEvent(event);
 }
 
-bool
-QueueController::canProcessRequest(const Request& request) {
-  if (canProcessRequestHandler)
-    return canProcessRequestHandler(request);
-  return false;
-}
-
-IEntity::Unique
-QueueController::processRequest(const Request& request) {
-  if (processRequestHandler)
-    return processRequestHandler(request);
-  return StatusResult::NotImplemented();
+RequestHandler
+QueueController::getRequestHandler(const Request& request) {
+  if (requestHandler)
+    return requestHandler(request);
+  return nullptr;
 }

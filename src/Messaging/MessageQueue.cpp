@@ -38,12 +38,6 @@ MessageQueue::addRequest(Request::Shared request) {
 }
 
 StatusResult::Unique
-MessageQueue::addResponse(Response::Shared response) {
-  responses.push(response);
-  return StatusResult::OK();
-}
-
-StatusResult::Unique
 MessageQueue::addEvent(Event::Shared event) {
   events.push(event);
   return StatusResult::OK();
@@ -77,12 +71,12 @@ void
 MessageQueue::processRequest(const Request& request) {
   Logger::message("Processing a request from '" + request.getSender() + "'");
   IEntity::Unique result;
-  auto controller = getController(request);
-  if (controller) {
-    result = controller->processRequest(request);
+  auto handler = getRequestHandler(request);
+  if (handler) {
+    result = handler(request);
   } else {
-    Logger::error("Unable to find a controller.");
-    result = StatusResult::makeUnique(StatusCode::NotFound, "Unable to find a controller.");
+    Logger::error("Unable to find a request handler.");
+    result = StatusResult::makeUnique(StatusCode::NotFound, "Unable to find a request handler.");
   }
   sendResponseFor(request, std::move(result));
 }
@@ -131,11 +125,13 @@ MessageQueue::getClient(std::string clientId) {
   return queueClient;
 }
 
-QueueController::Shared
-MessageQueue::getController(const Request& request) {
+RequestHandler
+MessageQueue::getRequestHandler(const Request& request) {
+  RequestHandler handler;
   QueueController::Shared queueController;
   for(auto controller: controllers) {
-    if (controller->canProcessRequest(request)) {
+    auto handler = controller->getRequestHandler(request);
+    if (handler) {
       queueController = controller;
       break;
     }
@@ -144,7 +140,7 @@ MessageQueue::getController(const Request& request) {
     controllers.remove(queueController);
     return nullptr;
   }
-  return queueController;
+  return handler;
 }
 
 void

@@ -31,11 +31,6 @@ class MessageQueue : public IMessageQueue {
     virtual Core::StatusResult::Unique addRequest(Request::Shared request) override;
 
     /**
-      Adds a response to the queue.
-    */
-    virtual Core::StatusResult::Unique addResponse(Response::Shared response) override;
-
-    /**
       Adds a event to the queue.
     */
     virtual Core::StatusResult::Unique addEvent(Event::Shared event) override;
@@ -72,8 +67,8 @@ class MessageQueue : public IMessageQueue {
     void processResponse(const Response& response);
     void processEvent(const Event& event);
 
-    QueueClient::Shared     getClient(std::string clientId);
-    QueueController::Shared getController(const Request& request);
+    QueueClient::Shared   getClient(std::string clientId);
+    RequestHandler        getRequestHandler(const Request& request);
 
     void sendResponseFor(
       const Request&          request,

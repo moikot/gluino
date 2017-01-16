@@ -25,7 +25,7 @@ class QueueClient {
     std::string getId() { return clientId; }
 
     Core::StatusResult::Unique sendRequest(
-        std::string type,
+        std::string requestType,
         std::string resource,
         Core::IEntity::Unique content
       );
