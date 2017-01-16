@@ -17,7 +17,7 @@ namespace Messaging {
 
 class IMessageQueue;
 
-typedef std::function<Core::IEntity::Unique(const Request&)> RequestHandler;
+typedef std::function<Core::IEntity::Unique(const Request&)> RequestFunction;
 
 class QueueController {
   TYPE_PTRS(QueueController)
@@ -30,15 +30,15 @@ class QueueController {
       Core::IEntity::Shared content
     );
 
-    RequestHandler getRequestHandler(const Request& request);
+    RequestFunction getRequestHandler(const Request& request);
 
-    void setRequestHandler(std::function<RequestHandler(const Request&)> requestHandler) {
+    void setRequestHandler(std::function<RequestFunction(const Request&)> requestHandler) {
       this->requestHandler = requestHandler;
     }
 
   private:
     IMessageQueue& messageQueue;
-    std::function<RequestHandler(const Request&)> requestHandler;
+    std::function<RequestFunction(const Request&)> requestHandler;
 };
 
 }

@@ -68,7 +68,7 @@ class MessageQueue : public IMessageQueue {
     void processEvent(const Event& event);
 
     QueueClient::Shared   getClient(std::string clientId);
-    RequestHandler        getRequestHandler(const Request& request);
+    RequestFunction       getRequestHandler(const Request& request);
 
     void sendResponseFor(
       const Request&          request,

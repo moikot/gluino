@@ -19,7 +19,21 @@ QueueResourceController::sendEvent(std::string eventType, Core::IEntity::Unique 
   return queueController.sendEvent(eventType, resource, std::move(content));
 }
 
-RequestHandler
+RequestFunction
 QueueResourceController::getRequestHandler(const Request& request) {
+  if (request.getResource() != resource) {
+    return nullptr;
+  }
+
+  auto requestType = request.getRequestType();
+  std::string contentType;
+  if (request.getContent())
+    contentType = request.getContent()->getTypeId();
+
+  return getRequestHandler2(requestType, contentType);
+}
+
+RequestFunction
+QueueResourceController::getRequestHandler2(std::string requestType, std::string contentType) {
   return nullptr;
 }

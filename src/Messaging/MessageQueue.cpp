@@ -125,13 +125,13 @@ MessageQueue::getClient(std::string clientId) {
   return queueClient;
 }
 
-RequestHandler
+RequestFunction
 MessageQueue::getRequestHandler(const Request& request) {
-  RequestHandler handler;
+  RequestFunction func;
   QueueController::Shared queueController;
   for(auto controller: controllers) {
-    auto handler = controller->getRequestHandler(request);
-    if (handler) {
+    func = controller->getRequestHandler(request);
+    if (func) {
       queueController = controller;
       break;
     }
@@ -140,7 +140,7 @@ MessageQueue::getRequestHandler(const Request& request) {
     controllers.remove(queueController);
     return nullptr;
   }
-  return handler;
+  return func;
 }
 
 void
