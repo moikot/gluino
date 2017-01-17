@@ -32,7 +32,7 @@ class IList : public IEntity {
       const IEntity& item) const = 0;
 
     /**
-      Interates through all the objects in the collection.
+      Iterates through all the objects in the collection.
 
       @param func The call back function called for each object in the collection.
       @return The result of the operation.
