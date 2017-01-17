@@ -15,6 +15,7 @@ namespace Messaging {
 
   class ResourceEventHandler {
     TYPE_PTRS_ABSTRACT(ResourceEventHandler)
+    virtual ~ResourceEventHandler() = default;
     virtual std::string getEventType() const = 0;
     virtual std::string getContentType() const = 0;
     virtual void processEvent(const Event& event) const = 0;

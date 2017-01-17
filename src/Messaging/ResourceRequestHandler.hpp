@@ -15,6 +15,7 @@ namespace Messaging {
 
   class ResourceRequestHandler {
     TYPE_PTRS_ABSTRACT(ResourceRequestHandler)
+    virtual ~ResourceRequestHandler() = default;
     virtual std::string getRequestType() const = 0;
     virtual std::string getContentType() const = 0;
     virtual Core::IEntity::Unique makeRequest(const Request& request) const = 0;

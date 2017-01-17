@@ -10,15 +10,22 @@
 #include "QueueClient.hpp"
 #include "ResourceResponseHandler.hpp"
 #include "ResourceEventHandler.hpp"
+#include "Core/StatusResult.hpp"
 
 #include <vector>
 
 namespace Messaging {
 
-class QueueResourceClient {
+class IMessageQueue;
+
+class QueueResourceClient : public QueueClient {
   TYPE_PTRS(QueueResourceClient)
   public:
-    QueueResourceClient(std::string resource, QueueClient& queueClient);
+    QueueResourceClient(std::string clientId, std::string resource, IMessageQueue& messageQueue);
+
+    std::string getClientId() const override { return clientId; }
+    void onResponse(const Response& response) const override;
+    void onEvent(const Event& event) const override;
 
     Core::StatusResult::Unique sendRequest(std::string requestType);
     Core::StatusResult::Unique sendRequest(std::string requestType, Core::IEntity::Unique content);
@@ -42,13 +49,11 @@ class QueueResourceClient {
     }
 
   private:
+    const std::string clientId;
     const std::string resource;
-    QueueClient& queueClient;
+    IMessageQueue& messageQueue;
     std::vector<ResourceResponseHandler::Unique> responseHandlers;
     std::vector<ResourceEventHandler::Unique> eventHandlers;
-
-    void onResponse(const Response& response);
-    void onEvent(const Event& response);
 };
 
 }

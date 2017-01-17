@@ -1,28 +1,26 @@
 #include "QueueResourceClient.hpp"
+#include "IMessageQueue.hpp"
 
 using namespace Messaging;
 
-QueueResourceClient::QueueResourceClient(std::string resource, QueueClient& queueClient) :
-  resource(resource), queueClient(queueClient) {
-
-  queueClient.setOnResponse(
-    std::bind(&QueueResourceClient::onResponse, this, std::placeholders::_1));
-  queueClient.setOnEvent(
-    std::bind(&QueueResourceClient::onEvent, this, std::placeholders::_1));
+QueueResourceClient::QueueResourceClient(std::string clientId, std::string resource, IMessageQueue& messageQueue) :
+  clientId(clientId), resource(resource), messageQueue(messageQueue) {
 }
 
 Core::StatusResult::Unique
 QueueResourceClient::sendRequest(std::string requestType) {
-  return queueClient.sendRequest(requestType, resource, nullptr);
+  auto request = Request::makeShared(requestType, clientId, resource, nullptr);
+  return messageQueue.addRequest(request);
 }
 
 Core::StatusResult::Unique
 QueueResourceClient::sendRequest(std::string requestType, Core::IEntity::Unique content) {
-  return queueClient.sendRequest(requestType, resource, std::move(content));
+  auto request = Request::makeShared(requestType, clientId, resource, std::move(content));
+  return messageQueue.addRequest(request);
 }
 
 void
-QueueResourceClient::onResponse(const Response& response) {
+QueueResourceClient::onResponse(const Response& response) const {
   if (response.getResource() != resource) {
     return;
   }
@@ -30,16 +28,16 @@ QueueResourceClient::onResponse(const Response& response) {
   auto requestType = response.getRequestType();
   auto contentType = response.getContent().getTypeId();
 
-  for(auto& handler: responseHandlers) {
+  for (auto& handler : responseHandlers) {
     if (handler->getRequestType() == requestType &&
-        handler->getContentType() == contentType) {
-          handler->processResponse(response);
-        }
+      handler->getContentType() == contentType) {
+      handler->processResponse(response);
+    }
   }
 }
 
 void
-QueueResourceClient::onEvent(const Event& event) {
+QueueResourceClient::onEvent(const Event& event) const {
   if (event.getResource() != resource) {
     return;
   }
@@ -49,10 +47,10 @@ QueueResourceClient::onEvent(const Event& event) {
   if (event.getContent())
     contentType = event.getContent()->getTypeId();
 
-  for(auto& handler: eventHandlers) {
+  for (auto& handler : eventHandlers) {
     if (handler->getEventType() == eventType &&
-        handler->getContentType() == contentType) {
-          handler->processEvent(event);
-        }
+      handler->getContentType() == contentType) {
+      handler->processEvent(event);
+    }
   }
 }

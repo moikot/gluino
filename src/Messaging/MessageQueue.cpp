@@ -43,27 +43,39 @@ MessageQueue::addEvent(Event::Shared event) {
   return StatusResult::OK();
 }
 
-QueueClient::Shared
-MessageQueue::createClient(std::string clientId) {
-  auto client = QueueClient::makeShared(clientId, *this);
+QueueGenericClient::Shared
+MessageQueue::createGenericClient(std::string clientId) {
+  auto client = QueueGenericClient::makeShared(clientId, *this);
   clients.push_back(client);
   return client;
 }
 
+void
+MessageQueue::removeGenericClient(QueueGenericClient::Shared client) {
+  clients.remove(client);
+}
+
+QueueResourceClient::Shared
+MessageQueue::createResourceClient(std::string clientId, std::string resource) {
+  auto client = QueueResourceClient::makeShared(clientId, resource, *this);
+  clients.push_back(client);
+  return client;
+}
+
+void
+MessageQueue::removeResourceClient(QueueResourceClient::Shared client) {
+  clients.remove(client);
+}
+
 QueueResourceController::Shared
-MessageQueue::createController(std::string resource) {
+MessageQueue::createResourceController(std::string resource) {
   auto controller = QueueResourceController::makeShared(resource, *this);
   controllers.push_back(controller);
   return controller;
 }
 
 void
-MessageQueue::removeClient(QueueClient::Shared client) {
-  clients.remove(client);
-}
-
-void
-MessageQueue::removeController(QueueResourceController::Shared controller) {
+MessageQueue::removeResourceController(QueueResourceController::Shared controller) {
   controllers.remove(controller);
 }
 
@@ -95,7 +107,7 @@ MessageQueue::processResponse(const Response& response) {
 
 void
 MessageQueue::processEvent(const Event& event) {
-  Logger::message("Broadcating event '" + event.getEventType() + "'.");
+  Logger::message("Broadcasting event '" + event.getEventType() + "'.");
   std::list<QueueClient::Shared> deletedClients;
   for(auto client: clients) {
     if (!client.unique()) {
@@ -113,7 +125,7 @@ QueueClient::Shared
 MessageQueue::getClient(std::string clientId) {
   QueueClient::Shared queueClient;
   for(auto client: clients) {
-    if (client->getId() == clientId) {
+    if (client->getClientId() == clientId) {
       queueClient = client;
       break;
     }

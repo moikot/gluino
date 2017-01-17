@@ -24,13 +24,13 @@ namespace {
 
 }
 
-TEST_CASE("QueueClient can be constructed", "[QueueClient]") {
+TEST_CASE("QueueGenericClient can be constructed", "[QueueClient]") {
 
   Mock<IMessageQueue> messageQueue;
-  auto client = QueueClient::makeUnique("id", messageQueue.get());
+  auto client = QueueGenericClient::makeUnique("id", messageQueue.get());
 
   SECTION("identifier retained") {
-    REQUIRE(client->getId() == "id");
+    REQUIRE(client->getClientId() == "id");
   }
 
 }
@@ -49,16 +49,16 @@ TEST_CASE("resource request is sent", "[QueueClient]") {
     return StatusResult::OK();
   });
 
-  auto client = QueueClient::makeUnique("clientId", messageQueue.get());
+  auto client = QueueGenericClient::makeUnique("clientId", messageQueue.get());
   client->sendRequest("get", "resource", std::move(content));
 
   Verify(Method(messageQueue, addRequest));
 }
 
-TEST_CASE("responce handler is invoked", "[QueueClient]") {
+TEST_CASE("response handler is invoked", "[QueueClient]") {
 
   Mock<IMessageQueue> messageQueue;
-  auto client = QueueClient::makeUnique("id", messageQueue.get());
+  auto client = QueueGenericClient::makeUnique("id", messageQueue.get());
   auto result = StatusResult::OK();
   auto resultPtr = result.get();
 
@@ -83,7 +83,7 @@ TEST_CASE("responce handler is invoked", "[QueueClient]") {
 TEST_CASE("event handler is invoked", "[QueueClient]") {
 
   Mock<IMessageQueue> messageQueue;
-  auto client = QueueClient::makeUnique("id", messageQueue.get());
+  auto client = QueueGenericClient::makeUnique("id", messageQueue.get());
   auto content = Content::makeShared();
 
   Mock<EventSink> eventSink;
