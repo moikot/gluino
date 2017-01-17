@@ -8,7 +8,7 @@
 #define MESSAGING_I_MESSAGE_QUEUE_HPP
 
 #include "QueueClient.hpp"
-#include "QueueController.hpp"
+#include "QueueResourceController.hpp"
 #include "Core/IService.hpp"
 
 namespace Messaging {
@@ -57,14 +57,14 @@ class IMessageQueue : public Core::IService {
       @param clientId The unique controller identifier.
       @return The queue client.
     */
-    virtual QueueController::Shared createController() = 0;
+    virtual QueueResourceController::Shared createController(std::string resource) = 0;
 
     /**
       Removes a queue controller from the queue.
 
       @param client The client to remove.
     */
-    virtual void removeController(QueueController::Shared controller) = 0;
+    virtual void removeController(QueueResourceController::Shared controller) = 0;
 };
 
 }

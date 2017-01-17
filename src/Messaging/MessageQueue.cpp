@@ -50,9 +50,9 @@ MessageQueue::createClient(std::string clientId) {
   return client;
 }
 
-QueueController::Shared
-MessageQueue::createController() {
-  auto controller = QueueController::makeShared(*this);
+QueueResourceController::Shared
+MessageQueue::createController(std::string resource) {
+  auto controller = QueueResourceController::makeShared(resource, *this);
   controllers.push_back(controller);
   return controller;
 }
@@ -63,7 +63,7 @@ MessageQueue::removeClient(QueueClient::Shared client) {
 }
 
 void
-MessageQueue::removeController(QueueController::Shared controller) {
+MessageQueue::removeController(QueueResourceController::Shared controller) {
   controllers.remove(controller);
 }
 
@@ -128,7 +128,7 @@ MessageQueue::getClient(std::string clientId) {
 RequestHandler
 MessageQueue::getRequestHandler(const Request& request) {
   RequestHandler func;
-  QueueController::Shared queueController;
+  QueueResourceController::Shared queueController;
   for(auto controller: controllers) {
     func = controller->getRequestHandler(request);
     if (func) {
