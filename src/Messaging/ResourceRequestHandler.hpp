@@ -38,7 +38,7 @@ namespace Messaging {
         return "";
       }
 
-      virtual Core::IEntity::Unique makeRequest(const Request& request) const override {
+      virtual Core::IEntity::Unique makeRequest(const Request&) const override {
           return onRequest();
       }
 

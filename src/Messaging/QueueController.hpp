@@ -32,8 +32,8 @@ class QueueController {
 
     RequestHandler getRequestHandler(const Request& request);
 
-    void setRequestHandler(std::function<RequestHandler(const Request&)> requestHandler) {
-      this->requestHandler = requestHandler;
+    void setRequestHandler(std::function<RequestHandler(const Request&)> handler) {
+      this->requestHandler = handler;
     }
 
   private:

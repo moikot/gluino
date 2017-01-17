@@ -38,7 +38,7 @@ namespace Messaging {
         return "";
       }
 
-      virtual void processEvent(const Event& event) const override {
+      virtual void processEvent(const Event&) const override {
           onEvent();
       }
 

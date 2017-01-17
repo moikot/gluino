@@ -38,7 +38,7 @@ namespace Messaging {
         return "";
       }
 
-      virtual void processResponse(const Response& response) const override {
+      virtual void processResponse(const Response&) const override {
           onResponse();
       }
 
