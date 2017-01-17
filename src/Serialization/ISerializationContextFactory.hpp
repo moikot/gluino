@@ -16,7 +16,7 @@ namespace Serialization {
 
 class ISerializationContextFactory {
   public:
-    virtual ~ISerializationContextFactory();
+    virtual ~ISerializationContextFactory() = default;
 
     virtual Core::StatusResult::Unique create(
       const ISerializationService& serializationService,

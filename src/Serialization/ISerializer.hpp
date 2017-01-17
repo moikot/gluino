@@ -16,7 +16,7 @@ namespace Serialization {
 
 class ISerializer {
   public:
-    virtual ~ISerializer();
+    virtual ~ISerializer() = default;
 
     virtual const std::string& getTypeId() const = 0;
 

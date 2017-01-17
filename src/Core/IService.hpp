@@ -17,7 +17,7 @@ namespace Core {
 class IService {
   TYPE_PTRS_ABSTRACT(IService)
   public:
-      virtual ~IService();
+      virtual ~IService() = default;
 
       /**
         This method should be invoked when the system is idle.

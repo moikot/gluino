@@ -17,7 +17,7 @@ namespace Core {
 class IEntity {
 TYPE_PTRS_ABSTRACT(IEntity)
 public:
-  virtual ~IEntity();
+  virtual ~IEntity() = default;
 
   /**
     Returns the type of the instance.
