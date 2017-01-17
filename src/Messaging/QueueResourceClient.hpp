@@ -23,15 +23,23 @@ class QueueResourceClient {
     Core::StatusResult::Unique sendRequest(std::string requestType);
     Core::StatusResult::Unique sendRequest(std::string requestType, Core::IEntity::Unique content);
 
-    void addOnResponse(std::string requestType, std::function<void()> onResponse);
+    void addOnResponse(std::string requestType, std::function<void()> onResponse) {
+      responseHandlers.push_back(ResourceResponseHandlerVoid::makeUnique(requestType, onResponse));
+    }
 
     template<class T>
-    void addOnResponse(std::string requestType, std::function<void(const T&)> onResponse);
+    void addOnResponse(std::string requestType, std::function<void(const T&)> onResponse) {
+      responseHandlers.push_back(ResourceResponseHandlerTyped<T>::makeUnique(requestType, onResponse));
+    }
 
-    void addOnEvent(std::string eventType, std::function<void()> onEvent);
+    void addOnEvent(std::string eventType, std::function<void()> onEvent) {
+      eventHandlers.push_back(ResourceEventHandlerVoid::makeUnique(eventType, onEvent));
+    }
 
     template<class T>
-    void addOnEvent(std::string eventType, std::function<void(const T&)> onEvent);
+    void addOnEvent(std::string eventType, std::function<void(const T&)> onEvent) {
+      eventHandlers.push_back(ResourceEventHandlerTyped<T>::makeUnique(eventType, onEvent));
+    }
 
   private:
     const std::string resource;
