@@ -16,9 +16,9 @@ namespace Serialization {
 
 class ISerializer {
   public:
-    virtual ~ISerializer();
+    virtual ~ISerializer() = default;
 
-    virtual std::string getTypeId() const = 0;
+    virtual const std::string& getTypeId() const = 0;
 
     virtual Core::StatusResult::Unique serialize(
       const Core::IEntity& entity,

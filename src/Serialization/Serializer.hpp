@@ -18,8 +18,8 @@ class Serializer : public ISerializer {
   typedef typename T::Unique TUnique;
   public:
     // From ISerializer
-    virtual std::string getTypeId() const override {
-      return T::TypeId;
+    virtual const std::string& getTypeId() const override {
+      return T::TypeId();
     }
 
     virtual Core::StatusResult::Unique serialize(

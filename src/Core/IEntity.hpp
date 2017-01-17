@@ -17,14 +17,14 @@ namespace Core {
 class IEntity {
 TYPE_PTRS_ABSTRACT(IEntity)
 public:
-  virtual ~IEntity();
+  virtual ~IEntity() = default;
 
   /**
     Returns the type of the instance.
 
     @return The type of the instance.
   */
-  virtual const char* getTypeId() const = 0;
+  virtual const std::string& getTypeId() const = 0;
 
   /**
     Checks if this class is a class of a particular type.

@@ -29,14 +29,6 @@ class IMessageQueue : public Core::IService {
     virtual Core::StatusResult::Unique addRequest(Request::Shared request) = 0;
 
     /**
-      Adds a new response to the message queue.
-
-      @param message The response to add to the queue.
-      @return The result of the operation.
-    */
-    virtual Core::StatusResult::Unique addResponse(Response::Shared response) = 0;
-
-    /**
       Adds a new event to the message queue.
 
       @param message The event to add to the queue.
@@ -65,7 +57,7 @@ class IMessageQueue : public Core::IService {
       @param clientId The unique controller identifier.
       @return The queue client.
     */
-    virtual QueueController::Shared createController(std::string controllerId) = 0;
+    virtual QueueController::Shared createController() = 0;
 
     /**
       Removes a queue controller from the queue.

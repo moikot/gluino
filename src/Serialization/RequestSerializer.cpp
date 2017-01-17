@@ -4,7 +4,7 @@ using namespace Core;
 using namespace Messaging;
 using namespace Serialization;
 
-#define FIELD_ACTION "action"
+#define FIELD_REQUEST_TYPE "requestType"
 #define FIELD_RESOURCE "resource"
 #define FIELD_CONTENT "content"
 
@@ -18,15 +18,10 @@ RequestSerializer::deserialize(
   Request::Unique& request,
   ISerializationContext& context) const {
 
-  std::string actionTypeStr;
-  auto result = context.getStringValue(FIELD_ACTION, actionTypeStr);
+  std::string requestType;
+  auto result = context.getStringValue(FIELD_REQUEST_TYPE, requestType);
   if (!result->isOk())
     return result;
-
-  ActionType actionType = ActionType::getById(actionTypeStr);
-  if (actionType == ActionType::Unknown)
-    return StatusResult::makeUnique(StatusCode::BadRequest,
-      "Action type '" + actionTypeStr + "' is not supported.");
 
   std::string resource;
   result = context.getStringValue(FIELD_RESOURCE, resource);
@@ -40,6 +35,6 @@ RequestSerializer::deserialize(
       return result;
   }
 
-  request = Request::makeUnique("", actionType, resource, std::move(content));
+  request = Request::makeUnique(requestType, "", resource, std::move(content));
   return StatusResult::OK();
 }

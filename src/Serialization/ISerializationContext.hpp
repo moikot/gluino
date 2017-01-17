@@ -15,7 +15,7 @@ namespace Serialization {
 class ISerializationContext {
   TYPE_PTRS_ABSTRACT(ISerializationContext)
   public:
-    virtual ~ISerializationContext();
+    virtual ~ISerializationContext() = default;
 
     virtual std::string toString() const = 0;
 

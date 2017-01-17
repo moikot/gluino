@@ -18,7 +18,7 @@ namespace Serialization {
 class ISerializationService {
   TYPE_PTRS_ABSTRACT(ISerializationService)
   public:
-    virtual ~ISerializationService();
+    virtual ~ISerializationService() = default;
 
     virtual Core::StatusResult::Unique serialize(
       const Core::IEntity& object,

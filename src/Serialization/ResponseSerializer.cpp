@@ -4,7 +4,7 @@ using namespace Core;
 using namespace Messaging;
 using namespace Serialization;
 
-#define FIELD_ACTION "action"
+#define FIELD_REQUEST_TYPE "requestType"
 #define FIELD_RESOURCE "resource"
 #define FIELD_CONTENT "content"
 
@@ -13,7 +13,7 @@ ResponseSerializer::serialize(
   const Response& response,
   ISerializationContext& context) const {
 
-  auto result = context.setValue(FIELD_ACTION, response.getActionType().getId());
+  auto result = context.setValue(FIELD_REQUEST_TYPE, response.getRequestType());
   if (!result->isOk())
     return result;
 

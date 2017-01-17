@@ -4,7 +4,7 @@ using namespace Core;
 using namespace Messaging;
 using namespace Serialization;
 
-#define FIELD_ACTION "action"
+#define FIELD_EVENT_TYPE "eventType"
 #define FIELD_RESOURCE "resource"
 #define FIELD_CONTENT "content"
 
@@ -13,7 +13,7 @@ EventSerializer::serialize(
   const Messaging::Event& event,
   ISerializationContext& context) const {
 
-  auto result = context.setValue(FIELD_ACTION, event.getActionType().getId());
+  auto result = context.setValue(FIELD_EVENT_TYPE, event.getEventType());
   if (!result->isOk())
     return result;
 

@@ -42,15 +42,15 @@ TEST_CASE("resource request is sent", "[QueueClient]") {
   auto contentPtr = content.get();
 
   When(Method(messageQueue, addRequest)).Do([=](Request::Shared request) {
-    REQUIRE(request->getSender() == "id");
-    REQUIRE(request->getActionType() == ActionType::Get);
+    REQUIRE(request->getRequestType() == "get");
+    REQUIRE(request->getSender() == "clientId");
     REQUIRE(request->getResource() == "resource");
     REQUIRE(request->getContent() == contentPtr);
     return StatusResult::OK();
   });
 
-  auto client = QueueClient::makeUnique("id", messageQueue.get());
-  client->sendRequest(ActionType::Get, "resource", std::move(content));
+  auto client = QueueClient::makeUnique("clientId", messageQueue.get());
+  client->sendRequest("get", "resource", std::move(content));
 
   Verify(Method(messageQueue, addRequest));
 }
@@ -64,9 +64,8 @@ TEST_CASE("responce handler is invoked", "[QueueClient]") {
 
   Mock<EventSink> eventSink;
   When(Method(eventSink, onResponse)).Do([=](const Response& response) {
-    REQUIRE(response.getSender() == "sender");
+    REQUIRE(response.getRequestType() == "get");
     REQUIRE(response.getReceiver() == "receiver");
-    REQUIRE(response.getActionType() == ActionType::Get);
     REQUIRE(response.getResource() == "resource");
     REQUIRE(&response.getContent() == resultPtr);
     return StatusResult::OK();
@@ -74,7 +73,7 @@ TEST_CASE("responce handler is invoked", "[QueueClient]") {
 
   client->setOnResponse(std::bind(&EventSink::onResponse, &eventSink.get(), _1));
 
-  Response response("sender", "receiver", ActionType::Get, "resource", std::move(result));
+  Response response("get", "receiver", "resource", std::move(result));
   client->onResponse(response);
 
   Verify(Method(eventSink, onResponse));
@@ -89,8 +88,7 @@ TEST_CASE("event handler is invoked", "[QueueClient]") {
 
   Mock<EventSink> eventSink;
   When(Method(eventSink, onEvent)).Do([=](const Event& event) {
-    REQUIRE(event.getSender() == "sender");
-    REQUIRE(event.getActionType() == ActionType::Get);
+    REQUIRE(event.getEventType() == "created");
     REQUIRE(event.getResource() == "resource");
     REQUIRE(event.getContent() == content.get());
     return StatusResult::OK();
@@ -98,7 +96,7 @@ TEST_CASE("event handler is invoked", "[QueueClient]") {
 
   client->setOnEvent(std::bind(&EventSink::onEvent, &eventSink.get(), _1));
 
-  Event event("sender", ActionType::Get, "resource", content);
+  Event event("created", "resource", content);
   client->onEvent(event);
 
   Verify(Method(eventSink, onEvent));

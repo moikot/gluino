@@ -38,12 +38,6 @@ MessageQueue::addRequest(Request::Shared request) {
 }
 
 StatusResult::Unique
-MessageQueue::addResponse(Response::Shared response) {
-  responses.push(response);
-  return StatusResult::OK();
-}
-
-StatusResult::Unique
 MessageQueue::addEvent(Event::Shared event) {
   events.push(event);
   return StatusResult::OK();
@@ -57,8 +51,8 @@ MessageQueue::createClient(std::string clientId) {
 }
 
 QueueController::Shared
-MessageQueue::createController(std::string controllerId) {
-  auto controller = QueueController::makeShared(controllerId, *this);
+MessageQueue::createController() {
+  auto controller = QueueController::makeShared(*this);
   controllers.push_back(controller);
   return controller;
 }
@@ -77,22 +71,20 @@ void
 MessageQueue::processRequest(const Request& request) {
   Logger::message("Processing a request from '" + request.getSender() + "'");
   IEntity::Unique result;
-  auto controller = getController(request);
-  if (controller) {
-    result = controller->processRequest(request);
+  auto handler = getRequestHandler(request);
+  if (handler) {
+    result = handler(request);
   } else {
-    Logger::error("Unable to find a controller.");
-    result = StatusResult::makeUnique(StatusCode::NotFound, "Unable to find a controller.");
+    Logger::error("Unable to find a request handler.");
+    result = StatusResult::makeUnique(StatusCode::NotFound, "Unable to find a request handler.");
   }
-  auto response = createResponseFor(request, std::move(result), controller.get());
-  responses.push(response);
+  sendResponseFor(request, std::move(result));
 }
 
 void
 MessageQueue::processResponse(const Response& response) {
-  auto sender = response.getSender();
   auto receiver = response.getReceiver();
-  Logger::message("Processing a response from '" + sender + "' to '" + receiver + "'");
+  Logger::message("Processing a response to '" + receiver + "'");
   auto client = getClient(receiver);
   if (client) {
     client->onResponse(response);
@@ -103,8 +95,7 @@ MessageQueue::processResponse(const Response& response) {
 
 void
 MessageQueue::processEvent(const Event& event) {
-  auto sender = event.getSender();
-  Logger::message("Broadcating a notification from '" + sender + "'.");
+  Logger::message("Broadcating event '" + event.getEventType() + "'.");
   std::list<QueueClient::Shared> deletedClients;
   for(auto client: clients) {
     if (!client.unique()) {
@@ -134,11 +125,13 @@ MessageQueue::getClient(std::string clientId) {
   return queueClient;
 }
 
-QueueController::Shared
-MessageQueue::getController(const Request& request) {
+RequestHandler
+MessageQueue::getRequestHandler(const Request& request) {
+  RequestHandler func;
   QueueController::Shared queueController;
   for(auto controller: controllers) {
-    if (controller->canProcessRequest(request)) {
+    func = controller->getRequestHandler(request);
+    if (func) {
       queueController = controller;
       break;
     }
@@ -147,22 +140,17 @@ MessageQueue::getController(const Request& request) {
     controllers.remove(queueController);
     return nullptr;
   }
-  return queueController;
+  return func;
 }
 
-Response::Shared
-MessageQueue::createResponseFor(const Request& request,
-  IEntity::Unique result, const QueueController* controller) {
-
-  std::string sender(messageQueueSenderId);
-  if (controller)
-    sender = controller->getId();
-
-  return Response::makeShared(
-          sender,
+void
+MessageQueue::sendResponseFor(const Request& request, IEntity::Unique result) {
+  auto response = Response::makeShared(
+          request.getRequestType(),
           request.getSender(),
-          request.getActionType(),
           request.getResource(),
           std::move(result)
          );
+
+  responses.push(response);
 }

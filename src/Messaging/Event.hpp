@@ -4,10 +4,9 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef CORE_NOTIFICATION_HPP
-#define CORE_NOTIFICATION_HPP
+#ifndef MESSAGING_EVENT_HPP
+#define MESSAGING_EVENT_HPP
 
-#include "ActionType.hpp"
 #include "Core/IEntity.hpp"
 
 namespace Messaging {
@@ -16,24 +15,18 @@ namespace Messaging {
   The notification message.
 */
 class Event : public Core::IEntity {
-  TYPE_INFO(Event, IEntity, "notification")
+  TYPE_INFO(Event, IEntity, "event")
   public:
     Event(
-      std::string     sender,
-      ActionType      actionType,
+      std::string     eventType,
       std::string     resource,
       IEntity::Shared content
     );
 
     /**
-      The notification sender.
+      The event type (created, updated, deleted stc.).
     */
-    std::string getSender() const { return sender; };
-
-    /**
-      The resource action type (Create, Get, Update, Delete).
-    */
-    ActionType getActionType() const { return actionType; }
+    std::string getEventType() const { return eventType; }
 
     /**
       The resource.
@@ -46,12 +39,11 @@ class Event : public Core::IEntity {
     const IEntity* getContent() const { return content.get(); };
 
   private:
-    std::string     sender;
-    ActionType      actionType;
+    std::string     eventType;
     std::string     resource;
     IEntity::Shared content;
 };
 
 }
 
-#endif /* end of include guard: CORE_NOTIFICATION_HPP */
+#endif /* end of include guard: MESSAGING_EVENT_HPP */

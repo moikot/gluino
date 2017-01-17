@@ -2,6 +2,7 @@
 
 #include "Messaging/Request.hpp"
 
+using namespace Core;
 using namespace Messaging;
 
 namespace {
@@ -10,22 +11,27 @@ namespace {
     TYPE_INFO(Content, Core::IEntity, "content")
   };
 
-  Request::Unique createRequest(Content::Unique content) {
-    return Request::makeUnique("sender", ActionType::Get, "resource", std::move(content));
+  Request::Unique createRequest(IEntity::Shared content) {
+    return Request::makeUnique("get", "sender", "resource", content);
   }
 
 }
 
 TEST_CASE("Request can be constructed", "[Request]") {
 
-  auto request = createRequest(nullptr);
+  auto content = Content::makeShared();
+  auto request = createRequest(content);
+
+  SECTION("type is correct") {
+    REQUIRE(request->getTypeId() == "request");
+  }
+
+  SECTION("request type retained") {
+    REQUIRE(request->getRequestType() == "get");
+  }
 
   SECTION("sender retained") {
     REQUIRE(request->getSender() == "sender");
-  }
-
-  SECTION("action type retained") {
-    REQUIRE(request->getActionType() == ActionType::Get);
   }
 
   SECTION("resource retained") {
@@ -33,10 +39,7 @@ TEST_CASE("Request can be constructed", "[Request]") {
   }
 
   SECTION("result retained") {
-    auto content = Content::makeUnique();
-    auto contentPtr = content.get();
-    auto response = createRequest(std::move(content));
-    REQUIRE(response->getContent() == contentPtr);
+    REQUIRE(request->getContent() == content.get());
   }
 
 }

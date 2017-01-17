@@ -6,7 +6,6 @@
 using namespace Core;
 using namespace Messaging;
 
-
 namespace {
 
   class Content : public Core::IEntity {
@@ -14,7 +13,7 @@ namespace {
   };
 
   Response::Unique createResponse(Core::IEntity::Shared content) {
-    return Response::makeUnique("sender", "receiver", ActionType::Get, "resource", content);
+    return Response::makeUnique("get", "receiver", "resource", content);
   }
 
 }
@@ -24,16 +23,16 @@ TEST_CASE("Response can be constructed", "[Response]") {
   auto content = Content::makeShared();
   auto response = createResponse(content);
 
-  SECTION("sender retained") {
-    REQUIRE(response->getSender() == "sender");
+  SECTION("type is correct") {
+    REQUIRE(response->getTypeId() == "response");
+  }
+
+  SECTION("request type retained") {
+    REQUIRE(response->getRequestType() == "get");
   }
 
   SECTION("receiver retained") {
     REQUIRE(response->getReceiver() == "receiver");
-  }
-
-  SECTION("action type retained") {
-    REQUIRE(response->getActionType() == ActionType::Get);
   }
 
   SECTION("resource retained") {

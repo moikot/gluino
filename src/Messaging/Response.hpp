@@ -7,7 +7,6 @@
 #ifndef MESSAGING_RESPONSE_HPP
 #define MESSAGING_RESPONSE_HPP
 
-#include "ActionType.hpp"
 #include "Core/IEntity.hpp"
 
 namespace Messaging {
@@ -19,27 +18,21 @@ class Response : public Core::IEntity {
   TYPE_INFO(Response, IEntity, "response")
   public:
     Response(
-      std::string       sender,
+      std::string       requestType,
       std::string       receiver,
-      ActionType        actionType,
       std::string       resource,
       IEntity::Shared   content
     );
 
     /**
-      The response sender.
+      The request type (create, get, update, delete etc.).
     */
-    std::string getSender() const { return sender; };
+    std::string getRequestType() const { return requestType; }
 
     /**
       The response receiver.
     */
     std::string getReceiver() const { return receiver; };
-
-    /**
-      The resource action type.
-    */
-    ActionType getActionType() const { return actionType; }
 
     /**
       The resource identifier.
@@ -52,9 +45,8 @@ class Response : public Core::IEntity {
     const IEntity& getContent() const { return *content; }
 
   private:
-    std::string     sender;
+    std::string     requestType;
     std::string     receiver;
-    ActionType      actionType;
     std::string     resource;
     IEntity::Shared content;
 };

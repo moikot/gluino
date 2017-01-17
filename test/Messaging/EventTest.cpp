@@ -11,21 +11,22 @@ namespace {
   };
 
   Event::Unique createEvent(Core::IEntity::Shared content) {
-    return Event::makeUnique("sender", ActionType::Get, "resource", content);
+    return Event::makeUnique("created", "resource", content);
   }
 
 }
 
 TEST_CASE("Event can be constructed", "[Event]") {
 
-  auto event = createEvent(nullptr);
+  auto content = Content::makeShared();
+  auto event = createEvent(content);
 
-  SECTION("sender retained") {
-    REQUIRE(event->getSender()  == "sender");
+  SECTION("type is correct") {
+    REQUIRE(event->getTypeId() == "event");
   }
 
-  SECTION("action type retained") {
-    REQUIRE(event->getActionType() == ActionType::Get);
+  SECTION("event type retained") {
+    REQUIRE(event->getEventType() == "created");
   }
 
   SECTION("resource retained") {
@@ -33,8 +34,6 @@ TEST_CASE("Event can be constructed", "[Event]") {
   }
 
   SECTION("content retained") {
-    auto content = Content::makeShared();
-    auto event = createEvent(content);
     REQUIRE(event->getContent() == content.get());
   }
 

@@ -3,13 +3,11 @@
 using namespace Messaging;
 
 Event::Event(
-  std::string sender,
-  ActionType actionType,
+  std::string eventType,
   std::string resource,
   IEntity::Shared content
 ) :
-  sender(sender),
-  actionType(actionType),
+  eventType(eventType),
   resource(resource),
   content(content) {
 }
