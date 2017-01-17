@@ -41,7 +41,7 @@ QueueResourceController::getResourceRequestHandler(std::string requestType, std:
   for(auto& handler: handlers) {
     if (handler->getRequestType() == requestType &&
         handler->getContentType() == contentType) {
-          return std::bind(&IResourceRequestHandler::makeRequest, handler.get(), _1);
+          return std::bind(&ResourceRequestHandler::makeRequest, handler.get(), _1);
         }
   }
   return nullptr;

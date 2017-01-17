@@ -30,6 +30,12 @@ QueueResourceClient::onResponse(const Response& response) {
   auto requestType = response.getRequestType();
   auto contentType = response.getContent().getTypeId();
 
+  for(auto& handler: responseHandlers) {
+    if (handler->getRequestType() == requestType &&
+        handler->getContentType() == contentType) {
+          handler->processResponse(response);
+        }
+  }
 }
 
 void
@@ -43,5 +49,10 @@ QueueResourceClient::onEvent(const Event& event) {
   if (event.getContent())
     contentType = event.getContent()->getTypeId();
 
-  // Go through all the event handlers
+  for(auto& handler: eventHandlers) {
+    if (handler->getEventType() == eventType &&
+        handler->getContentType() == contentType) {
+          handler->processEvent(event);
+        }
+  }
 }
