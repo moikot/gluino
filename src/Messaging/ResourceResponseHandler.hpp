@@ -21,33 +21,6 @@ namespace Messaging {
     virtual void processResponse(const Response& response) const = 0;
   };
 
-  class ResourceResponseHandlerVoid : public ResourceResponseHandler {
-    TYPE_PTRS(ResourceResponseHandlerVoid)
-    public:
-      ResourceResponseHandlerVoid(
-        std::string requestType,
-        std::function<void()> onResponse) :
-        requestType(requestType),
-        onResponse(onResponse) {
-      }
-
-      virtual std::string getRequestType() const override {
-        return requestType;
-      }
-
-      virtual std::string getContentType() const override {
-        return "";
-      }
-
-      virtual void processResponse(const Response&) const override {
-          onResponse();
-      }
-
-    private:
-      const std::string requestType;
-      const std::function<void()> onResponse;
-  };
-
   template<class T>
   class ResourceResponseHandlerTyped : public ResourceResponseHandler {
     TYPE_PTRS(ResourceResponseHandlerTyped)

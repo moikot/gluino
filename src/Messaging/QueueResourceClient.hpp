@@ -30,10 +30,6 @@ class QueueResourceClient : public QueueClient {
     Core::StatusResult::Unique sendRequest(std::string requestType);
     Core::StatusResult::Unique sendRequest(std::string requestType, Core::IEntity::Unique content);
 
-    void addOnResponse(std::string requestType, std::function<void()> onResponse) {
-      responseHandlers.push_back(ResourceResponseHandlerVoid::makeUnique(requestType, onResponse));
-    }
-
     template<class T>
     void addOnResponse(std::string requestType, std::function<void(const T&)> onResponse) {
       responseHandlers.push_back(ResourceResponseHandlerTyped<T>::makeUnique(requestType, onResponse));

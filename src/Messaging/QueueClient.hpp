@@ -16,7 +16,6 @@ class QueueClient {
   TYPE_PTRS_ABSTRACT(QueueClient)
   public:
     virtual ~QueueClient() = default;
-
     virtual std::string getClientId() const = 0;
     virtual void onResponse(const Response& response) const = 0;
     virtual void onEvent(const Event& event) const = 0;
