@@ -5,7 +5,7 @@
 using namespace Serialization;
 using namespace Core;
 
-#define TYPE_FIELD "type"
+#define TYPE_FIELD "_type"
 
 SerializationService::SerializationService(
   std::shared_ptr<const ISerializationContextFactory> contextFactory) :
