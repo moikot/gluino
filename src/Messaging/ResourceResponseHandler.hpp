@@ -26,7 +26,7 @@ namespace Messaging {
     TYPE_PTRS(ResourceResponseHandlerTyped)
     public:
       ResourceResponseHandlerTyped(
-        std::string responseType,
+        std::string requestType,
         std::function<void(const T&)> onResponse) :
         requestType(requestType),
         onResponse(onResponse) {
@@ -37,11 +37,11 @@ namespace Messaging {
       }
 
       virtual std::string getContentType() const override {
-        return T::getType();
+        return T::TypeId();
       }
 
       virtual void processResponse(const Response& response) const override {
-        onResponse(response.getContent());
+        onResponse(static_cast<const T&>(response.getContent()));
       }
 
     private:

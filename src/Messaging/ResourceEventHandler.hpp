@@ -64,11 +64,11 @@ namespace Messaging {
       }
 
       virtual std::string getContentType() const override {
-        return T::getType();
+        return T::TypeId();
       }
 
       virtual void processEvent(const Event& event) const override {
-        onEvent(event.getContent());
+        onEvent(static_cast<const T&>(*event.getContent()));
       }
 
     private:

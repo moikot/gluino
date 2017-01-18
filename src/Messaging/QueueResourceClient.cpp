@@ -30,7 +30,7 @@ QueueResourceClient::onResponse(const Response& response) const {
 
   for (auto& handler : responseHandlers) {
     if (handler->getRequestType() == requestType &&
-      handler->getContentType() == contentType) {
+        handler->getContentType() == contentType) {
       handler->processResponse(response);
     }
   }
@@ -49,7 +49,7 @@ QueueResourceClient::onEvent(const Event& event) const {
 
   for (auto& handler : eventHandlers) {
     if (handler->getEventType() == eventType &&
-      handler->getContentType() == contentType) {
+        handler->getContentType() == contentType) {
       handler->processEvent(event);
     }
   }

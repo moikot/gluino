@@ -64,11 +64,11 @@ namespace Messaging {
       }
 
       virtual std::string getContentType() const override {
-        return T::getType();
+        return T::TypeId();
       }
 
       virtual Core::IEntity::Unique makeRequest(const Request& request) const override {
-        return onRequest(request.getContent());
+        return onRequest(static_cast<const T&>(*request.getContent()));
       }
 
     private:
