@@ -7,14 +7,16 @@
 #ifndef MESSAGING_QUEUE_RESOURCE_CONTROLLER_HPP
 #define MESSAGING_QUEUE_RESOURCE_CONTROLLER_HPP
 
-#include "QueueController.hpp"
 #include "ResourceRequestHandler.hpp"
+#include "Core/StatusResult.hpp"
 
 #include <vector>
 
 namespace Messaging {
 
 class IMessageQueue;
+
+typedef std::function<Core::IEntity::Unique(const Request&)> RequestHandler; 
 
 class QueueResourceController {
   TYPE_PTRS(QueueResourceController)
