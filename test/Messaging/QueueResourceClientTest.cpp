@@ -1,8 +1,6 @@
 #include "catch.hpp"
 #include "fakeit.hpp"
 
-#include "Core/Casting.hpp"
-#include "Messaging/QueueClient.hpp"
 #include "Messaging/IMessageQueue.hpp"
 
 using namespace Core;
@@ -24,19 +22,7 @@ namespace {
 
 }
 
-TEST_CASE("QueueResourceClient can be constructed", "[QueueResourceClient]") {
-
-  Mock<IMessageQueue> messageQueue;
-  auto client = QueueResourceClient::makeUnique("id", "resource", messageQueue.get());
-
-  SECTION("identifier retained") {
-    REQUIRE(client->getClientId() == "id");
-  }
-
-}
-
 TEST_CASE("queue resource client can send a request", "[QueueResourceClient]") {
-
   Mock<IMessageQueue> messageQueue;
   auto content = Content::makeUnique();
   auto contentPtr = content.get();
@@ -55,8 +41,7 @@ TEST_CASE("queue resource client can send a request", "[QueueResourceClient]") {
   Verify(Method(messageQueue, addRequest));
 }
 
-TEST_CASE("queue resource client has on response invoked", "[QueueResourceClient]") {
-
+TEST_CASE("queue resource client can process a response", "[QueueResourceClient]") {
   Mock<IMessageQueue> messageQueue;
   auto client = QueueResourceClient::makeUnique("id", "resource", messageQueue.get());
   auto result = StatusResult::OK();
@@ -67,22 +52,15 @@ TEST_CASE("queue resource client has on response invoked", "[QueueResourceClient
     REQUIRE(&result == resultPtr);
     return StatusResult::OK();
   });
-
   client->addOnResponse<StatusResult>("get", std::bind(&EventSink::onResponse, &eventSink.get(), _1));
 
   Response response("get", "receiver", "resource", std::move(result));
   client->onResponse(response);
 
-  REQUIRE(response.getRequestType() == "get");
-  REQUIRE(response.getResource() == "resource");
-  REQUIRE(response.getContent().getTypeId() == "statusResult");
-
   Verify(Method(eventSink, onResponse));
-
 }
 
-TEST_CASE("queue resource client has on event invoked", "[QueueResourceClient]") {
-
+TEST_CASE("queue resource client can process an event", "[QueueResourceClient]") {
   Mock<IMessageQueue> messageQueue;
   auto client = QueueResourceClient::makeUnique("id", "resource", messageQueue.get());
   auto content = Content::makeShared();
@@ -92,12 +70,10 @@ TEST_CASE("queue resource client has on event invoked", "[QueueResourceClient]")
     REQUIRE(&param == content.get());
     return StatusResult::OK();
   });
-
   client->addOnEvent<Content>("created", std::bind(&EventSink::onEvent, &eventSink.get(), _1));
 
   Event event("created", "resource", content);
   client->onEvent(event);
 
   Verify(Method(eventSink, onEvent));
-
 }

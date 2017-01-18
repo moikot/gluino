@@ -1,8 +1,6 @@
 #include "catch.hpp"
 #include "fakeit.hpp"
 
-#include "Core/Casting.hpp"
-#include "Messaging/QueueClient.hpp"
 #include "Messaging/IMessageQueue.hpp"
 
 using namespace Core;
@@ -21,17 +19,6 @@ namespace {
     virtual void onResponse(const Response&) = 0;
     virtual void onEvent(const Event&) const = 0;
   };
-
-}
-
-TEST_CASE("QueueGenericClient can be constructed", "[QueueGenericClient]") {
-
-  Mock<IMessageQueue> messageQueue;
-  auto client = QueueGenericClient::makeUnique("id", messageQueue.get());
-
-  SECTION("identifier retained") {
-    REQUIRE(client->getClientId() == "id");
-  }
 
 }
 
