@@ -14,8 +14,8 @@ QueueResourceClient::sendRequest(std::string requestType) {
 }
 
 Core::StatusResult::Unique
-QueueResourceClient::sendRequest(std::string requestType, Core::IEntity::Unique content) {
-  auto request = Request::makeShared(requestType, clientId, resource, std::move(content));
+QueueResourceClient::sendRequest(std::string requestType, Core::IEntity::Shared content) {
+  auto request = Request::makeShared(requestType, clientId, resource, content);
   return messageQueue.addRequest(request);
 }
 
