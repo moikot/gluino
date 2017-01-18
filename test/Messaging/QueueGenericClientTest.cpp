@@ -22,8 +22,7 @@ namespace {
 
 }
 
-TEST_CASE("resource request is sent", "[QueueGenericClient]") {
-
+TEST_CASE("queue generic client can send a request", "[QueueGenericClient]") {
   Mock<IMessageQueue> messageQueue;
   auto content = Content::makeUnique();
   auto contentPtr = content.get();
@@ -42,8 +41,7 @@ TEST_CASE("resource request is sent", "[QueueGenericClient]") {
   Verify(Method(messageQueue, addRequest));
 }
 
-TEST_CASE("response handler is invoked", "[QueueGenericClient]") {
-
+TEST_CASE("queue generic client can process a response", "[QueueGenericClient]") {
   Mock<IMessageQueue> messageQueue;
   auto client = QueueGenericClient::makeUnique("id", messageQueue.get());
   auto result = StatusResult::OK();
@@ -64,11 +62,9 @@ TEST_CASE("response handler is invoked", "[QueueGenericClient]") {
   client->onResponse(response);
 
   Verify(Method(eventSink, onResponse));
-
 }
 
-TEST_CASE("event handler is invoked", "[QueueGenericClient]") {
-
+TEST_CASE("queue generic client can process an event", "[QueueGenericClient]") {
   Mock<IMessageQueue> messageQueue;
   auto client = QueueGenericClient::makeUnique("id", messageQueue.get());
   auto content = Content::makeShared();
@@ -87,5 +83,4 @@ TEST_CASE("event handler is invoked", "[QueueGenericClient]") {
   client->onEvent(event);
 
   Verify(Method(eventSink, onEvent));
-
 }
