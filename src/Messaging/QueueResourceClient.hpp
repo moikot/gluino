@@ -28,7 +28,7 @@ class QueueResourceClient : public QueueClient {
     void onEvent(const Event& event) const override;
 
     Core::StatusResult::Unique sendRequest(std::string requestType);
-    Core::StatusResult::Unique sendRequest(std::string requestType, Core::IEntity::Unique content);
+    Core::StatusResult::Unique sendRequest(std::string requestType, Core::IEntity::Shared content);
 
     template<class T>
     void addOnResponse(std::string requestType, std::function<void(const T&)> onResponse) {

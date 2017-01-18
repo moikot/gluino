@@ -16,15 +16,16 @@ namespace {
   };
 
   struct EventSink {
+    virtual Core::IEntity::Unique onRequest(const Content&) = 0;
     virtual void onResponse(const Response&) = 0;
-    virtual void onResponseStatus(const StatusResult&) = 0;
+    virtual void onResponseContent(const Content&) = 0;
     virtual void onEvent(const Event&) const = 0;
     virtual void onEventContent(const Content&) const = 0;
   };
 
 }
 
-TEST_CASE("message queue is routing event to a generic client", "[MessageQueue]") {
+TEST_CASE("message queue is routing an event to a generic client", "[MessageQueue]") {
   auto content = Content::makeShared();
 
   Mock<EventSink> eventSink;
@@ -47,7 +48,41 @@ TEST_CASE("message queue is routing event to a generic client", "[MessageQueue]"
   Verify(Method(eventSink, onEvent));
 }
 
-TEST_CASE("message queue is routing event to a resource client", "[MessageQueue]") {
+TEST_CASE("message queue is routing a response to a generic client", "[MessageQueue]") {
+  auto requestContent = Content::makeShared();
+  auto responseContent = Content::makeUnique();
+  auto responseContentPtr = responseContent.get();
+
+  Mock<EventSink> eventSink;
+  When(Method(eventSink, onRequest)).Do([&](const Content& param) {
+    REQUIRE(&param == requestContent.get());
+    return std::move(responseContent);
+  });
+
+  When(Method(eventSink, onResponse)).Do([=](const Response& response) {
+    REQUIRE(response.getRequestType() == "get");
+    REQUIRE(response.getReceiver() == "clientId");
+    REQUIRE(response.getResource() == "resource");
+    REQUIRE(&response.getContent() == responseContentPtr);
+    return StatusResult::OK();
+  });
+
+  auto queue = MessageQueue::makeUnique();
+
+  auto client = queue->createGenericClient("clientId");
+  client->setOnResponse(std::bind(&EventSink::onResponse, &eventSink.get(), _1));
+
+  auto controller = queue->createResourceController("resource");
+  controller->addOnRequest<Content>("get", std::bind(&EventSink::onRequest, &eventSink.get(), _1));
+
+  client->sendRequest("get", "resource", requestContent);
+  queue->idle();
+
+  Verify(Method(eventSink, onRequest));
+  Verify(Method(eventSink, onResponse));
+}
+
+TEST_CASE("message queue is routing an event to a resource client", "[MessageQueue]") {
   auto content = Content::makeShared();
 
   Mock<EventSink> eventSink;
@@ -66,4 +101,35 @@ TEST_CASE("message queue is routing event to a resource client", "[MessageQueue]
   queue->idle();
 
   Verify(Method(eventSink, onEventContent));
+}
+
+TEST_CASE("message queue is routing a response to a resource client", "[MessageQueue]") {
+  auto requestContent = Content::makeShared();
+  auto responseContent = Content::makeUnique();
+  auto responseContentPtr = responseContent.get();
+
+  Mock<EventSink> eventSink;
+  When(Method(eventSink, onRequest)).Do([&](const Content& param) {
+    REQUIRE(&param == requestContent.get());
+    return std::move(responseContent);
+  });
+
+  When(Method(eventSink, onResponseContent)).Do([=](const Content& param) {
+    REQUIRE(&param == responseContentPtr);
+    return StatusResult::OK();
+  });
+
+  auto queue = MessageQueue::makeUnique();
+
+  auto client = queue->createResourceClient("clientId", "resource");
+  client->addOnResponse<Content>("get", std::bind(&EventSink::onResponseContent, &eventSink.get(), _1));
+
+  auto controller = queue->createResourceController("resource");
+  controller->addOnRequest<Content>("get", std::bind(&EventSink::onRequest, &eventSink.get(), _1));
+
+  client->sendRequest("get", requestContent);
+  queue->idle();
+
+  Verify(Method(eventSink, onRequest));
+  Verify(Method(eventSink, onResponseContent));
 }
