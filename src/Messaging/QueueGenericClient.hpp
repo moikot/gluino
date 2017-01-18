@@ -24,11 +24,11 @@ class QueueGenericClient : public QueueClient {
     std::string getClientId() const override { return clientId; }
     void onResponse(const Response& response) const override;
     void onEvent(const Event& event) const override;
-      
+
     Core::StatusResult::Unique sendRequest(
       std::string requestType,
       std::string resource,
-      Core::IEntity::Unique content
+      Core::IEntity::Shared content
     );
 
     void setOnResponse(std::function<void(const Response&)> onResponse) {
