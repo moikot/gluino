@@ -15,6 +15,7 @@ namespace Messaging {
 
   class ResourceEventHandler {
     TYPE_PTRS_ABSTRACT(ResourceEventHandler)
+    virtual ~ResourceEventHandler() = default;
     virtual std::string getEventType() const = 0;
     virtual std::string getContentType() const = 0;
     virtual void processEvent(const Event& event) const = 0;
@@ -38,7 +39,7 @@ namespace Messaging {
         return "";
       }
 
-      virtual void processEvent(const Event& event) const override {
+      virtual void processEvent(const Event&) const override {
           onEvent();
       }
 
@@ -63,11 +64,11 @@ namespace Messaging {
       }
 
       virtual std::string getContentType() const override {
-        return T::getType();
+        return T::TypeId();
       }
 
       virtual void processEvent(const Event& event) const override {
-        onEvent(event.getContent());
+        onEvent(static_cast<const T&>(*event.getContent()));
       }
 
     private:

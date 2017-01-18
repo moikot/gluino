@@ -38,22 +38,32 @@ class MessageQueue : public IMessageQueue {
     /**
       Creates a queue client.
     */
-    virtual QueueClient::Shared createClient(std::string clinetId) override;
+    virtual QueueGenericClient::Shared createGenericClient(std::string clinetId) override;
 
     /**
       Removes the queue client.
     */
-    virtual void removeClient(QueueClient::Shared client) override;
+    virtual void removeGenericClient(QueueGenericClient::Shared client) override;
+
+    /**
+    Creates a queue client.
+    */
+    virtual QueueResourceClient::Shared createResourceClient(std::string clinetId, std::string resource) override;
+
+    /**
+    Removes the queue client.
+    */
+    virtual void removeResourceClient(QueueResourceClient::Shared client) override;
 
     /**
       Creates a queue controller.
     */
-    virtual QueueController::Shared createController() override;
+    virtual QueueResourceController::Shared createResourceController(std::string resource) override;
 
     /**
       Removes the queue controller.
     */
-    virtual void removeController(QueueController::Shared controller) override;
+    virtual void removeResourceController(QueueResourceController::Shared controller) override;
 
   private:
     std::queue<Request::Shared> requests;
@@ -61,7 +71,7 @@ class MessageQueue : public IMessageQueue {
     std::queue<Event::Shared> events;
 
     std::list<QueueClient::Shared> clients;
-    std::list<QueueController::Shared> controllers;
+    std::list<QueueResourceController::Shared> controllers;
 
     void processRequest(const Request& request);
     void processResponse(const Response& response);

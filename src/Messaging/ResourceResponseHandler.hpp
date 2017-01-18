@@ -15,36 +15,10 @@ namespace Messaging {
 
   class ResourceResponseHandler {
     TYPE_PTRS_ABSTRACT(ResourceResponseHandler)
+    virtual ~ResourceResponseHandler() = default;
     virtual std::string getRequestType() const = 0;
     virtual std::string getContentType() const = 0;
     virtual void processResponse(const Response& response) const = 0;
-  };
-
-  class ResourceResponseHandlerVoid : public ResourceResponseHandler {
-    TYPE_PTRS(ResourceResponseHandlerVoid)
-    public:
-      ResourceResponseHandlerVoid(
-        std::string requestType,
-        std::function<void()> onResponse) :
-        requestType(requestType),
-        onResponse(onResponse) {
-      }
-
-      virtual std::string getRequestType() const override {
-        return requestType;
-      }
-
-      virtual std::string getContentType() const override {
-        return "";
-      }
-
-      virtual void processResponse(const Response& response) const override {
-          onResponse();
-      }
-
-    private:
-      const std::string requestType;
-      const std::function<void()> onResponse;
   };
 
   template<class T>
@@ -52,7 +26,7 @@ namespace Messaging {
     TYPE_PTRS(ResourceResponseHandlerTyped)
     public:
       ResourceResponseHandlerTyped(
-        std::string responseType,
+        std::string requestType,
         std::function<void(const T&)> onResponse) :
         requestType(requestType),
         onResponse(onResponse) {
@@ -63,11 +37,11 @@ namespace Messaging {
       }
 
       virtual std::string getContentType() const override {
-        return T::getType();
+        return T::TypeId();
       }
 
       virtual void processResponse(const Response& response) const override {
-        onResponse(response.getContent());
+        onResponse(static_cast<const T&>(response.getContent()));
       }
 
     private:

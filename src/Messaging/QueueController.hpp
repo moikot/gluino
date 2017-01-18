@@ -24,16 +24,10 @@ class QueueController {
   public:
     QueueController(IMessageQueue& messageQueue);
 
-    Core::StatusResult::Unique sendEvent(
-      std::string eventType,
-      std::string resource,
-      Core::IEntity::Shared content
-    );
+    RequestHandler onRequest(const Request& request);
 
-    RequestHandler getRequestHandler(const Request& request);
-
-    void setRequestHandler(std::function<RequestHandler(const Request&)> requestHandler) {
-      this->requestHandler = requestHandler;
+    void setRequestHandler(std::function<RequestHandler(const Request&)> handler) {
+      this->requestHandler = handler;
     }
 
   private:

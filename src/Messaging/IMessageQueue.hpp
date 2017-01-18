@@ -7,8 +7,9 @@
 #ifndef MESSAGING_I_MESSAGE_QUEUE_HPP
 #define MESSAGING_I_MESSAGE_QUEUE_HPP
 
-#include "QueueClient.hpp"
-#include "QueueController.hpp"
+#include "QueueGenericClient.hpp"
+#include "QueueResourceClient.hpp"
+#include "QueueResourceController.hpp"
 #include "Core/IService.hpp"
 
 namespace Messaging {
@@ -42,14 +43,30 @@ class IMessageQueue : public Core::IService {
       @param clientId The unique client identifier.
       @return The queue client.
     */
-    virtual QueueClient::Shared createClient(std::string clinetId) = 0;
+    virtual QueueGenericClient::Shared createGenericClient(std::string clinetId) = 0;
+
+    /**
+    Removes a queue client from the queue.
+
+    @param client The client to remove.
+    */
+    virtual void removeGenericClient(QueueGenericClient::Shared client) = 0;
+
+    /**
+    Creates a new queue client for sending requests and getting responses.
+
+    @param clientId The unique client identifier.
+    @param clientId The resource identifier.
+    @return The queue client.
+    */
+    virtual QueueResourceClient::Shared createResourceClient(std::string clinetId, std::string resource) = 0;
 
     /**
       Removes a queue client from the queue.
 
       @param client The client to remove.
     */
-    virtual void removeClient(QueueClient::Shared client) = 0;
+    virtual void removeResourceClient(QueueResourceClient::Shared client) = 0;
 
     /**
       Creates a new queue controller for receiving requests and sending responses.
@@ -57,14 +74,14 @@ class IMessageQueue : public Core::IService {
       @param clientId The unique controller identifier.
       @return The queue client.
     */
-    virtual QueueController::Shared createController() = 0;
+    virtual QueueResourceController::Shared createResourceController(std::string resource) = 0;
 
     /**
       Removes a queue controller from the queue.
 
       @param client The client to remove.
     */
-    virtual void removeController(QueueController::Shared controller) = 0;
+    virtual void removeResourceController(QueueResourceController::Shared controller) = 0;
 };
 
 }

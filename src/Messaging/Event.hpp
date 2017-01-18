@@ -24,7 +24,7 @@ class Event : public Core::IEntity {
     );
 
     /**
-      The event type (created, updated, deleted stc.).
+      The event type (created, updated, deleted etc.).
     */
     std::string getEventType() const { return eventType; }
 

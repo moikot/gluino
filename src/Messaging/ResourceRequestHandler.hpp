@@ -15,6 +15,7 @@ namespace Messaging {
 
   class ResourceRequestHandler {
     TYPE_PTRS_ABSTRACT(ResourceRequestHandler)
+    virtual ~ResourceRequestHandler() = default;
     virtual std::string getRequestType() const = 0;
     virtual std::string getContentType() const = 0;
     virtual Core::IEntity::Unique makeRequest(const Request& request) const = 0;
@@ -38,7 +39,7 @@ namespace Messaging {
         return "";
       }
 
-      virtual Core::IEntity::Unique makeRequest(const Request& request) const override {
+      virtual Core::IEntity::Unique makeRequest(const Request&) const override {
           return onRequest();
       }
 
@@ -63,11 +64,11 @@ namespace Messaging {
       }
 
       virtual std::string getContentType() const override {
-        return T::getType();
+        return T::TypeId();
       }
 
       virtual Core::IEntity::Unique makeRequest(const Request& request) const override {
-        return onRequest(request.getContent());
+        return onRequest(static_cast<const T&>(*request.getContent()));
       }
 
     private:

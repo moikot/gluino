@@ -19,7 +19,7 @@ class IMessageQueue;
 class QueueResourceController {
   TYPE_PTRS(QueueResourceController)
   public:
-    QueueResourceController(std::string resource, QueueController& queueController);
+    QueueResourceController(std::string resource, IMessageQueue& messageQueue);
 
     Core::StatusResult::Unique sendEvent(std::string eventType);
     Core::StatusResult::Unique sendEvent(std::string eventType, Core::IEntity::Unique content);
@@ -33,13 +33,12 @@ class QueueResourceController {
       handlers.push_back(ResourceRequestHandlerTyped<T>::makeUnique(requestType, onRequest));
     }
 
+    RequestHandler getRequestHandler(const Request& request);
+
   private:
     const std::string resource;
-    QueueController& queueController;
+    IMessageQueue& messageQueue;
     std::vector<ResourceRequestHandler::Unique> handlers;
-
-    RequestHandler getRequestHandler(const Request& request);
-    RequestHandler getResourceRequestHandler(std::string requestType, std::string contentType);
 };
 
 }
