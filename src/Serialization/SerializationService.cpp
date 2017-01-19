@@ -5,7 +5,7 @@
 using namespace Serialization;
 using namespace Core;
 
-#define TYPE_FIELD "type"
+#define TYPE_FIELD "_type"
 
 SerializationService::SerializationService(
   std::shared_ptr<const ISerializationContextFactory> contextFactory) :
@@ -41,7 +41,7 @@ SerializationService::serialize (
     return StatusResult::makeUnique(StatusCode::BadRequest,
       "Unable to find a serializer for type """ + typeId + """.");
   }
-  context.setValue(TYPE_FIELD, typeId);
+  context.setString(TYPE_FIELD, typeId);
   return serializer->serialize(entity, context);
 }
 
@@ -64,7 +64,7 @@ SerializationService::deserialize(
   Core::IEntity::Unique& entity) const {
 
   std::string typeId;
-  auto actionResult = context.getStringValue(TYPE_FIELD, typeId);
+  auto actionResult = context.getString(TYPE_FIELD, typeId);
   if (!actionResult->isOk())
     return actionResult;
 

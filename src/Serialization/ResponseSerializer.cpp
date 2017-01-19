@@ -13,15 +13,15 @@ ResponseSerializer::serialize(
   const Response& response,
   ISerializationContext& context) const {
 
-  auto result = context.setValue(FIELD_REQUEST_TYPE, response.getRequestType());
+  auto result = context.setString(FIELD_REQUEST_TYPE, response.getRequestType());
   if (!result->isOk())
     return result;
 
-  result = context.setValue(FIELD_RESOURCE, response.getResource());
+  result = context.setString(FIELD_RESOURCE, response.getResource());
   if (!result->isOk())
     return result;
 
-  result = context.setValue(FIELD_CONTENT, response.getContent());
+  result = context.setEntity(FIELD_CONTENT, response.getContent());
   if (!result->isOk())
     return result;
 

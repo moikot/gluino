@@ -15,6 +15,7 @@
 namespace Serialization {
 
 class ISerializer {
+  TYPE_PTRS_ABSTRACT(ISerializer)
   public:
     virtual ~ISerializer() = default;
 

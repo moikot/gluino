@@ -19,12 +19,12 @@ RequestSerializer::deserialize(
   ISerializationContext& context) const {
 
   std::string requestType;
-  auto result = context.getStringValue(FIELD_REQUEST_TYPE, requestType);
+  auto result = context.getString(FIELD_REQUEST_TYPE, requestType);
   if (!result->isOk())
     return result;
 
   std::string resource;
-  result = context.getStringValue(FIELD_RESOURCE, resource);
+  result = context.getString(FIELD_RESOURCE, resource);
   if (!result->isOk())
     return result;
 

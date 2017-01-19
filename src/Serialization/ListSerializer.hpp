@@ -22,7 +22,7 @@ class ListSerializer : public Serializer<T> {
       const T& list,
       ISerializationContext& context) const override {
 
-      auto result = context.setValue("elements", list);
+      auto result = context.setEntity("elements", list);
       if (!result->isOk())
         return result;
 
