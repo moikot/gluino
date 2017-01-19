@@ -24,11 +24,11 @@ TEST_CASE("can serialize a request", "[EventSerializer]") {
 
   Mock<ISerializationContext> context;
   
-  When(Method(context, setString).Using("eventType","get")).Do([](...) {
+  When(Method(context, setString).Using("eventType","get")).Do([](const std::string&, const std::string&) {
     return StatusResult::OK();
   });
 
-  When(Method(context, setString).Using("resource", "res")).Do([](...) {
+  When(Method(context, setString).Using("resource", "res")).Do([](const std::string&, const std::string&) {
     return StatusResult::OK();
   });
 

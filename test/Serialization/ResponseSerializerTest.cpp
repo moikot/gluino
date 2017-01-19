@@ -24,15 +24,15 @@ TEST_CASE("can serialize a response", "[ResponseSerializer]") {
 
   Mock<ISerializationContext> context;
   
-  When(Method(context, setString).Using("requestType","get")).Do([](...) {
+  When(Method(context, setString).Using("requestType","get")).Do([](const std::string&, const std::string&) {
     return StatusResult::OK();
   });
 
-  When(Method(context, setString).Using("receiver", "rec")).Do([](...) {
+  When(Method(context, setString).Using("receiver", "rec")).Do([](const std::string&, const std::string&) {
     return StatusResult::OK();
   });
 
-  When(Method(context, setString).Using("resource", "res")).Do([](...) {
+  When(Method(context, setString).Using("resource", "res")).Do([](const std::string&, const std::string&) {
     return StatusResult::OK();
   });
 
