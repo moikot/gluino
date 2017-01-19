@@ -13,17 +13,17 @@ EventSerializer::serialize(
   const Messaging::Event& event,
   ISerializationContext& context) const {
 
-  auto result = context.setValue(FIELD_EVENT_TYPE, event.getEventType());
+  auto result = context.setString(FIELD_EVENT_TYPE, event.getEventType());
   if (!result->isOk())
     return result;
 
-  result = context.setValue(FIELD_RESOURCE, event.getResource());
+  result = context.setString(FIELD_RESOURCE, event.getResource());
   if (!result->isOk())
     return result;
 
   auto content = event.getContent();
   if (content) {
-    result = context.setValue(FIELD_CONTENT, *content);
+    result = context.setEntity(FIELD_CONTENT, *content);
     if (!result->isOk())
       return result;
   }

@@ -1,7 +1,7 @@
 #include "catch.hpp"
 #include "fakeit.hpp"
 
-#include "Serialization/EventSerializer.hpp"
+#include "Serialization/ResponseSerializer.hpp"
 
 using namespace Core;
 using namespace Messaging;
@@ -18,13 +18,17 @@ namespace {
 
 }
 
-TEST_CASE("can serialize a request", "[EventSerializer]") {
+TEST_CASE("can serialize a response", "[ResponseSerializer]") {
   auto content = Content::makeShared();
-  auto event = Event::makeUnique("get", "res", content);
+  auto response = Response::makeUnique("get", "rec", "res", content);
 
   Mock<ISerializationContext> context;
   
-  When(Method(context, setString).Using("eventType","get")).Do([](...) {
+  When(Method(context, setString).Using("requestType","get")).Do([](...) {
+    return StatusResult::OK();
+  });
+
+  When(Method(context, setString).Using("receiver", "rec")).Do([](...) {
     return StatusResult::OK();
   });
 
@@ -38,9 +42,9 @@ TEST_CASE("can serialize a request", "[EventSerializer]") {
     return StatusResult::OK();
   });
 
-  ISerializer::Unique serializer = EventSerializer::makeUnique();
+  ISerializer::Unique serializer = ResponseSerializer::makeUnique();
 
-  auto result = serializer->serialize(*event, context.get());
+  auto result = serializer->serialize(*response, context.get());
   REQUIRE(result->isOk() == true);
 
   Verify(Method(context, setString));

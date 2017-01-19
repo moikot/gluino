@@ -11,17 +11,17 @@ Core::StatusResult::Unique
 StatusResultSerializer::serialize(const StatusResult& statusResult,
                             ISerializationContext& context) const {
 
-  auto result = context.setValue(FIELD_CODE, (int)statusResult.getStatusCode());
+  auto result = context.setInt(FIELD_CODE, (int)statusResult.getStatusCode());
   if (!result->isOk())
     return result;
 
-  result =context.setValue(FIELD_MESSAGE, statusResult.getMessage());
+  result =context.setString(FIELD_MESSAGE, statusResult.getMessage());
   if (!result->isOk())
     return result;
 
   auto innerResult = statusResult.getInnerReuslt();
   if (innerResult != nullptr) {
-    result = context.setValue(FIELD_INNER_RESULT, *innerResult);
+    result = context.setEntity(FIELD_INNER_RESULT, *innerResult);
     if (!result->isOk())
       return result;
   }
