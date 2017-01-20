@@ -1,5 +1,4 @@
-#include "catch.hpp"
-#include "fakeit.hpp"
+#include "Utils/Testing.hpp"
 
 #include "Serialization/SerializationService.hpp"
 
