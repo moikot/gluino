@@ -8,6 +8,7 @@
 #define SERIALIZATION_I_SERIALIZATION_SERVICE_HPP
 
 #include "ISerializationContext.hpp"
+#include "IDeserializationContext.hpp"
 
 #include "Core/IEntity.hpp"
 
@@ -33,7 +34,7 @@ class ISerializationService {
       Core::IEntity::Unique& entity) const = 0;
 
     virtual Core::StatusResult::Unique deserialize(
-      ISerializationContext& context,
+      IDeserializationContext& context,
       Core::IEntity::Unique& entity) const = 0;
 };
 

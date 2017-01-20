@@ -23,7 +23,7 @@ TEST_CASE("can deserialize a request", "[RequestSerializer]") {
 
   auto content = Content::makeUnique();
   auto contentPtr = content.get();
-  Mock<ISerializationContext> context;
+  Mock<IDeserializationContext> context;
 
   When(Method(context, getString).Using("requestType", _)).Do([](const std::string&, std::string& value) {
     value = "requestType";

@@ -22,7 +22,7 @@ class EventSerializer : public Serializer<Messaging::Event> {
 
     virtual Core::StatusResult::Unique deserialize(
       Messaging::Event::Unique& event,
-      ISerializationContext& context) const override;
+      IDeserializationContext& context) const override;
 };
 
 }

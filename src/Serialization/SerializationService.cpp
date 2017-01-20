@@ -8,7 +8,7 @@ using namespace Core;
 #define TYPE_FIELD "_type"
 
 SerializationService::SerializationService(
-  std::shared_ptr<const ISerializationContextFactory> contextFactory) :
+  std::shared_ptr<const IContextFactory> contextFactory) :
   contextFactory(contextFactory) {
 }
 
@@ -18,7 +18,7 @@ SerializationService::serialize(
   std::string& json) const {
 
   ISerializationContext::Unique context;
-  auto result = contextFactory->create(*this, context);
+  auto result = contextFactory->createSerializationContext(*this, context);
   if (!result->isOk())
     return result;
 
@@ -50,8 +50,8 @@ SerializationService::deserialize(
   const std::string& json,
   Core::IEntity::Unique& entity) const {
 
-  ISerializationContext::Unique context;
-  auto actionResult = contextFactory->create(*this, json, context);
+  IDeserializationContext::Unique context;
+  auto actionResult = contextFactory->createDeserializationContext(*this, json, context);
   if (!actionResult->isOk())
     return actionResult;
 
@@ -60,7 +60,7 @@ SerializationService::deserialize(
 
 Core::StatusResult::Unique
 SerializationService::deserialize(
-  ISerializationContext& context,
+  IDeserializationContext& context,
   Core::IEntity::Unique& entity) const {
 
   std::string typeId;

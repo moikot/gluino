@@ -16,7 +16,7 @@ RequestSerializer::serialize(const Request&, ISerializationContext&) const {
 StatusResult::Unique
 RequestSerializer::deserialize(
   Request::Unique& request,
-  ISerializationContext& context) const {
+  IDeserializationContext& context) const {
 
   std::string requestType;
   auto result = context.getString(FIELD_REQUEST_TYPE, requestType);

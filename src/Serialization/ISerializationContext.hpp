@@ -19,17 +19,6 @@ class ISerializationContext {
 
     virtual std::string toString() const = 0;
 
-    virtual bool hasKey(const std::string& key) = 0;
-
-    virtual Core::StatusResult::Unique
-      getString(const std::string& key, std::string& value) = 0;
-    virtual Core::StatusResult::Unique
-      getInt(const std::string& key, int& value) = 0;
-    virtual Core::StatusResult::Unique
-      getBool(const std::string& key, bool& value) = 0;
-    virtual Core::StatusResult::Unique
-      getEntity(const std::string& key, Core::IEntity::Unique& entity) = 0;
-
     virtual Core::StatusResult::Unique
       setString(const std::string& key, const std::string& value) = 0;
     virtual Core::StatusResult::Unique

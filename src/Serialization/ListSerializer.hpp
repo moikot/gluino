@@ -31,7 +31,7 @@ class ListSerializer : public Serializer<T> {
 
     virtual Core::StatusResult::Unique deserialize(
      TUnique& list,
-     ISerializationContext& context) const override {
+     IDeserializationContext& context) const override {
        return Core::StatusResult::NotImplemented();
     }
 };

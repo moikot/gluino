@@ -9,7 +9,7 @@
 
 #include "ISerializer.hpp"
 #include "ISerializationService.hpp"
-#include "ISerializationContextFactory.hpp"
+#include "IContextFactory.hpp"
 
 #include <memory>
 #include <list>
@@ -20,7 +20,7 @@ class SerializationService : public ISerializationService {
   TYPE_PTRS(SerializationService)
   public:
     explicit SerializationService(
-      std::shared_ptr<const ISerializationContextFactory> contextFactory);
+      std::shared_ptr<const IContextFactory> contextFactory);
 
     // From ISerializationService
     virtual Core::StatusResult::Unique serialize(
@@ -36,7 +36,7 @@ class SerializationService : public ISerializationService {
       Core::IEntity::Unique& entity) const override;
 
     virtual Core::StatusResult::Unique deserialize(
-      ISerializationContext& context,
+      IDeserializationContext& context,
       Core::IEntity::Unique& entity) const override;
 
     // Methods
@@ -44,7 +44,7 @@ class SerializationService : public ISerializationService {
       std::shared_ptr<const ISerializer> serializer);
 
   private:
-    std::shared_ptr<const ISerializationContextFactory>   contextFactory;
+    std::shared_ptr<const IContextFactory>   contextFactory;
     std::list<std::shared_ptr<const ISerializer>>         serializers;
 
     std::shared_ptr<const ISerializer> getSerialzier(std::string typeId) const;

@@ -32,6 +32,6 @@ EventSerializer::serialize(
 }
 
 StatusResult::Unique
-EventSerializer::deserialize(Event::Unique&, ISerializationContext&) const {
+EventSerializer::deserialize(Event::Unique&, IDeserializationContext&) const {
   return StatusResult::NotImplemented();
 }

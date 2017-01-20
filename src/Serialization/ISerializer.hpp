@@ -9,6 +9,7 @@
 
 #include "Core/IEntity.hpp"
 #include "ISerializationContext.hpp"
+#include "IDeserializationContext.hpp"
 
 #include "memory"
 
@@ -27,7 +28,7 @@ class ISerializer {
 
     virtual Core::StatusResult::Unique deserialize(
       Core::IEntity::Unique& entity,
-      ISerializationContext& context) const = 0;
+      IDeserializationContext& context) const = 0;
 };
 
 }

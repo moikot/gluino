@@ -38,7 +38,7 @@ class Serializer : public ISerializer {
 
     virtual Core::StatusResult::Unique deserialize(
       Core::IEntity::Unique& entity,
-      ISerializationContext& context) const override {
+      IDeserializationContext& context) const override {
       TUnique entityT;
       auto result = deserialize(entityT, context);
       if (!result->isOk()) {
@@ -57,7 +57,7 @@ class Serializer : public ISerializer {
 
     virtual Core::StatusResult::Unique deserialize(
       TUnique& entity,
-      ISerializationContext& context) const = 0;
+      IDeserializationContext& context) const = 0;
  };
 
 }

@@ -22,7 +22,7 @@ class RequestSerializer : public Serializer<Messaging::Request> {
 
     virtual Core::StatusResult::Unique deserialize(
       Messaging::Request::Unique& request,
-      ISerializationContext& context) const override;
+      IDeserializationContext& context) const override;
 };
 
 }

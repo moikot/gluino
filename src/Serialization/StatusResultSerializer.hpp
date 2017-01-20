@@ -22,7 +22,7 @@ class StatusResultSerializer : public Serializer<Core::StatusResult> {
 
     virtual Core::StatusResult::Unique deserialize(
       Core::StatusResult::Unique& statusResult,
-      ISerializationContext& context) const override;
+      IDeserializationContext& context) const override;
 };
 
 }
