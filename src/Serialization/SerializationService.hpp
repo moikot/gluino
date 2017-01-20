@@ -39,9 +39,7 @@ class SerializationService : public ISerializationService {
       IDeserializationContext& context,
       Core::IEntity::Unique& entity) const override;
 
-    // Methods
-    void addSerializer(
-      std::shared_ptr<const ISerializer> serializer);
+    void addSerializer(ISerializer::Shared serializer);
 
   private:
     std::shared_ptr<const IContextFactory>   contextFactory;

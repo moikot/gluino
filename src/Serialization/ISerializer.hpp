@@ -15,20 +15,19 @@
 
 namespace Serialization {
 
-class ISerializer {
+struct ISerializer {
   TYPE_PTRS_ABSTRACT(ISerializer)
-  public:
-    virtual ~ISerializer() = default;
+  virtual ~ISerializer() = default;
 
-    virtual const std::string& getTypeId() const = 0;
+  virtual const std::string& getTypeId() const = 0;
 
-    virtual Core::Status::Unique serialize(
-      const Core::IEntity& entity,
-      ISerializationContext& context) const = 0;
+  virtual Core::Status::Unique serialize(
+    const Core::IEntity& entity,
+    ISerializationContext& context) const = 0;
 
-    virtual Core::Status::Unique deserialize(
-      Core::IEntity::Unique& entity,
-      IDeserializationContext& context) const = 0;
+  virtual Core::Status::Unique deserialize(
+    Core::IEntity::Unique& entity,
+    IDeserializationContext& context) const = 0;
 };
 
 }

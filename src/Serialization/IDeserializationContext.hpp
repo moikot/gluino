@@ -12,21 +12,20 @@
 
 namespace Serialization {
 
-class IDeserializationContext {
+struct IDeserializationContext {
   TYPE_PTRS_ABSTRACT(IDeserializationContext)
-  public:
-    virtual ~IDeserializationContext() = default;
+  virtual ~IDeserializationContext() = default;
 
-    virtual bool hasKey(const std::string& key) = 0;
+  virtual bool hasKey(const std::string& key) = 0;
 
-    virtual Core::Status::Unique
-      getString(const std::string& key, std::string& value) = 0;
-    virtual Core::Status::Unique
-      getInt(const std::string& key, int& value) = 0;
-    virtual Core::Status::Unique
-      getBool(const std::string& key, bool& value) = 0;
-    virtual Core::Status::Unique
-      getEntity(const std::string& key, Core::IEntity::Unique& entity) = 0;
+  virtual Core::Status::Unique
+    getString(const std::string& key, std::string& value) = 0;
+  virtual Core::Status::Unique
+    getInt(const std::string& key, int& value) = 0;
+  virtual Core::Status::Unique
+    getBool(const std::string& key, bool& value) = 0;
+  virtual Core::Status::Unique
+    getEntity(const std::string& key, Core::IEntity::Unique& entity) = 0;
 };
 
 }

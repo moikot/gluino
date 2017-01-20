@@ -78,7 +78,7 @@ SerializationService::deserialize(
 
 void
 SerializationService::addSerializer(
-  std::shared_ptr<const ISerializer> serializer) {
+  ISerializer::Shared serializer) {
   serializers.push_back(serializer);
 }
 

@@ -16,26 +16,25 @@
 
 namespace Serialization {
 
-class ISerializationService {
+struct ISerializationService {
   TYPE_PTRS_ABSTRACT(ISerializationService)
-  public:
-    virtual ~ISerializationService() = default;
+  virtual ~ISerializationService() = default;
 
-    virtual Core::Status::Unique serialize(
-      const Core::IEntity& object,
-      std::string& json) const = 0;
+  virtual Core::Status::Unique serialize(
+    const Core::IEntity& object,
+    std::string& json) const = 0;
 
-    virtual Core::Status::Unique serialize(
-      const Core::IEntity& object,
-      ISerializationContext& context) const = 0;
+  virtual Core::Status::Unique serialize(
+    const Core::IEntity& object,
+    ISerializationContext& context) const = 0;
 
-    virtual Core::Status::Unique deserialize(
-      const std::string& json,
-      Core::IEntity::Unique& entity) const = 0;
+  virtual Core::Status::Unique deserialize(
+    const std::string& json,
+    Core::IEntity::Unique& entity) const = 0;
 
-    virtual Core::Status::Unique deserialize(
-      IDeserializationContext& context,
-      Core::IEntity::Unique& entity) const = 0;
+  virtual Core::Status::Unique deserialize(
+    IDeserializationContext& context,
+    Core::IEntity::Unique& entity) const = 0;
 };
 
 }
