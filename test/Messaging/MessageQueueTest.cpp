@@ -1,5 +1,4 @@
-#include "catch.hpp"
-#include "fakeit.hpp"
+#include "Utils/Testing.hpp" 
 
 #include "Messaging/MessageQueue.hpp"
 
@@ -33,7 +32,7 @@ TEST_CASE("message queue is routing an event to a generic client", "[MessageQueu
     REQUIRE(event.getEventType() == "created");
     REQUIRE(event.getResource() == "resource");
     REQUIRE(event.getContent() == content.get());
-    return StatusResult::OK();
+    return Status::OK();
   });
 
   auto queue = MessageQueue::makeUnique();
@@ -64,7 +63,7 @@ TEST_CASE("message queue is routing a response to a generic client", "[MessageQu
     REQUIRE(response.getReceiver() == "clientId");
     REQUIRE(response.getResource() == "resource");
     REQUIRE(&response.getContent() == responseContentPtr);
-    return StatusResult::OK();
+    return Status::OK();
   });
 
   auto queue = MessageQueue::makeUnique();
@@ -88,7 +87,7 @@ TEST_CASE("message queue is routing an event to a resource client", "[MessageQue
   Mock<EventSink> eventSink;
   When(Method(eventSink, onEventContent)).Do([=](const Content& param) {
     REQUIRE(&param == content.get());
-    return StatusResult::OK();
+    return Status::OK();
   });
 
   auto queue = MessageQueue::makeUnique();
@@ -116,7 +115,7 @@ TEST_CASE("message queue is routing a response to a resource client", "[MessageQ
 
   When(Method(eventSink, onResponseContent)).Do([=](const Content& param) {
     REQUIRE(&param == responseContentPtr);
-    return StatusResult::OK();
+    return Status::OK();
   });
 
   auto queue = MessageQueue::makeUnique();

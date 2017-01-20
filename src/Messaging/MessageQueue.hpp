@@ -28,12 +28,12 @@ class MessageQueue : public IMessageQueue {
     /**
       Adds a request to the queue.
     */
-    virtual Core::StatusResult::Unique addRequest(Request::Shared request) override;
+    virtual Core::Status::Unique addRequest(Request::Shared request) override;
 
     /**
       Adds a event to the queue.
     */
-    virtual Core::StatusResult::Unique addEvent(Event::Shared event) override;
+    virtual Core::Status::Unique addEvent(Event::Shared event) override;
 
     /**
       Creates a queue client.

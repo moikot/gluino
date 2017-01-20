@@ -8,7 +8,7 @@ using namespace Serialization;
 #define FIELD_RESOURCE "resource"
 #define FIELD_CONTENT "content"
 
-StatusResult::Unique
+Status::Unique
 ResponseSerializer::serialize(
   const Response& response,
   ISerializationContext& context) const {
@@ -25,10 +25,10 @@ ResponseSerializer::serialize(
   if (!result->isOk())
     return result;
 
-  return StatusResult::OK();
+  return Status::OK();
 }
 
-StatusResult::Unique
+Status::Unique
 ResponseSerializer::deserialize(Response::Unique&, IDeserializationContext&) const {
-  return StatusResult::NotImplemented();
+  return Status::NotImplemented();
 }

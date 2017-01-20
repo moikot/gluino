@@ -1,5 +1,4 @@
-#include "catch.hpp"
-#include "fakeit.hpp"
+#include "Utils/Testing.hpp"
 
 #include "Serialization/RequestSerializer.hpp"
 #include "Core/Casting.hpp"
@@ -27,18 +26,18 @@ TEST_CASE("can deserialize a request", "[RequestSerializer]") {
 
   When(Method(context, getString).Using("requestType", _)).Do([](const std::string&, std::string& value) {
     value = "requestType";
-    return StatusResult::OK();
+    return Status::OK();
   });
 
   When(Method(context, getString).Using("resource", _)).Do([](const std::string&, std::string& value) {
     value = "resource";
-    return StatusResult::OK();
+    return Status::OK();
   });
 
   When(Method(context, hasKey).Using("content")).Return(true);
   When(Method(context, getEntity).Using("content", _)).Do([&](const std::string&, Core::IEntity::Unique& entity) {
     entity = std::move(content);
-    return StatusResult::OK();
+    return Status::OK();
   });
 
   ISerializer::Unique serializer = RequestSerializer::makeUnique();

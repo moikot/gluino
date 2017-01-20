@@ -22,11 +22,11 @@ class ISerializer {
 
     virtual const std::string& getTypeId() const = 0;
 
-    virtual Core::StatusResult::Unique serialize(
+    virtual Core::Status::Unique serialize(
       const Core::IEntity& entity,
       ISerializationContext& context) const = 0;
 
-    virtual Core::StatusResult::Unique deserialize(
+    virtual Core::Status::Unique deserialize(
       Core::IEntity::Unique& entity,
       IDeserializationContext& context) const = 0;
 };

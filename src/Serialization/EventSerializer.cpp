@@ -8,7 +8,7 @@ using namespace Serialization;
 #define FIELD_RESOURCE "resource"
 #define FIELD_CONTENT "content"
 
-StatusResult::Unique
+Status::Unique
 EventSerializer::serialize(
   const Messaging::Event& event,
   ISerializationContext& context) const {
@@ -28,10 +28,10 @@ EventSerializer::serialize(
       return result;
   }
 
-  return StatusResult::OK();
+  return Status::OK();
 }
 
-StatusResult::Unique
+Status::Unique
 EventSerializer::deserialize(Event::Unique&, IDeserializationContext&) const {
-  return StatusResult::NotImplemented();
+  return Status::NotImplemented();
 }

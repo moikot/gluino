@@ -31,16 +31,16 @@ MessageQueue::idle() {
   }
 }
 
-StatusResult::Unique
+Status::Unique
 MessageQueue::addRequest(Request::Shared request) {
   requests.push(request);
-  return StatusResult::OK();
+  return Status::OK();
 }
 
-StatusResult::Unique
+Status::Unique
 MessageQueue::addEvent(Event::Shared event) {
   events.push(event);
-  return StatusResult::OK();
+  return Status::OK();
 }
 
 QueueGenericClient::Shared
@@ -88,7 +88,7 @@ MessageQueue::processRequest(const Request& request) {
     result = handler(request);
   } else {
     Logger::error("Unable to find a request handler.");
-    result = StatusResult::makeUnique(StatusCode::NotFound, "Unable to find a request handler.");
+    result = Status::makeUnique(StatusCode::NotFound, "Unable to find a request handler.");
   }
   sendResponseFor(request, std::move(result));
 }

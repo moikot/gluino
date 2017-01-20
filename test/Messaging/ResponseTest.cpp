@@ -1,6 +1,6 @@
-#include "catch.hpp"
+#include "Utils/Testing.hpp"
 
-#include "Core/StatusResult.hpp"
+#include "Core/Status.hpp"
 #include "Messaging/Response.hpp"
 
 using namespace Core;

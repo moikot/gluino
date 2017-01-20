@@ -16,11 +16,11 @@ class EventSerializer : public Serializer<Messaging::Event> {
   TYPE_PTRS(EventSerializer)
   protected:
     // From Serializer
-    virtual Core::StatusResult::Unique serialize(
+    virtual Core::Status::Unique serialize(
       const Messaging::Event& event,
       ISerializationContext& context) const override;
 
-    virtual Core::StatusResult::Unique deserialize(
+    virtual Core::Status::Unique deserialize(
       Messaging::Event::Unique& event,
       IDeserializationContext& context) const override;
 };

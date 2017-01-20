@@ -12,7 +12,7 @@ SerializationService::SerializationService(
   contextFactory(contextFactory) {
 }
 
-Core::StatusResult::Unique
+Core::Status::Unique
 SerializationService::serialize(
   const IEntity& entity,
   std::string& json) const {
@@ -27,10 +27,10 @@ SerializationService::serialize(
     return result;
 
   json = context->toString();
-  return StatusResult::OK();
+  return Status::OK();
 }
 
-Core::StatusResult::Unique
+Core::Status::Unique
 SerializationService::serialize (
   const IEntity& entity,
   ISerializationContext& context) const {
@@ -38,14 +38,14 @@ SerializationService::serialize (
   std::string typeId = entity.getTypeId();
   auto serializer = getSerialzier(typeId);
   if (!serializer) {
-    return StatusResult::makeUnique(StatusCode::BadRequest,
+    return Status::makeUnique(StatusCode::BadRequest,
       "Unable to find a serializer for type """ + typeId + """.");
   }
   context.setString(TYPE_FIELD, typeId);
   return serializer->serialize(entity, context);
 }
 
-Core::StatusResult::Unique
+Core::Status::Unique
 SerializationService::deserialize(
   const std::string& json,
   Core::IEntity::Unique& entity) const {
@@ -58,7 +58,7 @@ SerializationService::deserialize(
   return deserialize(*context, entity);
 }
 
-Core::StatusResult::Unique
+Core::Status::Unique
 SerializationService::deserialize(
   IDeserializationContext& context,
   Core::IEntity::Unique& entity) const {
@@ -70,7 +70,7 @@ SerializationService::deserialize(
 
   auto serializer = getSerialzier(typeId);
   if (!serializer) {
-    return StatusResult::makeUnique(StatusCode::BadRequest,
+    return Status::makeUnique(StatusCode::BadRequest,
       "Unable to find serializer for type """ + typeId + """.");
   }
   return serializer->deserialize(entity, context);

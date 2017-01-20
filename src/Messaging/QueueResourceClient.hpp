@@ -10,7 +10,7 @@
 #include "QueueClient.hpp"
 #include "ResourceResponseHandler.hpp"
 #include "ResourceEventHandler.hpp"
-#include "Core/StatusResult.hpp"
+#include "Core/Status.hpp"
 
 #include <vector>
 
@@ -27,8 +27,8 @@ class QueueResourceClient : public QueueClient {
     void onResponse(const Response& response) const override;
     void onEvent(const Event& event) const override;
 
-    Core::StatusResult::Unique sendRequest(std::string requestType);
-    Core::StatusResult::Unique sendRequest(std::string requestType, Core::IEntity::Shared content);
+    Core::Status::Unique sendRequest(std::string requestType);
+    Core::Status::Unique sendRequest(std::string requestType, Core::IEntity::Shared content);
 
     template<class T>
     void addOnResponse(std::string requestType, std::function<void(const T&)> onResponse) {

@@ -1,4 +1,4 @@
-#include "catch.hpp"
+#include "Utils/Testing.hpp" 
 
 #include "Messaging/Event.hpp"
 

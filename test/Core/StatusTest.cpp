@@ -1,24 +1,24 @@
-#include "catch.hpp"
+#include "Utils/Testing.hpp" 
 
-#include "Core/StatusResult.hpp"
+#include "Core/Status.hpp"
 
 using namespace Core;
 
-TEST_CASE("static creators", "[StatusResult]") {
+TEST_CASE("static creators", "[Status]") {
 
   SECTION("OK status result has OK status code") {
-    REQUIRE(StatusResult::OK()->getStatusCode() == StatusCode::OK);
+    REQUIRE(Status::OK()->getStatusCode() == StatusCode::OK);
   }
 
   SECTION("NotImplemented status result has NotImplemented status code") {
-    REQUIRE(StatusResult::NotImplemented()->getStatusCode() == StatusCode::NotImplemented);
+    REQUIRE(Status::NotImplemented()->getStatusCode() == StatusCode::NotImplemented);
   }
 
 }
 
-TEST_CASE("StatusResult can be constructed", "[StatusResult]") {
+TEST_CASE("Status can be constructed", "[Status]") {
 
-  auto result = StatusResult::makeUnique(StatusCode::OK, "test");
+  auto result = Status::makeUnique(StatusCode::OK, "test");
 
   SECTION("status code retained") {
     REQUIRE(result->getStatusCode() == StatusCode::OK);
@@ -34,21 +34,21 @@ TEST_CASE("StatusResult can be constructed", "[StatusResult]") {
 
   SECTION("inner result is retained") {
     auto innerPtr = result.get();
-    auto outer = StatusResult::makeUnique(StatusCode::OK, "test", std::move(result));
+    auto outer = Status::makeUnique(StatusCode::OK, "test", std::move(result));
     REQUIRE(outer->getInnerReuslt() == innerPtr);
   }
 
 }
 
-TEST_CASE("StatusResult isOK method", "[StatusResult]") {
+TEST_CASE("Status isOK method", "[Status]") {
 
   SECTION("is OK when status code is OK") {
-    auto result = StatusResult::makeUnique(StatusCode::OK, "test");
+    auto result = Status::makeUnique(StatusCode::OK, "test");
     REQUIRE(result->isOk());
   }
 
   SECTION("is not OK when status code is not OK") {
-    auto result = StatusResult::makeUnique(StatusCode::Accepted, "test");
+    auto result = Status::makeUnique(StatusCode::Accepted, "test");
     REQUIRE(!result->isOk());
   }
 

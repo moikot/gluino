@@ -23,19 +23,19 @@ class SerializationService : public ISerializationService {
       std::shared_ptr<const IContextFactory> contextFactory);
 
     // From ISerializationService
-    virtual Core::StatusResult::Unique serialize(
+    virtual Core::Status::Unique serialize(
       const Core::IEntity& entity,
       std::string& json) const override;
 
-    virtual Core::StatusResult::Unique serialize(
+    virtual Core::Status::Unique serialize(
       const Core::IEntity& entity,
       ISerializationContext& context) const override;
 
-    virtual Core::StatusResult::Unique deserialize(
+    virtual Core::Status::Unique deserialize(
       const std::string& json,
       Core::IEntity::Unique& entity) const override;
 
-    virtual Core::StatusResult::Unique deserialize(
+    virtual Core::Status::Unique deserialize(
       IDeserializationContext& context,
       Core::IEntity::Unique& entity) const override;
 

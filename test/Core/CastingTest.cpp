@@ -1,4 +1,4 @@
-#include "catch.hpp" 
+#include "Utils/Testing.hpp" 
 
 #include "Core/IEntity.hpp"
 #include "Core/Memory.hpp"

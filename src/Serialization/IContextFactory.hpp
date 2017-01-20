@@ -18,11 +18,11 @@ namespace Serialization {
 struct IContextFactory {
     virtual ~IContextFactory() = default;
 
-    virtual Core::StatusResult::Unique createSerializationContext(
+    virtual Core::Status::Unique createSerializationContext(
       const ISerializationService& serializationService,
       ISerializationContext::Unique& context) const = 0;
 
-    virtual Core::StatusResult::Unique createDeserializationContext(
+    virtual Core::Status::Unique createDeserializationContext(
       const ISerializationService& serializationService, const std::string& json,
       IDeserializationContext::Unique& context) const = 0;
 };

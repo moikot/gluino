@@ -8,7 +8,7 @@
 #define MESSAGING_QUEUE_GENERIC_CLIENT_HPP
 
 #include "QueueClient.hpp"
-#include "Core/StatusResult.hpp"
+#include "Core/Status.hpp"
 
 #include <functional>
 
@@ -25,7 +25,7 @@ class QueueGenericClient : public QueueClient {
     void onResponse(const Response& response) const override;
     void onEvent(const Event& event) const override;
 
-    Core::StatusResult::Unique sendRequest(
+    Core::Status::Unique sendRequest(
       std::string requestType,
       std::string resource,
       Core::IEntity::Shared content

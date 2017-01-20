@@ -7,7 +7,7 @@
 #ifndef SERIALIZATION_I_SERIALIZATION_CONTEXT_HPP
 #define SERIALIZATION_I_SERIALIZATION_CONTEXT_HPP
 
-#include "Core/StatusResult.hpp"
+#include "Core/Status.hpp"
 #include "Core/IList.hpp"
 
 namespace Serialization {
@@ -19,15 +19,15 @@ class ISerializationContext {
 
     virtual std::string toString() const = 0;
 
-    virtual Core::StatusResult::Unique
+    virtual Core::Status::Unique
       setString(const std::string& key, const std::string& value) = 0;
-    virtual Core::StatusResult::Unique
+    virtual Core::Status::Unique
       setInt(const std::string& key, int value) = 0;
-    virtual Core::StatusResult::Unique
+    virtual Core::Status::Unique
       setBool(const std::string& key, bool value) = 0;
-    virtual Core::StatusResult::Unique
+    virtual Core::Status::Unique
       setList(const std::string& key, const Core::IList& list) = 0;
-    virtual Core::StatusResult::Unique
+    virtual Core::Status::Unique
       setEntity(const std::string& key, const Core::IEntity& entity) = 0;
 };
 

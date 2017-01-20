@@ -18,7 +18,7 @@ class ListSerializer : public Serializer<T> {
   typedef typename T::Unique TUnique;
   protected:
     // From Serializer
-    virtual Core::StatusResult::Unique serialize(
+    virtual Core::Status::Unique serialize(
       const T& list,
       ISerializationContext& context) const override {
 
@@ -26,13 +26,13 @@ class ListSerializer : public Serializer<T> {
       if (!result->isOk())
         return result;
 
-      return Core::StatusResult::OK();
+      return Core::Status::OK();
     }
 
-    virtual Core::StatusResult::Unique deserialize(
+    virtual Core::Status::Unique deserialize(
      TUnique& list,
      IDeserializationContext& context) const override {
-       return Core::StatusResult::NotImplemented();
+       return Core::Status::NotImplemented();
     }
 };
 

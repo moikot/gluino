@@ -1,5 +1,4 @@
-#include "catch.hpp"
-#include "fakeit.hpp"
+#include "Utils/Testing.hpp" 
 
 #include "Messaging/IMessageQueue.hpp"
 
@@ -16,7 +15,7 @@ namespace {
   };
 
   struct EventSink {
-    virtual void onResponse(const StatusResult&) = 0;
+    virtual void onResponse(const Status&) = 0;
     virtual void onEvent(const Content&) const = 0;
   };
 
@@ -32,7 +31,7 @@ TEST_CASE("queue resource client can send a request", "[QueueResourceClient]") {
     REQUIRE(request->getSender() == "clientId");
     REQUIRE(request->getResource() == "resource");
     REQUIRE(request->getContent() == contentPtr);
-    return StatusResult::OK();
+    return Status::OK();
   });
 
   auto client = QueueResourceClient::makeUnique("clientId", "resource", messageQueue.get());
@@ -44,15 +43,15 @@ TEST_CASE("queue resource client can send a request", "[QueueResourceClient]") {
 TEST_CASE("queue resource client can process a response", "[QueueResourceClient]") {
   Mock<IMessageQueue> messageQueue;
   auto client = QueueResourceClient::makeUnique("id", "resource", messageQueue.get());
-  auto result = StatusResult::OK();
+  auto result = Status::OK();
   auto resultPtr = result.get();
 
   Mock<EventSink> eventSink;
-  When(Method(eventSink, onResponse)).Do([=](const StatusResult& result) {
+  When(Method(eventSink, onResponse)).Do([=](const Status& result) {
     REQUIRE(&result == resultPtr);
-    return StatusResult::OK();
+    return Status::OK();
   });
-  client->addOnResponse<StatusResult>("get", std::bind(&EventSink::onResponse, &eventSink.get(), _1));
+  client->addOnResponse<Status>("get", std::bind(&EventSink::onResponse, &eventSink.get(), _1));
 
   Response response("get", "receiver", "resource", std::move(result));
   client->onResponse(response);
@@ -68,7 +67,7 @@ TEST_CASE("queue resource client can process an event", "[QueueResourceClient]")
   Mock<EventSink> eventSink;
   When(Method(eventSink, onEvent)).Do([=](const Content& param) {
     REQUIRE(&param == content.get());
-    return StatusResult::OK();
+    return Status::OK();
   });
   client->addOnEvent<Content>("created", std::bind(&EventSink::onEvent, &eventSink.get(), _1));
 

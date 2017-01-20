@@ -1,5 +1,4 @@
-#include "catch.hpp"
-#include "fakeit.hpp"
+#include "Utils/Testing.hpp"
 
 #include "Serialization/ResponseSerializer.hpp"
 
@@ -25,21 +24,21 @@ TEST_CASE("can serialize a response", "[ResponseSerializer]") {
   Mock<ISerializationContext> context;
   
   When(Method(context, setString).Using("requestType","get")).Do([](const std::string&, const std::string&) {
-    return StatusResult::OK();
+    return Status::OK();
   });
 
   When(Method(context, setString).Using("receiver", "rec")).Do([](const std::string&, const std::string&) {
-    return StatusResult::OK();
+    return Status::OK();
   });
 
   When(Method(context, setString).Using("resource", "res")).Do([](const std::string&, const std::string&) {
-    return StatusResult::OK();
+    return Status::OK();
   });
 
   When(Method(context, setEntity)).Do([=](const std::string& key, const Core::IEntity& entity) {
     REQUIRE(key == "content");
     REQUIRE(&entity == content.get());
-    return StatusResult::OK();
+    return Status::OK();
   });
 
   ISerializer::Unique serializer = ResponseSerializer::makeUnique();

@@ -8,12 +8,12 @@ using namespace Serialization;
 #define FIELD_RESOURCE "resource"
 #define FIELD_CONTENT "content"
 
-StatusResult::Unique
+Status::Unique
 RequestSerializer::serialize(const Request&, ISerializationContext&) const {
-  return StatusResult::NotImplemented();
+  return Status::NotImplemented();
 }
 
-StatusResult::Unique
+Status::Unique
 RequestSerializer::deserialize(
   Request::Unique& request,
   IDeserializationContext& context) const {
@@ -36,5 +36,5 @@ RequestSerializer::deserialize(
   }
 
   request = Request::makeUnique(requestType, "", resource, std::move(content));
-  return StatusResult::OK();
+  return Status::OK();
 }

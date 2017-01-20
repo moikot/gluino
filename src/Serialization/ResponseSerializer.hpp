@@ -16,11 +16,11 @@ class ResponseSerializer : public Serializer<Messaging::Response> {
   TYPE_PTRS(ResponseSerializer)
   protected:
     // From Serializer
-    virtual Core::StatusResult::Unique serialize(
+    virtual Core::Status::Unique serialize(
       const Messaging::Response& response,
       ISerializationContext& context) const override;
 
-    virtual Core::StatusResult::Unique deserialize(
+    virtual Core::Status::Unique deserialize(
       Messaging::Response::Unique& response,
       IDeserializationContext& context) const override;
 };

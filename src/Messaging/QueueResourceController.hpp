@@ -8,7 +8,7 @@
 #define MESSAGING_QUEUE_RESOURCE_CONTROLLER_HPP
 
 #include "ResourceRequestHandler.hpp"
-#include "Core/StatusResult.hpp"
+#include "Core/Status.hpp"
 
 #include <vector>
 
@@ -23,8 +23,8 @@ class QueueResourceController {
   public:
     QueueResourceController(std::string resource, IMessageQueue& messageQueue);
 
-    Core::StatusResult::Unique sendEvent(std::string eventType);
-    Core::StatusResult::Unique sendEvent(std::string eventType, Core::IEntity::Unique content);
+    Core::Status::Unique sendEvent(std::string eventType);
+    Core::Status::Unique sendEvent(std::string eventType, Core::IEntity::Unique content);
 
     void addOnRequest(std::string requestType, std::function<Core::IEntity::Unique()> onRequest) {
       handlers.push_back(ResourceRequestHandlerVoid::makeUnique(requestType, onRequest));

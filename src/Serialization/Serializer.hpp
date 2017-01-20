@@ -9,7 +9,7 @@
 
 #include "ISerializer.hpp"
 
-#include "Core/StatusResult.hpp"
+#include "Core/Status.hpp"
 
 namespace Serialization {
 
@@ -22,27 +22,27 @@ class Serializer : public ISerializer {
       return T::TypeId();
     }
 
-    virtual Core::StatusResult::Unique serialize(
+    virtual Core::Status::Unique serialize(
       const Core::IEntity& entity,
       ISerializationContext& context) const override {
 
       auto& entityT = static_cast<const T&>(entity);
       auto result = serialize(entityT, context);
       if (!result->isOk()) {
-        return Core::StatusResult::makeUnique(Core::StatusCode::InternalServerError,
+        return Core::Status::makeUnique(Core::StatusCode::InternalServerError,
           "Unable to serialize an instance of type """ + getTypeId() + """.",
           std::move(result));
       }
       return result;
     }
 
-    virtual Core::StatusResult::Unique deserialize(
+    virtual Core::Status::Unique deserialize(
       Core::IEntity::Unique& entity,
       IDeserializationContext& context) const override {
       TUnique entityT;
       auto result = deserialize(entityT, context);
       if (!result->isOk()) {
-        return Core::StatusResult::makeUnique(Core::StatusCode::InternalServerError,
+        return Core::Status::makeUnique(Core::StatusCode::InternalServerError,
           "Unable to deserialize an instance of type """ + getTypeId() + """.",
           std::move(result));
       }
@@ -51,11 +51,11 @@ class Serializer : public ISerializer {
     }
 
   protected:
-    virtual Core::StatusResult::Unique serialize(
+    virtual Core::Status::Unique serialize(
       const T& entity,
       ISerializationContext& context) const = 0;
 
-    virtual Core::StatusResult::Unique deserialize(
+    virtual Core::Status::Unique deserialize(
       TUnique& entity,
       IDeserializationContext& context) const = 0;
  };
