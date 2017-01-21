@@ -17,8 +17,8 @@ namespace {
 }
 
 TEST_CASE("can serialize a status", "[StatusSerializer]") {
-  auto innerResult = Status::NotImplemented;
-  auto status = Status::makeUnique(StatusCode::InternalServerError, "serverError", innerResult);
+  auto innerStatus = Status::NotImplemented;
+  auto status = Status::makeUnique(StatusCode::InternalServerError, "serverError", innerStatus);
 
   Mock<ISerializationContext> context;
 
@@ -31,7 +31,7 @@ TEST_CASE("can serialize a status", "[StatusSerializer]") {
   });
 
   When(Method(context, setEntity)).Do([=](const std::string& key, const Core::IEntity& entity) {
-    REQUIRE(key == "innerResult");
+    REQUIRE(key == "innerStatus");
     REQUIRE(static_cast<const Status*>(&entity)->getStatusCode() == StatusCode::NotImplemented);
     return Status::OK;
   });
