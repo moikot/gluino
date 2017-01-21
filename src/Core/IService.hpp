@@ -14,15 +14,14 @@ namespace Core {
 /**
   The base class for all the services.
 */
-class IService {
+struct IService {
   TYPE_PTRS_ABSTRACT(IService)
-  public:
-      virtual ~IService() = default;
+  virtual ~IService() = default;
 
-      /**
-        This method should be invoked when the system is idle.
-      */
-      virtual void idle() = 0;
+  /**
+    This method should be invoked when the system is idle.
+  */
+  virtual void idle() = 0;
 };
 
 }

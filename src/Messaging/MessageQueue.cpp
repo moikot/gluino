@@ -1,13 +1,15 @@
 #include "MessageQueue.hpp"
 
 #include "Core/Casting.hpp"
-#include "Core/Logger.hpp"
 
 using namespace Core;
 using namespace Messaging;
 
 namespace {
   static const std::string messageQueueSenderId = "messageQueue";
+}
+
+MessageQueue::MessageQueue(ILogger::Shared logger): logger(logger) {
 }
 
 void
@@ -81,13 +83,13 @@ MessageQueue::removeResourceController(QueueResourceController::Shared controlle
 
 void
 MessageQueue::processRequest(const Request& request) {
-  Logger::message("Processing a request from '" + request.getSender() + "'");
+  logger->message("Processing a request from '" + request.getSender() + "'");
   IEntity::Unique result;
   auto handler = getRequestHandler(request);
   if (handler) {
     result = handler(request);
   } else {
-    Logger::error("Unable to find a request handler.");
+    logger->error("Unable to find a request handler.");
     result = Status::makeUnique(StatusCode::NotFound, "Unable to find a request handler.");
   }
   sendResponseFor(request, std::move(result));
@@ -96,18 +98,18 @@ MessageQueue::processRequest(const Request& request) {
 void
 MessageQueue::processResponse(const Response& response) {
   auto receiver = response.getReceiver();
-  Logger::message("Processing a response to '" + receiver + "'");
+  logger->message("Processing a response to '" + receiver + "'");
   auto client = getClient(receiver);
   if (client) {
     client->onResponse(response);
   } else {
-    Logger::error("Unable to find client '" + receiver + "'");
+    logger->error("Unable to find client '" + receiver + "'");
   }
 }
 
 void
 MessageQueue::processEvent(const Event& event) {
-  Logger::message("Broadcasting event '" + event.getEventType() + "'.");
+  logger->message("Broadcasting event '" + event.getEventType() + "'.");
   std::list<QueueClient::Shared> deletedClients;
   for(auto client: clients) {
     if (!client.unique()) {

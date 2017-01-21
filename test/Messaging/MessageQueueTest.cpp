@@ -1,4 +1,4 @@
-#include "Utils/Testing.hpp" 
+#include "Utils/Testing.hpp"
 
 #include "Messaging/MessageQueue.hpp"
 
@@ -35,7 +35,13 @@ TEST_CASE("message queue is routing an event to a generic client", "[MessageQueu
     return Status::OK();
   });
 
-  auto queue = MessageQueue::makeUnique();
+  Mock<ILogger> loggerInstanse;
+  When(Dtor(loggerInstanse)).Do([](){});
+  Fake(Method(loggerInstanse, message));
+
+  ILogger::Shared logger(&loggerInstanse.get());
+
+  auto queue = MessageQueue::makeUnique(logger);
 
   auto client = queue->createGenericClient("clientId");
   client->setOnEvent(std::bind(&EventSink::onEvent, &eventSink.get(), _1));
@@ -66,7 +72,13 @@ TEST_CASE("message queue is routing a response to a generic client", "[MessageQu
     return Status::OK();
   });
 
-  auto queue = MessageQueue::makeUnique();
+  Mock<ILogger> loggerInstanse;
+  When(Dtor(loggerInstanse)).Do([](){});
+  Fake(Method(loggerInstanse, message));
+
+  ILogger::Shared logger(&loggerInstanse.get());
+
+  auto queue = MessageQueue::makeUnique(logger);
 
   auto client = queue->createGenericClient("clientId");
   client->setOnResponse(std::bind(&EventSink::onResponse, &eventSink.get(), _1));
@@ -90,7 +102,13 @@ TEST_CASE("message queue is routing an event to a resource client", "[MessageQue
     return Status::OK();
   });
 
-  auto queue = MessageQueue::makeUnique();
+  Mock<ILogger> loggerInstanse;
+  When(Dtor(loggerInstanse)).Do([](){});
+  Fake(Method(loggerInstanse, message));
+
+  ILogger::Shared logger(&loggerInstanse.get());
+
+  auto queue = MessageQueue::makeUnique(logger);
 
   auto client = queue->createResourceClient("clientId", "resource");
   client->addOnEvent<Content>("created", std::bind(&EventSink::onEventContent, &eventSink.get(), _1));
@@ -118,7 +136,13 @@ TEST_CASE("message queue is routing a response to a resource client", "[MessageQ
     return Status::OK();
   });
 
-  auto queue = MessageQueue::makeUnique();
+  Mock<ILogger> loggerInstanse;
+  When(Dtor(loggerInstanse)).Do([](){});
+  Fake(Method(loggerInstanse, message));
+
+  ILogger::Shared logger(&loggerInstanse.get());
+
+  auto queue = MessageQueue::makeUnique(logger);
 
   auto client = queue->createResourceClient("clientId", "resource");
   client->addOnResponse<Content>("get", std::bind(&EventSink::onResponseContent, &eventSink.get(), _1));
