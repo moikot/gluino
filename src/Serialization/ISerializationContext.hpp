@@ -19,15 +19,15 @@ class ISerializationContext {
 
     virtual std::string toString() const = 0;
 
-    virtual Core::Status::Unique
+    virtual Core::Status
       setString(const std::string& key, const std::string& value) = 0;
-    virtual Core::Status::Unique
+    virtual Core::Status
       setInt(const std::string& key, int value) = 0;
-    virtual Core::Status::Unique
+    virtual Core::Status
       setBool(const std::string& key, bool value) = 0;
-    virtual Core::Status::Unique
+    virtual Core::Status
       setList(const std::string& key, const Core::IList& list) = 0;
-    virtual Core::Status::Unique
+    virtual Core::Status
       setEntity(const std::string& key, const Core::IEntity& entity) = 0;
 };
 

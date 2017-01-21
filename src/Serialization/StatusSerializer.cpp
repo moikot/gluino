@@ -5,31 +5,31 @@ using namespace Core;
 
 #define FIELD_CODE "code"
 #define FIELD_MESSAGE "message"
-#define FIELD_INNER_RESULT "innerResult"
+#define FIELD_INNER_STATUS "innerStatus"
 
-Core::Status::Unique
+Core::Status
 StatusSerializer::serialize(const Status& status,
                             ISerializationContext& context) const {
 
   auto result = context.setInt(FIELD_CODE, (int)status.getStatusCode());
-  if (!result->isOk())
+  if (!result.isOk())
     return result;
 
   result =context.setString(FIELD_MESSAGE, status.getMessage());
-  if (!result->isOk())
+  if (!result.isOk())
     return result;
 
-  auto innerResult = status.getInnerResult();
-  if (innerResult != nullptr) {
-    result = context.setEntity(FIELD_INNER_RESULT, *innerResult);
-    if (!result->isOk())
+  auto innerStatus = status.getInnerStatus();
+  if (innerStatus != nullptr) {
+    result = context.setEntity(FIELD_INNER_STATUS, *innerStatus);
+    if (!result.isOk())
       return result;
   }
 
-  return Status::OK();
+  return Status::OK;
 }
 
-Core::Status::Unique
+Core::Status
 StatusSerializer::deserialize(Status::Unique&, IDeserializationContext&) const {
-  return Status::NotImplemented();
+  return Status::NotImplemented;
 }

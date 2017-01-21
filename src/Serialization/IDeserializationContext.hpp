@@ -18,13 +18,13 @@ struct IDeserializationContext {
 
   virtual bool hasKey(const std::string& key) = 0;
 
-  virtual Core::Status::Unique
+  virtual Core::Status
     getString(const std::string& key, std::string& value) = 0;
-  virtual Core::Status::Unique
+  virtual Core::Status
     getInt(const std::string& key, int& value) = 0;
-  virtual Core::Status::Unique
+  virtual Core::Status
     getBool(const std::string& key, bool& value) = 0;
-  virtual Core::Status::Unique
+  virtual Core::Status
     getEntity(const std::string& key, Core::IEntity::Unique& entity) = 0;
 };
 

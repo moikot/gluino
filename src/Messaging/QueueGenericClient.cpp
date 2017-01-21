@@ -22,7 +22,7 @@ QueueGenericClient::onEvent(const Event& event) const {
   }
 }
 
-Status::Unique
+Status
 QueueGenericClient::sendRequest(std::string requestType, std::string resource, IEntity::Shared content) {
   auto request = Request::makeShared(requestType, clientId, resource, content);
   return messageQueue.addRequest(request);

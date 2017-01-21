@@ -33,16 +33,16 @@ MessageQueue::idle() {
   }
 }
 
-Status::Unique
+Status
 MessageQueue::addRequest(Request::Shared request) {
   requests.push(request);
-  return Status::OK();
+  return Status::OK;
 }
 
-Status::Unique
+Status
 MessageQueue::addEvent(Event::Shared event) {
   events.push(event);
-  return Status::OK();
+  return Status::OK;
 }
 
 QueueGenericClient::Shared

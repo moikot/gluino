@@ -22,7 +22,7 @@ TEST_CASE("can serialize an entity", "[SerializationService]") {
   When(Dtor(contextInstance)).Do([](){});
 
   When(Method(contextInstance, setString).Using("_type","content")).Do([](const std::string&, const std::string&) {
-    return Status::OK();
+    return Status::OK;
   });
 
   When(Method(contextInstance, toString)).Return("serialized");
@@ -35,7 +35,7 @@ TEST_CASE("can serialize an entity", "[SerializationService]") {
     ISerializationContext::Unique& context) {
     ISerializationContext::Unique con(&contextInstance.get());
     context = std::move(con);
-    return Status::OK();
+    return Status::OK;
   });
 
   Mock<ISerializer> serializerInstance;
@@ -46,7 +46,7 @@ TEST_CASE("can serialize an entity", "[SerializationService]") {
   When(Method(serializerInstance, serialize)).Do([](
     const Core::IEntity& entity,
     ISerializationContext& context) {
-    return Status::OK();
+    return Status::OK;
   });
 
   ISerializer::Shared serializer(&serializerInstance.get());
@@ -58,7 +58,7 @@ TEST_CASE("can serialize an entity", "[SerializationService]") {
   auto entity = Content::makeUnique();
   std::string json;
   auto result = service->serialize(*entity, json);
-  REQUIRE(result->isOk() == true);
+  REQUIRE(result.isOk() == true);
 }
 
 TEST_CASE("can deserialize an entity", "[SerializationService]") {
@@ -68,7 +68,7 @@ TEST_CASE("can deserialize an entity", "[SerializationService]") {
 
   When(Method(contextInstance, getString)).Do([](const std::string&, std::string& value) {
     value = "content";
-    return Status::OK();
+    return Status::OK;
   });
 
   Mock<IContextFactory> factoryInstance;
@@ -80,7 +80,7 @@ TEST_CASE("can deserialize an entity", "[SerializationService]") {
     IDeserializationContext::Unique& context) {
     IDeserializationContext::Unique con(&contextInstance.get());
     context = std::move(con);
-    return Status::OK();
+    return Status::OK;
   });
 
   Mock<ISerializer> serializerInstance;
@@ -92,7 +92,7 @@ TEST_CASE("can deserialize an entity", "[SerializationService]") {
     Core::IEntity::Unique& entity,
     IDeserializationContext& context) {
     entity = Content::makeUnique();
-    return Status::OK();
+    return Status::OK;
   });
 
   ISerializer::Shared serializer(&serializerInstance.get());
@@ -103,5 +103,5 @@ TEST_CASE("can deserialize an entity", "[SerializationService]") {
 
   Core::IEntity::Unique entity;
   auto result = service->deserialize("json", entity);
-  REQUIRE(result->isOk() == true);
+  REQUIRE(result.isOk() == true);
 }

@@ -16,11 +16,11 @@ class RequestSerializer : public Serializer<Messaging::Request> {
   TYPE_PTRS(RequestSerializer)
   protected:
     // From Serializer
-    virtual Core::Status::Unique serialize(
+    virtual Core::Status serialize(
       const Messaging::Request& request,
       ISerializationContext& context) const override;
 
-    virtual Core::Status::Unique deserialize(
+    virtual Core::Status deserialize(
       Messaging::Request::Unique& request,
       IDeserializationContext& context) const override;
 };

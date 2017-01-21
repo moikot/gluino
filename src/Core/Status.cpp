@@ -2,21 +2,33 @@
 
 using namespace Core;
 
-Status::Unique
-Status::OK() {
-  return Status::makeUnique(StatusCode::OK, "OK");
-}
-
-Status::Unique
-Status::NotImplemented() {
-  return Status::makeUnique(StatusCode::NotImplemented, "Not implemented.");
-}
+Status Status::OK(StatusCode::OK, "OK");
+Status Status::NotImplemented(StatusCode::NotImplemented, "Not implemented.");
 
 Status::Status(const StatusCode& statusCode, const std::string& message) :
   statusCode(statusCode), message(message) {
 }
 
 Status::Status(const StatusCode& statusCode, const std::string& message,
-             Status::Unique innerResult) :
-  statusCode(statusCode), message(message), innerResult(std::move(innerResult)) {
+             Status innerResult) :
+  statusCode(statusCode), message(message), innerStatus(makeUnique(innerResult)) {
+}
+
+Status::Status(const Status& status) : 
+  statusCode(status.statusCode), message(status.message) {
+  if (status.getInnerStatus()) {
+    innerStatus = Status::makeUnique(*status.getInnerStatus());
+  }
+}
+
+Status& 
+Status::operator=(const Status& status) {
+  if (this != &status) {
+    statusCode = status.statusCode;
+    message = status.message;
+    if (status.getInnerStatus()) {
+      innerStatus = Status::makeUnique(*status.getInnerStatus());
+    }
+  }
+  return *this;
 }

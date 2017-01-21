@@ -21,11 +21,11 @@ struct ISerializer {
 
   virtual const std::string& getTypeId() const = 0;
 
-  virtual Core::Status::Unique serialize(
+  virtual Core::Status serialize(
     const Core::IEntity& entity,
     ISerializationContext& context) const = 0;
 
-  virtual Core::Status::Unique deserialize(
+  virtual Core::Status deserialize(
     Core::IEntity::Unique& entity,
     IDeserializationContext& context) const = 0;
 };
