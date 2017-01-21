@@ -1,4 +1,4 @@
-#include "Utils/Testing.hpp" 
+#include "Utils/Testing.hpp"
 
 #include "Core/Status.hpp"
 
@@ -29,13 +29,13 @@ TEST_CASE("Status can be constructed", "[Status]") {
   }
 
   SECTION("inner result is null by default") {
-    REQUIRE(result->getInnerReuslt() == nullptr);
+    REQUIRE(result->getInnerResult() == nullptr);
   }
 
   SECTION("inner result is retained") {
     auto innerPtr = result.get();
     auto outer = Status::makeUnique(StatusCode::OK, "test", std::move(result));
-    REQUIRE(outer->getInnerReuslt() == innerPtr);
+    REQUIRE(outer->getInnerResult() == innerPtr);
   }
 
 }

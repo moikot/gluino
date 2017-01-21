@@ -22,12 +22,8 @@ TEST_CASE("can serialize a response", "[ResponseSerializer]") {
   auto response = Response::makeUnique("get", "rec", "res", content);
 
   Mock<ISerializationContext> context;
-  
-  When(Method(context, setString).Using("requestType","get")).Do([](const std::string&, const std::string&) {
-    return Status::OK();
-  });
 
-  When(Method(context, setString).Using("receiver", "rec")).Do([](const std::string&, const std::string&) {
+  When(Method(context, setString).Using("requestType","get")).Do([](const std::string&, const std::string&) {
     return Status::OK();
   });
 
@@ -48,4 +44,15 @@ TEST_CASE("can serialize a response", "[ResponseSerializer]") {
 
   Verify(Method(context, setString));
   Verify(Method(context, setEntity));
+}
+
+TEST_CASE("response deserialization is not implemented", "[ResponseSerializer]") {
+  IEntity::Unique entity;
+  Mock<IDeserializationContext> context;
+
+  ISerializer::Unique serializer = ResponseSerializer::makeUnique();
+
+  auto result = serializer->deserialize(entity, context.get());
+  REQUIRE(result->getStatusCode() == StatusCode::InternalServerError);
+  REQUIRE(result->getInnerResult()->getStatusCode() == StatusCode::NotImplemented);
 }

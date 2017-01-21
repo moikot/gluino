@@ -18,6 +18,18 @@ namespace {
 
 }
 
+TEST_CASE("request serialization is not implemented", "[ResponseSerializer]") {
+  auto content = Content::makeShared();
+  auto event = Request::makeUnique("get", "sender", "res", content);
+
+  Mock<ISerializationContext> context;
+  ISerializer::Unique serializer = RequestSerializer::makeUnique();
+
+  auto result = serializer->serialize(*event, context.get());
+  REQUIRE(result->getStatusCode() == StatusCode::InternalServerError);
+  REQUIRE(result->getInnerResult()->getStatusCode() == StatusCode::NotImplemented);
+}
+
 TEST_CASE("can deserialize a request", "[RequestSerializer]") {
 
   auto content = Content::makeUnique();

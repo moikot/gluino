@@ -19,7 +19,7 @@ StatusSerializer::serialize(const Status& status,
   if (!result->isOk())
     return result;
 
-  auto innerResult = status.getInnerReuslt();
+  auto innerResult = status.getInnerResult();
   if (innerResult != nullptr) {
     result = context.setEntity(FIELD_INNER_RESULT, *innerResult);
     if (!result->isOk())

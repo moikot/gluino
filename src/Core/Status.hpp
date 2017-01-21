@@ -39,7 +39,7 @@ public:
     return message;
   }
 
-  const Status* getInnerReuslt() const {
+  const Status* getInnerResult() const {
     return innerResult.get();
   }
 
