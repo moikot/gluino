@@ -18,6 +18,7 @@ namespace {
     virtual Core::IEntity::Unique onRequest(const Content&) = 0;
     virtual void onResponse(const Response&) = 0;
     virtual void onResponseContent(const Content&) = 0;
+    virtual void onResponseStatus(const Status&) = 0;
     virtual void onEvent(const Event&) const = 0;
     virtual void onEventContent(const Content&) const = 0;
   };
@@ -155,4 +156,32 @@ TEST_CASE("message queue is routing a response to a resource client", "[MessageQ
 
   Verify(Method(eventSink, onRequest));
   Verify(Method(eventSink, onResponseContent));
+}
+
+TEST_CASE("message queue is failing to route a request in there is no controller to handle it", "[MessageQueue]") {
+  auto requestContent = Content::makeShared();
+
+  Mock<EventSink> eventSink;
+
+  When(Method(eventSink, onResponseStatus)).Do([=](const Status& status) {
+    REQUIRE(status.getStatusCode() == StatusCode::NotFound);
+    return Status::OK();
+  });
+
+  Mock<ILogger> loggerInstanse;
+  When(Dtor(loggerInstanse)).Do([](){});
+  Fake(Method(loggerInstanse, message));
+  Fake(Method(loggerInstanse, error));
+
+  ILogger::Shared logger(&loggerInstanse.get());
+
+  auto queue = MessageQueue::makeUnique(logger);
+
+  auto client = queue->createResourceClient("clientId", "resource");
+  client->addOnResponse<Status>("get", std::bind(&EventSink::onResponseStatus, &eventSink.get(), _1));
+
+  client->sendRequest("get", requestContent);
+  queue->idle();
+
+  Verify(Method(eventSink, onResponseStatus));
 }
