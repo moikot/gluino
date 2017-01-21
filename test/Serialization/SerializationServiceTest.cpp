@@ -1,6 +1,8 @@
 #include "Utils/Testing.hpp"
 
 #include "Serialization/SerializationService.hpp"
+#include "Serialization/FakeSerializationContext.hpp"
+#include "Serialization/FakeDeserializationContext.hpp"
 
 using namespace Core;
 using namespace Serialization;
@@ -17,9 +19,9 @@ namespace {
 }
 
 TEST_CASE("can serialize an entity", "[SerializationService]") {
-
-  Mock<ISerializationContext> contextInstance;
-  When(Dtor(contextInstance)).Do([](){});
+  
+  auto context = FakeSerializationContext::makeUnique();
+  Mock<FakeSerializationContext> contextInstance(*context.get());
 
   When(Method(contextInstance, setString).Using("_type","content")).Do([](const std::string&, const std::string&) {
     return Status::OK;
@@ -28,29 +30,25 @@ TEST_CASE("can serialize an entity", "[SerializationService]") {
   When(Method(contextInstance, toString)).Return("serialized");
 
   Mock<IContextFactory> factoryInstance;
-  When(Dtor(factoryInstance)).Do([](){});
-
   When(Method(factoryInstance, createSerializationContext)).Do([&](
-    const ISerializationService& serializationService,
-    ISerializationContext::Unique& context) {
-    ISerializationContext::Unique con(&contextInstance.get());
-    context = std::move(con);
+    const ISerializationService&,
+    ISerializationContext::Unique& con) {
+    con = std::move(context);
     return Status::OK;
   });
 
   Mock<ISerializer> serializerInstance;
-  When(Dtor(serializerInstance)).Do([](){});
 
   When(Method(serializerInstance, getTypeId)).Return(Content::TypeId());
 
   When(Method(serializerInstance, serialize)).Do([](
-    const Core::IEntity& entity,
-    ISerializationContext& context) {
+    const Core::IEntity&,
+    ISerializationContext&) {
     return Status::OK;
   });
 
-  ISerializer::Shared serializer(&serializerInstance.get());
-  IContextFactory::Shared factory(&factoryInstance.get());
+  auto serializer = ISerializer::Shared(&serializerInstance.get(), [](...) {});
+  auto factory = IContextFactory::Shared(&factoryInstance.get(), [](...) {});
 
   auto service = SerializationService::makeUnique(factory);
   service->addSerializer(serializer);
@@ -62,9 +60,9 @@ TEST_CASE("can serialize an entity", "[SerializationService]") {
 }
 
 TEST_CASE("can deserialize an entity", "[SerializationService]") {
-
-  Mock<IDeserializationContext> contextInstance;
-  When(Dtor(contextInstance)).Do([](){});
+ 
+  auto context = FakeDeserializationContext::makeUnique();
+  Mock<FakeDeserializationContext> contextInstance(*context.get());
 
   When(Method(contextInstance, getString)).Do([](const std::string&, std::string& value) {
     value = "content";
@@ -72,31 +70,28 @@ TEST_CASE("can deserialize an entity", "[SerializationService]") {
   });
 
   Mock<IContextFactory> factoryInstance;
-  When(Dtor(factoryInstance)).Do([](){});
 
   When(Method(factoryInstance, createDeserializationContext)).Do([&](
-    const ISerializationService& serializationService,
-    const std::string& json,
-    IDeserializationContext::Unique& context) {
-    IDeserializationContext::Unique con(&contextInstance.get());
-    context = std::move(con);
+    const ISerializationService&,
+    const std::string&,
+    IDeserializationContext::Unique& con) {
+    con = std::move(context);
     return Status::OK;
   });
 
   Mock<ISerializer> serializerInstance;
-  When(Dtor(serializerInstance)).Do([](){});
 
   When(Method(serializerInstance, getTypeId)).Return(Content::TypeId());
 
   When(Method(serializerInstance, deserialize)).Do([](
     Core::IEntity::Unique& entity,
-    IDeserializationContext& context) {
+    IDeserializationContext&) {
     entity = Content::makeUnique();
     return Status::OK;
   });
 
-  ISerializer::Shared serializer(&serializerInstance.get());
-  IContextFactory::Shared factory(&factoryInstance.get());
+  auto serializer = ISerializer::Shared(&serializerInstance.get(), [](...) {});
+  auto factory = IContextFactory::Shared(&factoryInstance.get(), [](...) {});
 
   auto service = SerializationService::makeUnique(factory);
   service->addSerializer(serializer);

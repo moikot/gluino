@@ -37,10 +37,8 @@ TEST_CASE("message queue is routing an event to a generic client", "[MessageQueu
   });
 
   Mock<ILogger> loggerInstanse;
-  When(Dtor(loggerInstanse)).Do([](){});
   Fake(Method(loggerInstanse, message));
-
-  ILogger::Shared logger(&loggerInstanse.get());
+  auto logger = ILogger::Shared(&loggerInstanse.get(), [](...) {});
 
   auto queue = MessageQueue::makeUnique(logger);
 
@@ -74,10 +72,8 @@ TEST_CASE("message queue is routing a response to a generic client", "[MessageQu
   });
 
   Mock<ILogger> loggerInstanse;
-  When(Dtor(loggerInstanse)).Do([](){});
   Fake(Method(loggerInstanse, message));
-
-  ILogger::Shared logger(&loggerInstanse.get());
+  auto logger = ILogger::Shared(&loggerInstanse.get(), [](...) {});
 
   auto queue = MessageQueue::makeUnique(logger);
 
@@ -104,10 +100,8 @@ TEST_CASE("message queue is routing an event to a resource client", "[MessageQue
   });
 
   Mock<ILogger> loggerInstanse;
-  When(Dtor(loggerInstanse)).Do([](){});
   Fake(Method(loggerInstanse, message));
-
-  ILogger::Shared logger(&loggerInstanse.get());
+  auto logger = ILogger::Shared(&loggerInstanse.get(), [](...) {});
 
   auto queue = MessageQueue::makeUnique(logger);
 
@@ -138,10 +132,8 @@ TEST_CASE("message queue is routing a response to a resource client", "[MessageQ
   });
 
   Mock<ILogger> loggerInstanse;
-  When(Dtor(loggerInstanse)).Do([](){});
   Fake(Method(loggerInstanse, message));
-
-  ILogger::Shared logger(&loggerInstanse.get());
+  auto logger = ILogger::Shared(&loggerInstanse.get(), [](...) {});
 
   auto queue = MessageQueue::makeUnique(logger);
 
@@ -169,11 +161,9 @@ TEST_CASE("message queue is failing to route a request in there is no controller
   });
 
   Mock<ILogger> loggerInstanse;
-  When(Dtor(loggerInstanse)).Do([](){});
   Fake(Method(loggerInstanse, message));
   Fake(Method(loggerInstanse, error));
-
-  ILogger::Shared logger(&loggerInstanse.get());
+  auto logger = ILogger::Shared(&loggerInstanse.get(), [](...) {});
 
   auto queue = MessageQueue::makeUnique(logger);
 
