@@ -16,13 +16,13 @@ namespace {
 
 }
 
-TEST_CASE("can serialize a status result", "[StatusSerializer]") {
+TEST_CASE("can serialize a status", "[StatusSerializer]") {
   auto innerResult = Status::makeUnique(StatusCode::NotImplemented, "notImplemented");
   auto innerResultPtr = innerResult.get();
   auto status = Status::makeUnique(StatusCode::InternalServerError, "serverError", std::move(innerResult));
 
   Mock<ISerializationContext> context;
-  
+
   When(Method(context, setInt).Using("code", (int)StatusCode::InternalServerError)).Do([](const std::string&, int) {
     return Status::OK();
   });
@@ -44,4 +44,15 @@ TEST_CASE("can serialize a status result", "[StatusSerializer]") {
 
   Verify(Method(context, setString));
   Verify(Method(context, setEntity));
+}
+
+TEST_CASE("status deserialization is not implemented", "[StatusSerializer]") {
+  IEntity::Unique entity;
+  Mock<IDeserializationContext> context;
+
+  ISerializer::Unique serializer = StatusSerializer::makeUnique();
+
+  auto result = serializer->deserialize(entity, context.get());
+  REQUIRE(result->getStatusCode() == StatusCode::InternalServerError);
+  REQUIRE(result->getInnerResult()->getStatusCode() == StatusCode::NotImplemented);
 }

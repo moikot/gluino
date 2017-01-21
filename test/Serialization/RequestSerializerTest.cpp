@@ -18,7 +18,7 @@ namespace {
 
 }
 
-TEST_CASE("request serialization is not implemented", "[ResponseSerializer]") {
+TEST_CASE("request serialization is not implemented", "[RequestSerializer]") {
   auto content = Content::makeShared();
   auto event = Request::makeUnique("get", "sender", "res", content);
 

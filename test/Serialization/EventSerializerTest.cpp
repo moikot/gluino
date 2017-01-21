@@ -46,7 +46,7 @@ TEST_CASE("can serialize a request", "[EventSerializer]") {
   Verify(Method(context, setEntity));
 }
 
-TEST_CASE("event deserialization is not implemented", "[ResponseSerializer]") {
+TEST_CASE("event deserialization is not implemented", "[EventSerializer]") {
   IEntity::Unique entity;
   Mock<IDeserializationContext> context;
 
