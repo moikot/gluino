@@ -35,6 +35,7 @@ TEST_CASE("can deserialize a request", "[RequestSerializer]") {
   });
 
   When(Method(context, hasKey).Using("content")).Return(true);
+
   When(Method(context, getEntity).Using("content", _)).Do([&](const std::string&, Core::IEntity::Unique& entity) {
     entity = std::move(content);
     return Status::OK();
