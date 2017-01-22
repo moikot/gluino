@@ -36,12 +36,15 @@ SerializationService::serialize (
   ISerializationContext& context) const {
 
   std::string typeId = entity.getTypeId();
+  auto result = context.setString(TYPE_FIELD, typeId);
+  if (!result.isOk())
+    return result;
+
   auto serializer = getSerialzier(typeId);
   if (!serializer) {
     return Status(StatusCode::BadRequest,
       "Unable to find a serializer for type """ + typeId + """.");
   }
-  context.setString(TYPE_FIELD, typeId);
   return serializer->serialize(entity, context);
 }
 
