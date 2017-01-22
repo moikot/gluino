@@ -14,39 +14,38 @@
 namespace Core {
 
 class Status : public IEntity {
-TYPE_INFO(Status, IEntity, "status")
+  TYPE_INFO(Status, IEntity, "status")
 
-public:
-  static Status::Unique OK();
-  static Status::Unique NotImplemented();
+  public:
+    static Status OK;
+    static Status NotImplemented;
 
-  Status(const StatusCode& statusCode,
-               const std::string& message);
+    Status(const StatusCode& statusCode, const std::string& message);
+    Status(const StatusCode& statusCode, const std::string& message, Status innerStatus);
 
-  Status(const StatusCode& statusCode,
-               const std::string& message,
-               Status::Unique innerResult);
+    Status(const Status& op);
+    Status& operator=(const Status& op);
 
-  bool isOk() const {
-    return getStatusCode() == StatusCode::OK;
-  }
+    bool isOk() const {
+      return getStatusCode() == StatusCode::OK;
+    }
 
-  virtual StatusCode getStatusCode() const {
-    return statusCode;
-  }
+    virtual StatusCode getStatusCode() const {
+      return statusCode;
+    }
 
-  std::string getMessage() const {
-    return message;
-  }
+    std::string getMessage() const {
+      return message;
+    }
 
-  const Status* getInnerResult() const {
-    return innerResult.get();
-  }
+    const Status* getInnerStatus() const {
+      return innerStatus.get();
+    }
 
-private:
-  const StatusCode            statusCode;
-  const std::string           message;
-  const Status::Unique  innerResult;
+  private:
+    StatusCode		  statusCode;
+    std::string		  message;
+    Status::Unique	innerStatus;
 };
 
 }

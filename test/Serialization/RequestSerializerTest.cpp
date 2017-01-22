@@ -26,8 +26,8 @@ TEST_CASE("request serialization is not implemented", "[RequestSerializer]") {
   ISerializer::Unique serializer = RequestSerializer::makeUnique();
 
   auto result = serializer->serialize(*event, context.get());
-  REQUIRE(result->getStatusCode() == StatusCode::InternalServerError);
-  REQUIRE(result->getInnerResult()->getStatusCode() == StatusCode::NotImplemented);
+  REQUIRE(result.getStatusCode() == StatusCode::InternalServerError);
+  REQUIRE(result.getInnerStatus()->getStatusCode() == StatusCode::NotImplemented);
 }
 
 TEST_CASE("can deserialize a request", "[RequestSerializer]") {
@@ -38,26 +38,26 @@ TEST_CASE("can deserialize a request", "[RequestSerializer]") {
 
   When(Method(context, getString).Using("requestType", _)).Do([](const std::string&, std::string& value) {
     value = "requestType";
-    return Status::OK();
+    return Status::OK;
   });
 
   When(Method(context, getString).Using("resource", _)).Do([](const std::string&, std::string& value) {
     value = "resource";
-    return Status::OK();
+    return Status::OK;
   });
 
   When(Method(context, hasKey).Using("content")).Return(true);
 
   When(Method(context, getEntity).Using("content", _)).Do([&](const std::string&, Core::IEntity::Unique& entity) {
     entity = std::move(content);
-    return Status::OK();
+    return Status::OK;
   });
 
   ISerializer::Unique serializer = RequestSerializer::makeUnique();
   IEntity::Unique entity;
 
   auto result = serializer->deserialize(entity, context.get());
-  REQUIRE(result->isOk() == true);
+  REQUIRE(result.isOk() == true);
 
   auto request = castToUnique<Request>(std::move(entity));
   REQUIRE(request->getRequestType() == "requestType");

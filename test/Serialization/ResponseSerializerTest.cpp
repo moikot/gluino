@@ -24,23 +24,23 @@ TEST_CASE("can serialize a response", "[ResponseSerializer]") {
   Mock<ISerializationContext> context;
 
   When(Method(context, setString).Using("requestType","get")).Do([](const std::string&, const std::string&) {
-    return Status::OK();
+    return Status::OK;
   });
 
   When(Method(context, setString).Using("resource", "res")).Do([](const std::string&, const std::string&) {
-    return Status::OK();
+    return Status::OK;
   });
 
   When(Method(context, setEntity)).Do([=](const std::string& key, const Core::IEntity& entity) {
     REQUIRE(key == "content");
     REQUIRE(&entity == content.get());
-    return Status::OK();
+    return Status::OK;
   });
 
   ISerializer::Unique serializer = ResponseSerializer::makeUnique();
 
   auto result = serializer->serialize(*response, context.get());
-  REQUIRE(result->isOk() == true);
+  REQUIRE(result.isOk() == true);
 
   Verify(Method(context, setString));
   Verify(Method(context, setEntity));
@@ -53,6 +53,6 @@ TEST_CASE("response deserialization is not implemented", "[ResponseSerializer]")
   ISerializer::Unique serializer = ResponseSerializer::makeUnique();
 
   auto result = serializer->deserialize(entity, context.get());
-  REQUIRE(result->getStatusCode() == StatusCode::InternalServerError);
-  REQUIRE(result->getInnerResult()->getStatusCode() == StatusCode::NotImplemented);
+  REQUIRE(result.getStatusCode() == StatusCode::InternalServerError);
+  REQUIRE(result.getInnerStatus()->getStatusCode() == StatusCode::NotImplemented);
 }

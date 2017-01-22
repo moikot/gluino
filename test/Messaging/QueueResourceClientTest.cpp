@@ -31,7 +31,7 @@ TEST_CASE("queue resource client can send a request", "[QueueResourceClient]") {
     REQUIRE(request->getSender() == "clientId");
     REQUIRE(request->getResource() == "resource");
     REQUIRE(request->getContent() == contentPtr);
-    return Status::OK();
+    return Status::OK;
   });
 
   auto client = QueueResourceClient::makeUnique("clientId", "resource", messageQueue.get());
@@ -43,13 +43,13 @@ TEST_CASE("queue resource client can send a request", "[QueueResourceClient]") {
 TEST_CASE("queue resource client can process a response", "[QueueResourceClient]") {
   Mock<IMessageQueue> messageQueue;
   auto client = QueueResourceClient::makeUnique("id", "resource", messageQueue.get());
-  auto result = Status::OK();
+  auto result = Status::makeUnique(Status::OK);
   auto resultPtr = result.get();
 
   Mock<EventSink> eventSink;
   When(Method(eventSink, onResponse)).Do([=](const Status& result) {
     REQUIRE(&result == resultPtr);
-    return Status::OK();
+    return Status::OK;
   });
   client->addOnResponse<Status>("get", std::bind(&EventSink::onResponse, &eventSink.get(), _1));
 
@@ -67,7 +67,7 @@ TEST_CASE("queue resource client can process an event", "[QueueResourceClient]")
   Mock<EventSink> eventSink;
   When(Method(eventSink, onEvent)).Do([=](const Content& param) {
     REQUIRE(&param == content.get());
-    return Status::OK();
+    return Status::OK;
   });
   client->addOnEvent<Content>("created", std::bind(&EventSink::onEvent, &eventSink.get(), _1));
 

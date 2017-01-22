@@ -8,27 +8,27 @@ using namespace Serialization;
 #define FIELD_RESOURCE "resource"
 #define FIELD_CONTENT "content"
 
-Status::Unique
+Status
 ResponseSerializer::serialize(
   const Response& response,
   ISerializationContext& context) const {
 
   auto result = context.setString(FIELD_REQUEST_TYPE, response.getRequestType());
-  if (!result->isOk())
+  if (!result.isOk())
     return result;
 
   result = context.setString(FIELD_RESOURCE, response.getResource());
-  if (!result->isOk())
+  if (!result.isOk())
     return result;
 
   result = context.setEntity(FIELD_CONTENT, response.getContent());
-  if (!result->isOk())
+  if (!result.isOk())
     return result;
 
-  return Status::OK();
+  return Status::OK;
 }
 
-Status::Unique
+Status
 ResponseSerializer::deserialize(Response::Unique&, IDeserializationContext&) const {
-  return Status::NotImplemented();
+  return Status::NotImplemented;
 }

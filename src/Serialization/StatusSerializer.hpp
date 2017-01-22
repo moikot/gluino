@@ -16,11 +16,11 @@ class StatusSerializer : public Serializer<Core::Status> {
   TYPE_PTRS(StatusSerializer)
   protected:
     // From Serializer
-    virtual Core::Status::Unique serialize(
+    virtual Core::Status serialize(
       const Core::Status& status,
       ISerializationContext& context) const override;
 
-    virtual Core::Status::Unique deserialize(
+    virtual Core::Status deserialize(
       Core::Status::Unique& status,
       IDeserializationContext& context) const override;
 };
