@@ -14,25 +14,31 @@
 struct FakeDeserializationContext : public Serialization::IDeserializationContext {
   TYPE_PTRS(FakeDeserializationContext)
 
-    virtual bool hasKey(const std::string&) override {
-    throw std::runtime_error("hasKey call was not expected.");
+  FakeDeserializationContext(IDeserializationContext& context) : context(context) {
   }
 
-  virtual Core::Status getString(const std::string&, std::string&) override {
-    throw std::runtime_error("getString call was not expected.");
+  virtual bool hasKey(const std::string& key) override {
+    return context.hasKey(key);
   }
 
-  virtual Core::Status getInt(const std::string&, int&) override {
-    throw std::runtime_error("getInt call was not expected.");
+  virtual Core::Status getString(const std::string& key, std::string& value) override {
+    return context.getString(key, value);
   }
 
-  virtual Core::Status getBool(const std::string&, bool&) override {
-    throw std::runtime_error("getBool call was not expected.");
+  virtual Core::Status getInt(const std::string& key, int& value) override {
+    return context.getInt(key, value);
   }
 
-  virtual Core::Status getEntity(const std::string&, Core::IEntity::Unique&) override {
-    throw std::runtime_error("getEntity call was not expected.");
+  virtual Core::Status getBool(const std::string& key, bool& value) override {
+    return context.getBool(key, value);
   }
+
+  virtual Core::Status getEntity(const std::string& key, Core::IEntity::Unique& entity) override {
+    return context.getEntity(key, entity);
+  }
+
+  private:
+    IDeserializationContext& context;
 };
 
 #endif /* end of include guard: FAKE_DESERIALIZATION_CONTEXT */

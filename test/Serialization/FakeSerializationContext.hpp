@@ -14,29 +14,35 @@
 struct FakeSerializationContext : public Serialization::ISerializationContext {
   TYPE_PTRS(FakeSerializationContext)
 
-    virtual std::string toString() const override {
-    throw std::runtime_error("toStirng call was not expected.");
+  FakeSerializationContext(ISerializationContext& context) : context(context) {
   }
 
-  virtual Core::Status setString(const std::string&, const std::string&) override {
-    throw std::runtime_error("setStirng call was not expected.");
+  virtual std::string toString() const override {
+    return context.toString();
   }
 
-  virtual Core::Status setInt(const std::string&, int) override {
-    throw std::runtime_error("setInt call was not expected.");
+  virtual Core::Status setString(const std::string& key, const std::string& value) override {
+    return context.setString(key, value);
   }
 
-  virtual Core::Status setBool(const std::string&, bool) override {
-    throw std::runtime_error("setBool call was not expected.");
+  virtual Core::Status setInt(const std::string& key, int value) override {
+    return context.setInt(key, value);
   }
 
-  virtual Core::Status setList(const std::string&, const Core::IList&) override {
-    throw std::runtime_error("setList call was not expected.");
+  virtual Core::Status setBool(const std::string& key, bool value) override {
+    return context.setBool(key, value);
   }
 
-  virtual Core::Status setEntity(const std::string&, const Core::IEntity&) override {
-    throw std::runtime_error("setEntity call was not expected.");
+  virtual Core::Status setList(const std::string& key, const Core::IList& list) override {
+    return context.setList(key, list);
   }
+
+  virtual Core::Status setEntity(const std::string& key, const Core::IEntity& entity) override {
+    return context.setEntity(key, entity);
+  }
+
+  private:
+    ISerializationContext& context;
 };
 
 #endif /* end of include guard: FAKE_SERIALIZATION_CONTEXT */

@@ -19,21 +19,20 @@ namespace {
 }
 
 TEST_CASE("can serialize an entity", "[SerializationService]") {
-  
-  auto context = FakeSerializationContext::makeUnique();
-  Mock<FakeSerializationContext> contextInstance(*context.get());
 
-  When(Method(contextInstance, setString).Using("_type","content")).Do([](const std::string&, const std::string&) {
+  Mock<ISerializationContext> context;
+
+  When(Method(context, setString).Using("_type","content")).Do([](const std::string&, const std::string&) {
     return Status::OK;
   });
 
-  When(Method(contextInstance, toString)).Return("serialized");
+  When(Method(context, toString)).Return("serialized");
 
   Mock<IContextFactory> factoryInstance;
   When(Method(factoryInstance, createSerializationContext)).Do([&](
     const ISerializationService&,
     ISerializationContext::Unique& con) {
-    con = std::move(context);
+    con = FakeSerializationContext::makeUnique(context.get());
     return Status::OK;
   });
 
@@ -60,11 +59,10 @@ TEST_CASE("can serialize an entity", "[SerializationService]") {
 }
 
 TEST_CASE("can deserialize an entity", "[SerializationService]") {
- 
-  auto context = FakeDeserializationContext::makeUnique();
-  Mock<FakeDeserializationContext> contextInstance(*context.get());
 
-  When(Method(contextInstance, getString)).Do([](const std::string&, std::string& value) {
+  Mock<IDeserializationContext> context;
+
+  When(Method(context, getString)).Do([](const std::string&, std::string& value) {
     value = "content";
     return Status::OK;
   });
@@ -75,7 +73,7 @@ TEST_CASE("can deserialize an entity", "[SerializationService]") {
     const ISerializationService&,
     const std::string&,
     IDeserializationContext::Unique& con) {
-    con = std::move(context);
+    con = FakeDeserializationContext::makeUnique(context.get());
     return Status::OK;
   });
 
