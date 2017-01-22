@@ -45,6 +45,45 @@ TEST_CASE("can serialize a status", "[StatusSerializer]") {
   Verify(Method(context, setEntity));
 }
 
+TEST_CASE("status serialization fails", "[StatusSerializer]") {
+  Mock<ISerializationContext> context;
+
+  SECTION("if setInt fails") {
+    When(Method(context, setInt).Using("code", (int)StatusCode::OK)).Return(
+      Status(StatusCode::NotImplemented, "error")
+    );
+  }
+
+  SECTION("if setString fails") {
+    When(Method(context, setInt).Using("code", (int)StatusCode::OK)).Return(
+      Status::OK
+    );
+    When(Method(context, setString).Using("message", "serverError")).Return(
+      Status(StatusCode::NotImplemented, "error")
+    );
+  }
+
+  SECTION("if setEntity fails") {
+    When(Method(context, setInt).Using("code", (int)StatusCode::OK)).Return(
+      Status::OK
+    );
+    When(Method(context, setString).Using("message", "serverError")).Return(
+      Status::OK
+    );
+    When(Method(context, setEntity)).Return(
+      Status(StatusCode::NotImplemented, "error")
+    );
+  }
+
+  auto innerStatus = Status::NotImplemented;
+  auto status = Status::makeUnique(StatusCode::OK, "serverError", innerStatus);
+
+  ISerializer::Unique serializer = StatusSerializer::makeUnique();
+  auto result = serializer->serialize(*status, context.get());
+
+  REQUIRE(result.isOk() == false);
+}
+
 TEST_CASE("status deserialization is not implemented", "[StatusSerializer]") {
   IEntity::Unique entity;
   Mock<IDeserializationContext> context;

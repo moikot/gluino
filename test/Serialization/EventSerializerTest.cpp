@@ -46,34 +46,34 @@ TEST_CASE("can serialize a request", "[EventSerializer]") {
   Verify(Method(context, setEntity));
 }
 
-TEST_CASE("serialize fails", "[EventSerializer]") {
+TEST_CASE("event serialization fails", "[EventSerializer]") {
   Mock<ISerializationContext> context;
 
   SECTION("if setString fails for eventType") {
-    When(Method(context, setString).Using("eventType","get")).Do([](const std::string&, const std::string&) {
-      return Status(StatusCode::InternalServerError, "error");
-    });
+    When(Method(context, setString).Using("eventType","get")).Return(
+      Status(StatusCode::InternalServerError, "error")
+    );
   }
 
   SECTION("if setString fails for resource") {
-    When(Method(context, setString).Using("eventType","get")).Do([](const std::string&, const std::string&) {
-      return Status::OK;
-    });
-    When(Method(context, setString).Using("resource", "res")).Do([](const std::string&, const std::string&) {
-      return Status(StatusCode::InternalServerError, "error");
-    });
+    When(Method(context, setString).Using("eventType","get")).Return(
+      Status::OK
+    );
+    When(Method(context, setString).Using("resource", "res")).Return(
+      Status(StatusCode::InternalServerError, "error")
+    );
   }
-  
+
   SECTION("if setEntity fails") {
-    When(Method(context, setString).Using("eventType","get")).Do([](const std::string&, const std::string&) {
-      return Status::OK;
-    });
-    When(Method(context, setString).Using("resource", "res")).Do([](const std::string&, const std::string&) {
-      return Status::OK;
-    });
-    When(Method(context, setEntity)).Do([=](const std::string& key, const Core::IEntity& entity) {
-      return Status(StatusCode::InternalServerError, "error");
-    });
+    When(Method(context, setString).Using("eventType","get")).Return(
+      Status::OK
+    );
+    When(Method(context, setString).Using("resource", "res")).Return(
+      Status::OK
+    );
+    When(Method(context, setEntity)).Return(
+      Status(StatusCode::InternalServerError, "error")
+    );
   }
 
   auto event = Event::makeUnique("get", "res", Content::makeShared());
