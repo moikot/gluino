@@ -51,7 +51,7 @@ TEST_CASE("event serialization fails", "[EventSerializer]") {
 
   SECTION("if setString fails for eventType") {
     When(Method(context, setString).Using("eventType","get")).Return(
-      Status(StatusCode::InternalServerError, "error")
+      Status::NotImplemented
     );
   }
 
@@ -60,7 +60,7 @@ TEST_CASE("event serialization fails", "[EventSerializer]") {
       Status::OK
     );
     When(Method(context, setString).Using("resource", "res")).Return(
-      Status(StatusCode::InternalServerError, "error")
+      Status::NotImplemented
     );
   }
 
@@ -72,7 +72,7 @@ TEST_CASE("event serialization fails", "[EventSerializer]") {
       Status::OK
     );
     When(Method(context, setEntity)).Return(
-      Status(StatusCode::InternalServerError, "error")
+      Status::NotImplemented
     );
   }
 

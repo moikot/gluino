@@ -50,7 +50,7 @@ TEST_CASE("status serialization fails", "[StatusSerializer]") {
 
   SECTION("if setInt fails") {
     When(Method(context, setInt).Using("code", (int)StatusCode::OK)).Return(
-      Status(StatusCode::NotImplemented, "error")
+      Status::NotImplemented
     );
   }
 
@@ -59,7 +59,7 @@ TEST_CASE("status serialization fails", "[StatusSerializer]") {
       Status::OK
     );
     When(Method(context, setString).Using("message", "serverError")).Return(
-      Status(StatusCode::NotImplemented, "error")
+      Status::NotImplemented
     );
   }
 
@@ -71,7 +71,7 @@ TEST_CASE("status serialization fails", "[StatusSerializer]") {
       Status::OK
     );
     When(Method(context, setEntity)).Return(
-      Status(StatusCode::NotImplemented, "error")
+      Status::NotImplemented
     );
   }
 

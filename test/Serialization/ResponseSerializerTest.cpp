@@ -46,6 +46,45 @@ TEST_CASE("can serialize a response", "[ResponseSerializer]") {
   Verify(Method(context, setEntity));
 }
 
+TEST_CASE("response serialization fails", "[ResponseSerializer]") {
+  Mock<ISerializationContext> context;
+
+  SECTION("if setString for requestType fails") {
+    When(Method(context, setString).Using("requestType","get")).Return(
+      Status::NotImplemented
+    );
+  }
+
+  SECTION("if setString for resource fails") {
+    When(Method(context, setString).Using("requestType","get")).Return(
+      Status::OK
+    );
+    When(Method(context, setString).Using("resource", "res")).Return(
+      Status::NotImplemented
+    );
+  }
+
+  SECTION("if setEntity fails") {
+    When(Method(context, setString).Using("requestType","get")).Return(
+      Status::OK
+    );
+    When(Method(context, setString).Using("resource", "res")).Return(
+      Status::OK
+    );
+    When(Method(context, setEntity)).Return(
+      Status::NotImplemented
+    );
+  }
+
+  auto content = Content::makeShared();
+  auto response = Response::makeUnique("get", "rec", "res", content);
+
+  ISerializer::Unique serializer = ResponseSerializer::makeUnique();
+  auto result = serializer->serialize(*response, context.get());
+
+  REQUIRE(result.isOk() == false);
+}
+
 TEST_CASE("response deserialization is not implemented", "[ResponseSerializer]") {
   IEntity::Unique entity;
   Mock<IDeserializationContext> context;
