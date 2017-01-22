@@ -52,6 +52,24 @@ TEST_CASE("message queue is routing an event to a generic client", "[MessageQueu
   Verify(Method(eventSink, onEvent));
 }
 
+TEST_CASE("message queue is not routing an event to a deleted generic client", "[MessageQueue]") {
+  Mock<ILogger> loggerInstanse;
+  Fake(Method(loggerInstanse, message));
+
+  auto logger = ILogger::Shared(&loggerInstanse.get(), [](...) {});
+  auto queue = MessageQueue::makeUnique(logger);
+
+  {
+    Mock<EventSink> eventSink;
+    auto client = queue->createGenericClient("clientId");
+    client->setOnEvent(std::bind(&EventSink::onEvent, &eventSink.get(), _1));
+    client.reset();
+  }
+
+  queue->addEvent(Event::makeShared("created", "resource"));
+  queue->idle();
+}
+
 TEST_CASE("message queue is routing a response to a generic client", "[MessageQueue]") {
   auto requestContent = Content::makeShared();
   auto responseContent = Content::makeUnique();
