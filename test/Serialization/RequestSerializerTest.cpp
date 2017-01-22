@@ -69,3 +69,45 @@ TEST_CASE("can deserialize a request", "[RequestSerializer]") {
   Verify(Method(context, hasKey));
   Verify(Method(context, getEntity));
 }
+
+TEST_CASE("request deserialization fails", "[RequestSerializer]") {
+  Mock<IDeserializationContext> context;
+
+  SECTION("if getString for requestType fails") {
+    When(Method(context, getString).Using("requestType", _)).Do([](const std::string&, std::string& value) {
+      return Status::NotImplemented;
+    });
+  }
+
+  SECTION("if getString for resource fails") {
+    When(Method(context, getString).Using("requestType", _)).Do([](const std::string&, std::string& value) {
+      value = "requestType";
+      return Status::OK;
+    });
+    When(Method(context, getString).Using("resource", _)).Do([](const std::string&, std::string& value) {
+      return Status::NotImplemented;
+    });
+  }
+
+  SECTION("if getEntity fails") {
+    When(Method(context, getString).Using("requestType", _)).Do([](const std::string&, std::string& value) {
+      value = "requestType";
+      return Status::OK;
+    });
+    When(Method(context, getString).Using("resource", _)).Do([](const std::string&, std::string& value) {
+      value = "resource";
+      return Status::OK;
+    });
+    When(Method(context, hasKey).Using("content")).Return(true);
+    When(Method(context, getEntity).Using("content", _)).Do([&](const std::string&, Core::IEntity::Unique& entity) {
+      return Status::NotImplemented;
+    });
+  }
+
+  ISerializer::Unique serializer = RequestSerializer::makeUnique();
+
+  IEntity::Unique entity;
+  auto result = serializer->deserialize(entity, context.get());
+
+  REQUIRE(result.isOk() == false);
+}
