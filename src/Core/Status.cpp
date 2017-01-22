@@ -14,6 +14,10 @@ Status::Status(const StatusCode& statusCode, const std::string& message,
   statusCode(statusCode), message(message), innerStatus(makeUnique(innerResult)) {
 }
 
+Status::Status(Status && op) noexcept = default;
+
+Status& Status::operator = (Status && op) noexcept = default;
+
 Status::Status(const Status& status) : 
   statusCode(status.statusCode), message(status.message) {
   if (status.getInnerStatus()) {
