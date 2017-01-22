@@ -23,8 +23,8 @@ class Status : public IEntity {
     Status(const StatusCode& statusCode, const std::string& message);
     Status(const StatusCode& statusCode, const std::string& message, Status innerStatus);
 
-    Status(Status && op) noexcept;
-    Status& operator=(Status && op) noexcept;
+    Status(Status && op);
+    Status& operator=(Status && op);
 
     Status(const Status& op);
     Status& operator=(const Status& op);
