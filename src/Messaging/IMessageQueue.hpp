@@ -27,7 +27,7 @@ class IMessageQueue : public Core::IService {
       @param message The request to add to the queue.
       @return The result of the operation.
     */
-    virtual Core::Status::Unique addRequest(Request::Shared request) = 0;
+    virtual Core::Status addRequest(Request::Shared request) = 0;
 
     /**
       Adds a new event to the message queue.
@@ -35,7 +35,7 @@ class IMessageQueue : public Core::IService {
       @param message The event to add to the queue.
       @return The result of the operation.
     */
-    virtual Core::Status::Unique addEvent(Event::Shared event) = 0;
+    virtual Core::Status addEvent(Event::Shared event) = 0;
 
     /**
       Creates a new queue client for sending requests and getting responses.

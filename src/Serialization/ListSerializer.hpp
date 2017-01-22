@@ -18,21 +18,21 @@ class ListSerializer : public Serializer<T> {
   typedef typename T::Unique TUnique;
   protected:
     // From Serializer
-    virtual Core::Status::Unique serialize(
+    virtual Core::Status serialize(
       const T& list,
       ISerializationContext& context) const override {
 
       auto result = context.setEntity("elements", list);
-      if (!result->isOk())
+      if (!result.isOk())
         return result;
 
-      return Core::Status::OK();
+      return Core::Status::OK;
     }
 
-    virtual Core::Status::Unique deserialize(
+    virtual Core::Status deserialize(
      TUnique& list,
      IDeserializationContext& context) const override {
-       return Core::Status::NotImplemented();
+       return Core::Status::NotImplemented;
     }
 };
 

@@ -31,7 +31,7 @@ TEST_CASE("queue generic client can send a request", "[QueueGenericClient]") {
     REQUIRE(request->getSender() == "clientId");
     REQUIRE(request->getResource() == "resource");
     REQUIRE(request->getContent() == contentPtr);
-    return Status::OK();
+    return Status::OK;
   });
 
   auto client = QueueGenericClient::makeUnique("clientId", messageQueue.get());
@@ -43,7 +43,7 @@ TEST_CASE("queue generic client can send a request", "[QueueGenericClient]") {
 TEST_CASE("queue generic client can process a response", "[QueueGenericClient]") {
   Mock<IMessageQueue> messageQueue;
   auto client = QueueGenericClient::makeUnique("id", messageQueue.get());
-  auto result = Status::OK();
+  auto result = Status::makeShared(Status::OK);
   auto resultPtr = result.get();
 
   Mock<EventSink> eventSink;
@@ -52,7 +52,7 @@ TEST_CASE("queue generic client can process a response", "[QueueGenericClient]")
     REQUIRE(response.getReceiver() == "receiver");
     REQUIRE(response.getResource() == "resource");
     REQUIRE(&response.getContent() == resultPtr);
-    return Status::OK();
+    return Status::OK;
   });
 
   client->setOnResponse(std::bind(&EventSink::onResponse, &eventSink.get(), _1));
@@ -73,7 +73,7 @@ TEST_CASE("queue generic client can process an event", "[QueueGenericClient]") {
     REQUIRE(event.getEventType() == "created");
     REQUIRE(event.getResource() == "resource");
     REQUIRE(event.getContent() == content.get());
-    return Status::OK();
+    return Status::OK;
   });
 
   client->setOnEvent(std::bind(&EventSink::onEvent, &eventSink.get(), _1));

@@ -20,7 +20,7 @@ namespace Core {
 class IList : public IEntity {
   TYPE_PTRS_ABSTRACT(IList)
   public:
-    typedef std::function<Status::Unique(const IEntity& item)> ForEachFunction;
+    typedef std::function<Status(const IEntity& item)> ForEachFunction;
 
     /**
       Add a new instance to the collection.
@@ -28,7 +28,7 @@ class IList : public IEntity {
       @param item The domain object instance to add.
       @return The result of the operation.
     */
-    virtual Core::Status::Unique add(
+    virtual Core::Status add(
       const IEntity& item) const = 0;
 
     /**
@@ -37,7 +37,7 @@ class IList : public IEntity {
       @param func The call back function called for each object in the collection.
       @return The result of the operation.
     */
-    virtual Core::Status::Unique forEach(
+    virtual Core::Status forEach(
       ForEachFunction func) const = 0;
 };
 

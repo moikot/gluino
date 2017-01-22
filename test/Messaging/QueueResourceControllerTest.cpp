@@ -29,7 +29,7 @@ TEST_CASE("queue resource controller can send an event", "[QueueResourceControll
     REQUIRE(request->getEventType() == "created");
     REQUIRE(request->getResource() == "resource");
     REQUIRE(request->getContent() == contentPtr);
-    return Status::OK();
+    return Status::OK;
   });
 
   auto client = QueueResourceController::makeUnique("resource", messageQueue.get());
@@ -46,7 +46,7 @@ TEST_CASE("queue resource controller can process a request", "[QueueResourceCont
   Mock<EventSink> eventSink;
   When(Method(eventSink, onRequest)).Do([=](const Content& param) {
     REQUIRE(&param == content.get());
-    return Status::OK();
+    return Status::makeUnique(Status::OK);
   });
   client->addOnRequest<Content>("create", std::bind(&EventSink::onRequest, &eventSink.get(), _1));
 

@@ -12,25 +12,25 @@ SerializationService::SerializationService(
   contextFactory(contextFactory) {
 }
 
-Core::Status::Unique
+Core::Status
 SerializationService::serialize(
   const IEntity& entity,
   std::string& json) const {
 
   ISerializationContext::Unique context;
   auto result = contextFactory->createSerializationContext(*this, context);
-  if (!result->isOk())
+  if (!result.isOk())
     return result;
 
   result = serialize(entity, *context);
-  if (!result->isOk())
+  if (!result.isOk())
     return result;
 
   json = context->toString();
-  return Status::OK();
+  return Status::OK;
 }
 
-Core::Status::Unique
+Core::Status
 SerializationService::serialize (
   const IEntity& entity,
   ISerializationContext& context) const {
@@ -38,39 +38,39 @@ SerializationService::serialize (
   std::string typeId = entity.getTypeId();
   auto serializer = getSerialzier(typeId);
   if (!serializer) {
-    return Status::makeUnique(StatusCode::BadRequest,
+    return Status(StatusCode::BadRequest,
       "Unable to find a serializer for type """ + typeId + """.");
   }
   context.setString(TYPE_FIELD, typeId);
   return serializer->serialize(entity, context);
 }
 
-Core::Status::Unique
+Core::Status
 SerializationService::deserialize(
   const std::string& json,
   Core::IEntity::Unique& entity) const {
 
   IDeserializationContext::Unique context;
-  auto actionResult = contextFactory->createDeserializationContext(*this, json, context);
-  if (!actionResult->isOk())
-    return actionResult;
+  auto result = contextFactory->createDeserializationContext(*this, json, context);
+  if (!result.isOk())
+    return result;
 
   return deserialize(*context, entity);
 }
 
-Core::Status::Unique
+Core::Status
 SerializationService::deserialize(
   IDeserializationContext& context,
   Core::IEntity::Unique& entity) const {
 
   std::string typeId;
-  auto actionResult = context.getString(TYPE_FIELD, typeId);
-  if (!actionResult->isOk())
-    return actionResult;
+  auto result = context.getString(TYPE_FIELD, typeId);
+  if (!result.isOk())
+    return result;
 
   auto serializer = getSerialzier(typeId);
   if (!serializer) {
-    return Status::makeUnique(StatusCode::BadRequest,
+    return Status(StatusCode::BadRequest,
       "Unable to find serializer for type """ + typeId + """.");
   }
   return serializer->deserialize(entity, context);

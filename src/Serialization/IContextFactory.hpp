@@ -19,11 +19,11 @@ struct IContextFactory {
     TYPE_PTRS_ABSTRACT(IContextFactory) 
     virtual ~IContextFactory() = default;
 
-    virtual Core::Status::Unique createSerializationContext(
+    virtual Core::Status createSerializationContext(
       const ISerializationService& serializationService,
       ISerializationContext::Unique& context) const = 0;
 
-    virtual Core::Status::Unique createDeserializationContext(
+    virtual Core::Status createDeserializationContext(
       const ISerializationService& serializationService, const std::string& json,
       IDeserializationContext::Unique& context) const = 0;
 };

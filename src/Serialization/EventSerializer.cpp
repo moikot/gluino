@@ -8,30 +8,30 @@ using namespace Serialization;
 #define FIELD_RESOURCE "resource"
 #define FIELD_CONTENT "content"
 
-Status::Unique
+Status
 EventSerializer::serialize(
   const Messaging::Event& event,
   ISerializationContext& context) const {
 
   auto result = context.setString(FIELD_EVENT_TYPE, event.getEventType());
-  if (!result->isOk())
+  if (!result.isOk())
     return result;
 
   result = context.setString(FIELD_RESOURCE, event.getResource());
-  if (!result->isOk())
+  if (!result.isOk())
     return result;
 
   auto content = event.getContent();
   if (content) {
     result = context.setEntity(FIELD_CONTENT, *content);
-    if (!result->isOk())
+    if (!result.isOk())
       return result;
   }
 
-  return Status::OK();
+  return Status::OK;
 }
 
-Status::Unique
+Status
 EventSerializer::deserialize(Event::Unique&, IDeserializationContext&) const {
-  return Status::NotImplemented();
+  return Status::NotImplemented;
 }

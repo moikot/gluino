@@ -5,51 +5,40 @@
 using namespace Core;
 
 TEST_CASE("static creators", "[Status]") {
-
   SECTION("OK status result has OK status code") {
-    REQUIRE(Status::OK()->getStatusCode() == StatusCode::OK);
+    REQUIRE(Status::OK.getStatusCode() == StatusCode::OK);
   }
-
   SECTION("NotImplemented status result has NotImplemented status code") {
-    REQUIRE(Status::NotImplemented()->getStatusCode() == StatusCode::NotImplemented);
+    REQUIRE(Status::NotImplemented.getStatusCode() == StatusCode::NotImplemented);
   }
-
 }
 
 TEST_CASE("Status can be constructed", "[Status]") {
 
-  auto result = Status::makeUnique(StatusCode::OK, "test");
+  auto status = Status(StatusCode::OK, "test");
 
   SECTION("status code retained") {
-    REQUIRE(result->getStatusCode() == StatusCode::OK);
+    REQUIRE(status.getStatusCode() == StatusCode::OK);
   }
-
   SECTION("message retained") {
-    REQUIRE(result->getMessage() == "test");
+    REQUIRE(status.getMessage() == "test");
   }
-
   SECTION("inner result is null by default") {
-    REQUIRE(result->getInnerResult() == nullptr);
+    REQUIRE(status.getInnerStatus() == nullptr);
   }
-
   SECTION("inner result is retained") {
-    auto innerPtr = result.get();
-    auto outer = Status::makeUnique(StatusCode::OK, "test", std::move(result));
-    REQUIRE(outer->getInnerResult() == innerPtr);
+    auto outer = Status(StatusCode::NotFound, "test", status);
+    REQUIRE(outer.getInnerStatus()->getStatusCode() == StatusCode::OK);
   }
-
 }
 
 TEST_CASE("Status isOK method", "[Status]") {
-
   SECTION("is OK when status code is OK") {
-    auto result = Status::makeUnique(StatusCode::OK, "test");
-    REQUIRE(result->isOk());
+    auto result = Status(StatusCode::OK, "test");
+    REQUIRE(result.isOk());
   }
-
   SECTION("is not OK when status code is not OK") {
-    auto result = Status::makeUnique(StatusCode::Accepted, "test");
-    REQUIRE(!result->isOk());
+    auto result = Status(StatusCode::Accepted, "test");
+    REQUIRE(!result.isOk());
   }
-
 }
