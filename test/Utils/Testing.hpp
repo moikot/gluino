@@ -7,7 +7,7 @@
 #ifndef TESTING
 #define TESTING
 
-#if (_MSC_VER)
+#if defined(_MSC_VER)
 	#pragma warning( push )
 	// Disabling warning C4515: 'namespace': namespace uses itself
 	#pragma warning( disable : 4515)
@@ -15,11 +15,20 @@
 	#pragma warning( disable : 4100)
 #endif
 
+#if defined(__clang__)
+	#pragma clang diagnostic push
+	#pragma clang diagnostic ignored "-Winconsistent-missing-override"
+#endif
+
 #include "catch.hpp"
 #include "fakeit.hpp"
 
-#if (_MSC_VER)
-	#pragma warning( pop ) 
+#if defined(__clang__)
+	#pragma clang diagnostic pop
+#endif
+
+#if defined(_MSC_VER)
+	#pragma warning( pop )
 #endif
 
 #endif /* end of include guard: TESTING */
