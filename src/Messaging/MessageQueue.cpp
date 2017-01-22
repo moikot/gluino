@@ -112,7 +112,7 @@ MessageQueue::processEvent(const Event& event) {
   logger->message("Broadcasting event '" + event.getEventType() + "'.");
   std::list<QueueClient::Shared> deletedClients;
   for(auto& client: clients) {
-    if (!client.unique()) {
+    if (client.use_count() != 1) {
 	    client->onEvent(event);
     } else {
       deletedClients.push_back(client);
@@ -141,20 +141,17 @@ MessageQueue::getClient(std::string clientId) {
 
 RequestHandler
 MessageQueue::getRequestHandler(const Request& request) {
-  RequestHandler func;
-  QueueResourceController::Shared queueController;
   for(auto& controller: controllers) {
-    func = controller->getRequestHandler(request);
-    if (func) {
-      queueController = controller;
-      break;
+    auto handler = controller->getRequestHandler(request);
+    if (handler) {
+      if (controller.use_count() == 1) {
+        controllers.remove(controller);
+        return nullptr;
+      }
+      return handler;
     }
   }
-  if (queueController && queueController.unique()) {
-    controllers.remove(queueController);
-    return nullptr;
-  }
-  return func;
+  return nullptr;
 }
 
 void
