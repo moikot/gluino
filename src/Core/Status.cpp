@@ -26,7 +26,7 @@ Status::Status(const Status& status) :
 }
 
 Status&
-Status::operator=(const Status& status) {
+Status::operator = (const Status& status) {
   if (this != &status) {
     statusCode = status.statusCode;
     message = status.message;

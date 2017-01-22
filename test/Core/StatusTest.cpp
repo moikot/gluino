@@ -38,7 +38,7 @@ TEST_CASE("Status copy semantic", "[Status]") {
     auto status = Status(StatusCode::OK, "status", innerStaus);
 
     auto statusCopy(status);
-    
+
     REQUIRE(status.getInnerStatus() != nullptr);
     REQUIRE(statusCopy.getInnerStatus()->getStatusCode() == StatusCode::Created);
     REQUIRE(statusCopy.getInnerStatus()->getMessage() == "inner");
@@ -48,7 +48,8 @@ TEST_CASE("Status copy semantic", "[Status]") {
     auto innerStaus = Status(StatusCode::Created, "inner");
     auto status = Status(StatusCode::OK, "status", innerStaus);
 
-    auto statusCopy = status;
+    auto statusCopy = Status::OK;
+    statusCopy = status;
 
     REQUIRE(status.getInnerStatus() != nullptr);
     REQUIRE(statusCopy.getInnerStatus()->getStatusCode() == StatusCode::Created);
