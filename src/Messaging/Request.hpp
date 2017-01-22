@@ -17,12 +17,10 @@ namespace Messaging {
 class Request : public Core::IEntity {
   TYPE_INFO(Request, IEntity, "request")
   public:
-    Request(
-      std::string     requestType,
-      std::string     sender,
-      std::string     resource,
-      IEntity::Shared content
-    );
+    Request(std::string requestType, std::string sender,
+      std::string resource);
+    Request(std::string requestType, std::string sender,
+      std::string resource, IEntity::Shared content);
 
     /**
       The request type (create, get, update, delete etc.).

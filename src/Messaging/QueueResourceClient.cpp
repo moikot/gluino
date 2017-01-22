@@ -9,7 +9,7 @@ QueueResourceClient::QueueResourceClient(std::string clientId, std::string resou
 
 Core::Status
 QueueResourceClient::sendRequest(std::string requestType) {
-  auto request = Request::makeShared(requestType, clientId, resource, nullptr);
+  auto request = Request::makeShared(requestType, clientId, resource);
   return messageQueue.addRequest(request);
 }
 

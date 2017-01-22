@@ -23,10 +23,10 @@ namespace {
 TEST_CASE("queue resource controller can send an event", "[QueueResourceController]") {
   Mock<IMessageQueue> messageQueue;
 
-  When(Method(messageQueue, addEvent)).Do([=](Event::Shared request) {
-    REQUIRE(request->getEventType() == "created");
-    REQUIRE(request->getResource() == "resource");
-    REQUIRE(request->getContent() == nullptr);
+  When(Method(messageQueue, addEvent)).Do([=](Event::Shared event) {
+    REQUIRE(event->getEventType() == "created");
+    REQUIRE(event->getResource() == "resource");
+    REQUIRE(event->getContent() == nullptr);
     return Status::OK;
   });
 
@@ -41,10 +41,10 @@ TEST_CASE("queue resource controller can send an event with content", "[QueueRes
   auto content = Content::makeUnique();
   auto contentPtr = content.get();
 
-  When(Method(messageQueue, addEvent)).Do([=](Event::Shared request) {
-    REQUIRE(request->getEventType() == "created");
-    REQUIRE(request->getResource() == "resource");
-    REQUIRE(request->getContent() == contentPtr);
+  When(Method(messageQueue, addEvent)).Do([=](Event::Shared event) {
+    REQUIRE(event->getEventType() == "created");
+    REQUIRE(event->getResource() == "resource");
+    REQUIRE(event->getContent() == contentPtr);
     return Status::OK;
   });
 
@@ -74,4 +74,14 @@ TEST_CASE("queue resource controller can process a request", "[QueueResourceCont
   REQUIRE(response != nullptr);
 
   Verify(Method(eventSink, onRequest));
+}
+
+TEST_CASE("queue resource controller cannot process a request for another resource", "[QueueResourceController]") {
+  Mock<IMessageQueue> messageQueue;
+  auto client = QueueResourceController::makeUnique("resource", messageQueue.get());
+
+  Request request("create", "sender", "another resource");
+  auto handler = client->getRequestHandler(request);
+
+  REQUIRE(handler == nullptr);
 }

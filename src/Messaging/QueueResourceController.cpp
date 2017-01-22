@@ -12,7 +12,7 @@ QueueResourceController::QueueResourceController(std::string resource, IMessageQ
 
 Core::Status
 QueueResourceController::sendEvent(std::string eventType) {
-  auto event = Event::makeShared(eventType, resource, nullptr);
+  auto event = Event::makeShared(eventType, resource);
   return messageQueue.addEvent(event);
 }
 
