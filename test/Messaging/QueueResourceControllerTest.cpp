@@ -1,4 +1,4 @@
-#include "Utils/Testing.hpp" 
+#include "Utils/Testing.hpp"
 
 #include "Messaging/IMessageQueue.hpp"
 
@@ -21,6 +21,22 @@ namespace {
 }
 
 TEST_CASE("queue resource controller can send an event", "[QueueResourceController]") {
+  Mock<IMessageQueue> messageQueue;
+
+  When(Method(messageQueue, addEvent)).Do([=](Event::Shared request) {
+    REQUIRE(request->getEventType() == "created");
+    REQUIRE(request->getResource() == "resource");
+    REQUIRE(request->getContent() == nullptr);
+    return Status::OK;
+  });
+
+  auto client = QueueResourceController::makeUnique("resource", messageQueue.get());
+  client->sendEvent("created");
+
+  Verify(Method(messageQueue, addEvent));
+}
+
+TEST_CASE("queue resource controller can send an event with content", "[QueueResourceController]") {
   Mock<IMessageQueue> messageQueue;
   auto content = Content::makeUnique();
   auto contentPtr = content.get();

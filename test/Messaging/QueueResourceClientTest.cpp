@@ -1,4 +1,4 @@
-#include "Utils/Testing.hpp" 
+#include "Utils/Testing.hpp"
 
 #include "Messaging/IMessageQueue.hpp"
 
@@ -22,6 +22,23 @@ namespace {
 }
 
 TEST_CASE("queue resource client can send a request", "[QueueResourceClient]") {
+  Mock<IMessageQueue> messageQueue;
+
+  When(Method(messageQueue, addRequest)).Do([=](Request::Shared request) {
+    REQUIRE(request->getRequestType() == "get");
+    REQUIRE(request->getSender() == "clientId");
+    REQUIRE(request->getResource() == "resource");
+    REQUIRE(request->getContent() == nullptr);
+    return Status::OK;
+  });
+
+  auto client = QueueResourceClient::makeUnique("clientId", "resource", messageQueue.get());
+  client->sendRequest("get");
+
+  Verify(Method(messageQueue, addRequest));
+}
+
+TEST_CASE("queue resource client can send a request with content", "[QueueResourceClient]") {
   Mock<IMessageQueue> messageQueue;
   auto content = Content::makeUnique();
   auto contentPtr = content.get();
