@@ -1,4 +1,4 @@
-#include "Utils/Testing.hpp" 
+#include "Utils/Testing.hpp"
 
 #include "Messaging/Event.hpp"
 
@@ -10,31 +10,30 @@ namespace {
     TYPE_INFO(Content, Core::IEntity, "content")
   };
 
-  Event::Unique createEvent(Core::IEntity::Shared content) {
-    return Event::makeUnique("created", "resource", content);
-  }
-
 }
 
 TEST_CASE("Event can be constructed", "[Event]") {
 
   auto content = Content::makeShared();
-  auto event = createEvent(content);
+  auto eventNoContent = Event::makeUnique("created", "resource");
+  auto eventWithContent = Event::makeUnique("created", "resource", content);
 
   SECTION("type is correct") {
-    REQUIRE(event->getTypeId() == "event");
+    REQUIRE(eventNoContent->getTypeId() == "event");
+    REQUIRE(eventWithContent->getTypeId() == "event");
   }
 
   SECTION("event type retained") {
-    REQUIRE(event->getEventType() == "created");
+    REQUIRE(eventNoContent->getEventType() == "created");
+    REQUIRE(eventWithContent->getEventType() == "created");
   }
 
   SECTION("resource retained") {
-    REQUIRE(event->getResource() == "resource");
+    REQUIRE(eventNoContent->getResource() == "resource");
+    REQUIRE(eventWithContent->getResource() == "resource");
   }
 
   SECTION("content retained") {
-    REQUIRE(event->getContent() == content.get());
+    REQUIRE(eventWithContent->getContent() == content.get());
   }
-
 }

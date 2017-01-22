@@ -46,6 +46,66 @@ TEST_CASE("can serialize a request", "[EventSerializer]") {
   Verify(Method(context, setEntity));
 }
 
+TEST_CASE("serialize fails", "[EventSerializer]") {
+  Mock<ISerializationContext> context;
+
+  SECTION("if setString fails for eventType") {
+    When(Method(context, setString).Using("eventType","get")).Do([](const std::string&, const std::string&) {
+      return Status(StatusCode::InternalServerError, "error");
+    });
+  }
+
+  SECTION("if setString fails for resource") {
+    When(Method(context, setString).Using("eventType","get")).Do([](const std::string&, const std::string&) {
+      return Status::OK;
+    });
+    When(Method(context, setString).Using("resource", "res")).Do([](const std::string&, const std::string&) {
+      return Status(StatusCode::InternalServerError, "error");
+    });
+  }
+  
+  SECTION("if setEntity fails") {
+    When(Method(context, setString).Using("eventType","get")).Do([](const std::string&, const std::string&) {
+      return Status::OK;
+    });
+    When(Method(context, setString).Using("resource", "res")).Do([](const std::string&, const std::string&) {
+      return Status::OK;
+    });
+    When(Method(context, setEntity)).Do([=](const std::string& key, const Core::IEntity& entity) {
+      return Status(StatusCode::InternalServerError, "error");
+    });
+  }
+
+  auto event = Event::makeUnique("get", "res", Content::makeShared());
+
+  ISerializer::Unique serializer = EventSerializer::makeUnique();
+  auto result = serializer->serialize(*event, context.get());
+
+  REQUIRE(result.isOk() == false);
+}
+
+/*
+TEST_CASE("serialize fails if setString for resource fails", "[EventSerializer]") {
+  Mock<ISerializationContext> context;
+
+  When(Method(context, setString).Using("eventType","get")).Do([](const std::string&, const std::string&) {
+    return Status::OK;
+  });
+
+  When(Method(context, setString).Using("resource", "res")).Do([](const std::string&, const std::string&) {
+    return Status(StatusCode::InternalServerError, "error");
+  });
+
+  ISerializer::Unique serializer = EventSerializer::makeUnique();
+
+  auto event = Event::makeUnique("get", "res");
+  auto result = serializer->serialize(*event, context.get());
+  REQUIRE(result.isOk() == false);
+
+  Verify(Method(context, setString));
+}
+*/
+
 TEST_CASE("event deserialization is not implemented", "[EventSerializer]") {
   IEntity::Unique entity;
   Mock<IDeserializationContext> context;
