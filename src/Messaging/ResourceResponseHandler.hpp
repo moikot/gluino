@@ -13,7 +13,7 @@
 
 namespace Messaging {
 
-  class ResourceResponseHandler {
+  struct ResourceResponseHandler {
     TYPE_PTRS_ABSTRACT(ResourceResponseHandler)
     virtual ~ResourceResponseHandler() = default;
     virtual std::string getRequestType() const = 0;

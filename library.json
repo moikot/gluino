@@ -13,9 +13,9 @@
     "url": "https://github.com/anisimovsergey/gluino.git"
   },
   "build": {
-    "flags": "-I src"
-  }
-  "version": "1.0.2",
+    "flags": "-Isrc"
+  },
+  "version": "1.0.3",
   "frameworks": "*",
   "platforms":"*"
 }
