@@ -12,7 +12,7 @@
     "type": "git",
     "url": "https://github.com/anisimovsergey/gluino.git"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "frameworks": "*",
   "platforms":"*"
 }
