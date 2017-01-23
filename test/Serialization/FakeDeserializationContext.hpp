@@ -14,7 +14,7 @@
 struct FakeDeserializationContext : public Serialization::IDeserializationContext {
   TYPE_PTRS(FakeDeserializationContext)
 
-  FakeDeserializationContext(IDeserializationContext& context) : context(context) {
+  explicit FakeDeserializationContext(IDeserializationContext& context) : context(context) {
   }
 
   virtual bool hasKey(const std::string& key) override {

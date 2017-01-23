@@ -74,7 +74,7 @@ TEST_CASE("request deserialization fails", "[RequestSerializer]") {
   Mock<IDeserializationContext> context;
 
   SECTION("if getString for requestType fails") {
-    When(Method(context, getString).Using("requestType", _)).Do([](const std::string&, std::string& value) {
+    When(Method(context, getString).Using("requestType", _)).Do([](const std::string&, std::string&) {
       return Status::NotImplemented;
     });
   }
@@ -84,7 +84,7 @@ TEST_CASE("request deserialization fails", "[RequestSerializer]") {
       value = "requestType";
       return Status::OK;
     });
-    When(Method(context, getString).Using("resource", _)).Do([](const std::string&, std::string& value) {
+    When(Method(context, getString).Using("resource", _)).Do([](const std::string&, std::string&) {
       return Status::NotImplemented;
     });
   }
@@ -99,7 +99,7 @@ TEST_CASE("request deserialization fails", "[RequestSerializer]") {
       return Status::OK;
     });
     When(Method(context, hasKey).Using("content")).Return(true);
-    When(Method(context, getEntity).Using("content", _)).Do([&](const std::string&, Core::IEntity::Unique& entity) {
+    When(Method(context, getEntity).Using("content", _)).Do([&](const std::string&, Core::IEntity::Unique&) {
       return Status::NotImplemented;
     });
   }

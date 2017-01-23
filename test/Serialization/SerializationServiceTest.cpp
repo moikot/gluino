@@ -69,7 +69,7 @@ TEST_CASE("entity serialization fails", "[SerializationService]") {
   SECTION("if createSerializationContext fails") {
     When(Method(factoryInstance, createSerializationContext)).Do([&](
       const ISerializationService&,
-      ISerializationContext::Unique& con) {
+      ISerializationContext::Unique&) {
       return Status::NotImplemented;
     });
     service->addSerializer(serializer);
@@ -159,14 +159,14 @@ TEST_CASE("entity deserialization fails", "[SerializationService]") {
     When(Method(factoryInstance, createDeserializationContext)).Do([&](
       const ISerializationService&,
       const std::string&,
-      IDeserializationContext::Unique& con) {
+      IDeserializationContext::Unique&) {
       return Status::NotImplemented;
     });
     service->addSerializer(serializer);
   }
 
   SECTION("if getString for _type fails") {
-    When(Method(context, getString)).Do([](const std::string&, std::string& value) {
+    When(Method(context, getString)).Do([](const std::string&, std::string&) {
       return Status::NotImplemented;
     });
     When(Method(factoryInstance, createDeserializationContext)).Do([&](

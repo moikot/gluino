@@ -21,7 +21,7 @@ namespace Messaging {
 class MessageQueue : public IMessageQueue {
   TYPE_PTRS(MessageQueue)
   public:
-    MessageQueue(Core::ILogger::Shared logger);
+    explicit MessageQueue(Core::ILogger::Shared logger);
 
     /**
       This method should be called for dispatching the messages.
@@ -41,32 +41,27 @@ class MessageQueue : public IMessageQueue {
     /**
       Creates a queue client.
     */
-    virtual QueueGenericClient::Shared createGenericClient(std::string clinetId) override;
-
-    /**
-      Removes the queue client.
-    */
-    virtual void removeGenericClient(QueueGenericClient::Shared client) override;
+    virtual QueueGenericClient::Shared createClient(std::string clinetId) override;
 
     /**
     Creates a queue client.
     */
-    virtual QueueResourceClient::Shared createResourceClient(std::string clinetId, std::string resource) override;
+    virtual QueueResourceClient::Shared createClient(std::string clinetId, std::string resource) override;
 
     /**
-    Removes the queue client.
+      Removes the queue client.
     */
-    virtual void removeResourceClient(QueueResourceClient::Shared client) override;
+    virtual void removeClient(QueueClient::Shared client) override;
 
     /**
       Creates a queue controller.
     */
-    virtual QueueResourceController::Shared createResourceController(std::string resource) override;
+    virtual QueueResourceController::Shared createController(std::string resource) override;
 
     /**
       Removes the queue controller.
     */
-    virtual void removeResourceController(QueueResourceController::Shared controller) override;
+    virtual void removeController(QueueResourceController::Shared controller) override;
 
   private:
     Core::ILogger::Shared logger;
