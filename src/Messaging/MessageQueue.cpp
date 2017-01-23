@@ -46,38 +46,33 @@ MessageQueue::addEvent(Event::Shared event) {
 }
 
 QueueGenericClient::Shared
-MessageQueue::createGenericClient(std::string clientId) {
+MessageQueue::createClient(std::string clientId) {
   auto client = QueueGenericClient::makeShared(clientId, *this);
   clients.push_back(client);
   return client;
 }
 
-void
-MessageQueue::removeGenericClient(QueueGenericClient::Shared client) {
-  clients.remove(client);
-}
-
 QueueResourceClient::Shared
-MessageQueue::createResourceClient(std::string clientId, std::string resource) {
+MessageQueue::createClient(std::string clientId, std::string resource) {
   auto client = QueueResourceClient::makeShared(clientId, resource, *this);
   clients.push_back(client);
   return client;
 }
 
 void
-MessageQueue::removeResourceClient(QueueResourceClient::Shared client) {
+MessageQueue::removeClient(QueueClient::Shared client) {
   clients.remove(client);
 }
 
 QueueResourceController::Shared
-MessageQueue::createResourceController(std::string resource) {
+MessageQueue::createController(std::string resource) {
   auto controller = QueueResourceController::makeShared(resource, *this);
   controllers.push_back(controller);
   return controller;
 }
 
 void
-MessageQueue::removeResourceController(QueueResourceController::Shared controller) {
+MessageQueue::removeController(QueueResourceController::Shared controller) {
   controllers.remove(controller);
 }
 

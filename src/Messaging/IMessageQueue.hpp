@@ -43,14 +43,7 @@ class IMessageQueue : public Core::IService {
       @param clientId The unique client identifier.
       @return The queue client.
     */
-    virtual QueueGenericClient::Shared createGenericClient(std::string clinetId) = 0;
-
-    /**
-    Removes a queue client from the queue.
-
-    @param client The client to remove.
-    */
-    virtual void removeGenericClient(QueueGenericClient::Shared client) = 0;
+    virtual QueueGenericClient::Shared createClient(std::string clinetId) = 0;
 
     /**
     Creates a new queue client for sending requests and getting responses.
@@ -59,14 +52,14 @@ class IMessageQueue : public Core::IService {
     @param clientId The resource identifier.
     @return The queue client.
     */
-    virtual QueueResourceClient::Shared createResourceClient(std::string clinetId, std::string resource) = 0;
+    virtual QueueResourceClient::Shared createClient(std::string clinetId, std::string resource) = 0;
 
     /**
-      Removes a queue client from the queue.
+    Removes a queue client from the queue.
 
-      @param client The client to remove.
+    @param client The client to remove.
     */
-    virtual void removeResourceClient(QueueResourceClient::Shared client) = 0;
+    virtual void removeClient(QueueClient::Shared client) = 0;
 
     /**
       Creates a new queue controller for receiving requests and sending responses.
@@ -74,14 +67,14 @@ class IMessageQueue : public Core::IService {
       @param clientId The unique controller identifier.
       @return The queue client.
     */
-    virtual QueueResourceController::Shared createResourceController(std::string resource) = 0;
+    virtual QueueResourceController::Shared createController(std::string resource) = 0;
 
     /**
       Removes a queue controller from the queue.
 
       @param client The client to remove.
     */
-    virtual void removeResourceController(QueueResourceController::Shared controller) = 0;
+    virtual void removeController(QueueResourceController::Shared controller) = 0;
 };
 
 }
