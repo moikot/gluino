@@ -186,12 +186,6 @@ TEST_CASE("message queue is failing to route a response to a deleted client", "[
   Mock<ILogger> loggerInstanse;
   Fake(Method(loggerInstanse, message));
   Fake(Method(loggerInstanse, error));
-  /*
-  When(Method(loggerInstanse, message)).AlwaysDo([](const std::string& message) {
-  });
-  When(Method(loggerInstanse, error)).Do([](const std::string& error) {
-  });
-  */
   
   auto logger = ILogger::Shared(&loggerInstanse.get(), [](...) {});
   auto queue = MessageQueue::makeUnique(logger);
