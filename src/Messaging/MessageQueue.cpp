@@ -125,18 +125,16 @@ MessageQueue::processEvent(const Event& event) {
 
 QueueClient::Shared
 MessageQueue::getClient(std::string clientId) {
-  QueueClient::Shared queueClient;
-  for(auto& client: clients) {
+  for (auto& client : clients) {
     if (client->getClientId() == clientId) {
-      queueClient = client;
-      break;
+      if (client.use_count() == 1) {
+        clients.remove(client);
+        return nullptr;
+      }
+      return client;
     }
   }
-  if (queueClient && queueClient.unique()) {
-    clients.remove(queueClient);
-    return nullptr;
-  }
-  return queueClient;
+  return nullptr;
 }
 
 RequestHandler
