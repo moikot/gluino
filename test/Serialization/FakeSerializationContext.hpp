@@ -14,7 +14,7 @@
 struct FakeSerializationContext : public Serialization::ISerializationContext {
   TYPE_PTRS(FakeSerializationContext)
 
-  FakeSerializationContext(ISerializationContext& context) : context(context) {
+  explicit FakeSerializationContext(ISerializationContext& context) : context(context) {
   }
 
   virtual std::string toString() const override {

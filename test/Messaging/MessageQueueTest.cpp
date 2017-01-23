@@ -262,7 +262,7 @@ TEST_CASE("message queue is failing to route a request if there is no controller
   Verify(Method(eventSink, onResponseStatus));
 }
 
-TEST_CASE("message queue is failing to route a request if the controller was deleted", "[MessageQueue]") {
+TEST_CASE("message queue is failing to route a request if the controller was implicitly deleted", "[MessageQueue]") {
   auto requestContent = Content::makeShared();
   auto responseContent = Content::makeUnique();
 
@@ -289,6 +289,35 @@ TEST_CASE("message queue is failing to route a request if the controller was del
   }
   
   client->sendRequest("get", requestContent);
+  queue->idle();
+
+  Verify(Method(eventSink, onResponseStatus));
+}
+
+TEST_CASE("message queue is failing to route a request if the controller was explicitly deleted", "[MessageQueue]") {
+  auto requestContent = Content::makeShared();
+  auto responseContent = Content::makeUnique();
+
+  Mock<EventSink> eventSink;
+
+  When(Method(eventSink, onResponseStatus)).Do([=](const Status& status) {
+    REQUIRE(status.getStatusCode() == StatusCode::NotFound);
+    return Status::OK;
+  });
+
+  Mock<ILogger> loggerInstanse;
+  Fake(Method(loggerInstanse, message));
+  Fake(Method(loggerInstanse, error));
+  auto logger = ILogger::Shared(&loggerInstanse.get(), [](...) {});
+
+  auto queue = MessageQueue::makeUnique(logger);
+
+  auto client = queue->createClient("clientId", "resource");
+  client->addOnResponse<Status>("get", std::bind(&EventSink::onResponseStatus, &eventSink.get(), _1));
+  auto controller = queue->createController("resource");
+
+  client->sendRequest("get", requestContent);
+  queue->removeController(controller);
   queue->idle();
 
   Verify(Method(eventSink, onResponseStatus));

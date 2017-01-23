@@ -21,7 +21,7 @@ namespace Messaging {
 class MessageQueue : public IMessageQueue {
   TYPE_PTRS(MessageQueue)
   public:
-    MessageQueue(Core::ILogger::Shared logger);
+    explicit MessageQueue(Core::ILogger::Shared logger);
 
     /**
       This method should be called for dispatching the messages.
