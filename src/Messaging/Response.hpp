@@ -17,22 +17,38 @@ namespace Messaging {
 class Response : public Core::IEntity {
   TYPE_INFO(Response, IEntity, "response")
   public:
-    Response(
-      std::string       requestType,
-      std::string       receiver,
-      std::string       resource,
-      IEntity::Shared   content
-    );
+	/**
+	Constructs a response.
+	*/
+    Response(std::string receiver, std::string requestType, 
+		std::string resource, IEntity::Unique content);
+
+	/**
+	Constructs a response based on anther one and replaces the receiver.
+	*/
+	Response(std::string receiver, Response&& response);
+
+	/**
+	Move semantic.
+	*/
+	Response(Response && op) = default;
+	Response& operator=(Response && op) = default;
+
+	/**
+	Copy semantic.
+	*/
+	Response(const Response& op) = delete;
+	Response& operator=(const Response& op) = delete;
+
+	/**
+	The response receiver.
+	*/
+	std::string getReceiver() const { return receiver; };
 
     /**
       The request type (create, get, update, delete etc.).
     */
     std::string getRequestType() const { return requestType; }
-
-    /**
-      The response receiver.
-    */
-    std::string getReceiver() const { return receiver; };
 
     /**
       The resource identifier.
@@ -45,10 +61,10 @@ class Response : public Core::IEntity {
     const IEntity& getContent() const { return *content; }
 
   private:
+	std::string     receiver;
     std::string     requestType;
-    std::string     receiver;
     std::string     resource;
-    IEntity::Shared content;
+    IEntity::Unique content;
 };
 
 }

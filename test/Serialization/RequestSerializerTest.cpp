@@ -19,8 +19,7 @@ namespace {
 }
 
 TEST_CASE("request serialization is not implemented", "[RequestSerializer]") {
-  auto content = Content::makeShared();
-  auto event = Request::makeUnique("get", "sender", "res", content);
+  auto event = Request::makeUnique("sender", "get", "res", Content::makeUnique());
 
   Mock<ISerializationContext> context;
   ISerializer::Unique serializer = RequestSerializer::makeUnique();

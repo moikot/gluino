@@ -22,14 +22,13 @@ class QueueGenericClient : public QueueClient {
     QueueGenericClient(std::string clientId, IMessageQueue& messageQueue);
 
     std::string getClientId() const override { return clientId; }
+
+	Core::Status sendRequest(std::string requestType,
+		std::string resource, Core::IEntity::Unique content
+	);
+
     void onResponse(const Response& response) const override;
     void onEvent(const Event& event) const override;
-
-    Core::Status sendRequest(
-      std::string requestType,
-      std::string resource,
-      Core::IEntity::Shared content
-    );
 
     void setOnResponse(std::function<void(const Response&)> onResponse) {
       onResponseHandler = onResponse;

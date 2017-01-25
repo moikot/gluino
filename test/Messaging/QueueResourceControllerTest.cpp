@@ -57,16 +57,17 @@ TEST_CASE("queue resource controller can send an event with content", "[QueueRes
 TEST_CASE("queue resource controller can process a request", "[QueueResourceController]") {
   Mock<IMessageQueue> messageQueue;
   auto client = QueueResourceController::makeUnique("resource", messageQueue.get());
-  auto content = Content::makeShared();
+  auto content = Content::makeUnique();
+  auto contentPtr = content.get();
 
   Mock<EventSink> eventSink;
   When(Method(eventSink, onRequest)).Do([=](const Content& param) {
-    REQUIRE(&param == content.get());
+    REQUIRE(&param == contentPtr);
     return Status::makeUnique(Status::OK);
   });
   client->addOnRequest<Content>("create", std::bind(&EventSink::onRequest, &eventSink.get(), _1));
 
-  Request request("create", "sender", "resource", content);
+  Request request("sender", "create", "resource", std::move(content));
   auto handler = client->getRequestHandler(request);
   REQUIRE(handler != nullptr);
 

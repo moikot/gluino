@@ -9,13 +9,13 @@ QueueResourceClient::QueueResourceClient(std::string clientId, std::string resou
 
 Core::Status
 QueueResourceClient::sendRequest(std::string requestType) {
-  auto request = Request::makeShared(requestType, clientId, resource);
+  auto request = Request::makeShared(clientId, requestType, resource);
   return messageQueue.addRequest(request);
 }
 
 Core::Status
-QueueResourceClient::sendRequest(std::string requestType, Core::IEntity::Shared content) {
-  auto request = Request::makeShared(requestType, clientId, resource, content);
+QueueResourceClient::sendRequest(std::string requestType, Core::IEntity::Unique content) {
+  auto request = Request::makeShared(clientId, requestType, resource, std::move(content));
   return messageQueue.addRequest(request);
 }
 

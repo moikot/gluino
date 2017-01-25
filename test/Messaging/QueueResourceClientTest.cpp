@@ -70,7 +70,7 @@ TEST_CASE("queue resource client can process a response", "[QueueResourceClient]
   });
   client->addOnResponse<Status>("get", std::bind(&EventSink::onResponse, &eventSink.get(), _1));
 
-  Response response("get", "receiver", "resource", std::move(result));
+  Response response("receiver", "get", "resource", std::move(result));
   client->onResponse(response);
 
   Verify(Method(eventSink, onResponse));
@@ -79,16 +79,17 @@ TEST_CASE("queue resource client can process a response", "[QueueResourceClient]
 TEST_CASE("queue resource client can process an event", "[QueueResourceClient]") {
   Mock<IMessageQueue> messageQueue;
   auto client = QueueResourceClient::makeUnique("id", "resource", messageQueue.get());
-  auto content = Content::makeShared();
+  auto content = Content::makeUnique();
+  auto contentPtr = content.get();
 
   Mock<EventSink> eventSink;
   When(Method(eventSink, onEvent)).Do([=](const Content& param) {
-    REQUIRE(&param == content.get());
+    REQUIRE(&param == contentPtr);
     return Status::OK;
   });
   client->addOnEvent<Content>("created", std::bind(&EventSink::onEvent, &eventSink.get(), _1));
 
-  Event event("created", "resource", content);
+  Event event("created", "resource", std::move(content));
   client->onEvent(event);
 
   Verify(Method(eventSink, onEvent));

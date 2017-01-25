@@ -12,27 +12,24 @@ namespace {
     TYPE_INFO(Content, Core::IEntity, "content")
   };
 
-  Response::Unique createResponse(Core::IEntity::Shared content) {
-    return Response::makeUnique("get", "receiver", "resource", content);
-  }
-
 }
 
 TEST_CASE("Response can be constructed", "[Response]") {
+  auto content = Content::makeUnique();
+  auto contentPtr = content.get();
 
-  auto content = Content::makeShared();
-  auto response = createResponse(content);
+  auto response = Response::makeUnique("receiver", "get", "resource", std::move(content));
 
   SECTION("type is correct") {
     REQUIRE(response->getTypeId() == "response");
   }
 
-  SECTION("request type retained") {
-    REQUIRE(response->getRequestType() == "get");
+  SECTION("receiver retained") {
+	  REQUIRE(response->getReceiver() == "receiver");
   }
 
-  SECTION("receiver retained") {
-    REQUIRE(response->getReceiver() == "receiver");
+  SECTION("request type retained") {
+    REQUIRE(response->getRequestType() == "get");
   }
 
   SECTION("resource retained") {
@@ -40,7 +37,6 @@ TEST_CASE("Response can be constructed", "[Response]") {
   }
 
   SECTION("content retained") {
-    REQUIRE(&response->getContent() == content.get());
+    REQUIRE(&response->getContent() == contentPtr);
   }
-
 }

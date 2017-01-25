@@ -13,10 +13,11 @@ namespace {
 }
 
 TEST_CASE("Event can be constructed", "[Event]") {
+  auto content = Content::makeUnique();
+  auto contentPtr = content.get();
 
-  auto content = Content::makeShared();
   auto eventNoContent = Event::makeUnique("created", "resource");
-  auto eventWithContent = Event::makeUnique("created", "resource", content);
+  auto eventWithContent = Event::makeUnique("created", "resource", std::move(content));
 
   SECTION("type is correct") {
     REQUIRE(eventNoContent->getTypeId() == "event");
@@ -34,6 +35,6 @@ TEST_CASE("Event can be constructed", "[Event]") {
   }
 
   SECTION("content retained") {
-    REQUIRE(eventWithContent->getContent() == content.get());
+    REQUIRE(eventWithContent->getContent() == contentPtr);
   }
 }

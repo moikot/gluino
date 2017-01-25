@@ -2,14 +2,13 @@
 
 using namespace Messaging;
 
-Response::Response(
-  std::string requestType,
-  std::string receiver,
-  std::string resource,
-  IEntity::Shared content
-) :
-  requestType(requestType),
-  receiver(receiver),
-  resource(resource),
-  content(content) {
+Response::Response(std::string receiver, std::string requestType,
+  std::string resource, IEntity::Unique content) :
+  receiver(receiver), requestType(requestType),
+  resource(resource), content(std::move(content)) {
+}
+
+Response::Response(std::string receiver, Response&& response) : 
+	Response(std::move(response)) {
+	this->receiver = receiver;
 }
