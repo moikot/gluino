@@ -18,8 +18,10 @@ namespace {
 }
 
 TEST_CASE("can serialize a request", "[EventSerializer]") {
-  auto content = Content::makeShared();
-  auto event = Event::makeUnique("get", "res", content);
+  auto content = Content::makeUnique();
+  auto contentPtr = content.get();
+
+  auto event = Event::makeUnique("get", "res", std::move(content));
 
   Mock<ISerializationContext> context;
 
@@ -33,7 +35,7 @@ TEST_CASE("can serialize a request", "[EventSerializer]") {
 
   When(Method(context, setEntity)).Do([=](const std::string& key, const Core::IEntity& entity) {
     REQUIRE(key == "content");
-    REQUIRE(&entity == content.get());
+    REQUIRE(&entity == contentPtr);
     return Status::OK;
   });
 
@@ -76,35 +78,13 @@ TEST_CASE("event serialization fails", "[EventSerializer]") {
     );
   }
 
-  auto event = Event::makeUnique("get", "res", Content::makeShared());
+  auto event = Event::makeUnique("get", "res", Content::makeUnique());
 
   ISerializer::Unique serializer = EventSerializer::makeUnique();
   auto result = serializer->serialize(*event, context.get());
 
   REQUIRE(result.isOk() == false);
 }
-
-/*
-TEST_CASE("serialize fails if setString for resource fails", "[EventSerializer]") {
-  Mock<ISerializationContext> context;
-
-  When(Method(context, setString).Using("eventType","get")).Do([](const std::string&, const std::string&) {
-    return Status::OK;
-  });
-
-  When(Method(context, setString).Using("resource", "res")).Do([](const std::string&, const std::string&) {
-    return Status(StatusCode::InternalServerError, "error");
-  });
-
-  ISerializer::Unique serializer = EventSerializer::makeUnique();
-
-  auto event = Event::makeUnique("get", "res");
-  auto result = serializer->serialize(*event, context.get());
-  REQUIRE(result.isOk() == false);
-
-  Verify(Method(context, setString));
-}
-*/
 
 TEST_CASE("event deserialization is not implemented", "[EventSerializer]") {
   IEntity::Unique entity;

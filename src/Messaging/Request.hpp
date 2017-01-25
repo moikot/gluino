@@ -17,20 +17,32 @@ namespace Messaging {
 class Request : public Core::IEntity {
   TYPE_INFO(Request, IEntity, "request")
   public:
-    Request(std::string requestType, std::string sender,
+  	/**
+  	Constructs a request.
+  	*/
+    Request(std::string sender, std::string requestType,
       std::string resource);
-    Request(std::string requestType, std::string sender,
-      std::string resource, IEntity::Shared content);
+
+  	/**
+  	Constructs a request.
+  	*/
+    Request(std::string sender, std::string requestType,
+      std::string resource, IEntity::Unique content);
+
+  	/**
+  	The request sender.
+  	*/
+  	std::string getSender() const { return sender; };
+
+	/**
+	Set the request sender.
+	*/
+	void setSender(std::string value) { sender = value; };
 
     /**
       The request type (create, get, update, delete etc.).
     */
     std::string getRequestType() const { return requestType; }
-
-    /**
-      The request sender.
-    */
-    std::string getSender() const { return sender; };
 
     /**
       The resource.
@@ -43,10 +55,10 @@ class Request : public Core::IEntity {
     const IEntity* getContent() const { return content.get(); };
 
   private:
-    std::string     requestType;
     std::string     sender;
+    std::string     requestType;
     std::string     resource;
-    IEntity::Shared content;
+    IEntity::Unique content;
 };
 
 }

@@ -35,6 +35,6 @@ RequestSerializer::deserialize(
       return result;
   }
 
-  request = Request::makeUnique(requestType, "", resource, std::move(content));
+  request = Request::makeUnique("", requestType, resource, std::move(content));
   return Status::OK;
 }

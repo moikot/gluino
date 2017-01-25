@@ -26,13 +26,14 @@ namespace {
 }
 
 TEST_CASE("message queue is routing an event to a generic client", "[MessageQueue]") {
-  auto content = Content::makeShared();
+  auto content = Content::makeUnique();
+  auto contentPtr = content.get();
 
   Mock<EventSink> eventSink;
   When(Method(eventSink, onEvent)).Do([=](const Event& event) {
     REQUIRE(event.getEventType() == "created");
     REQUIRE(event.getResource() == "resource");
-    REQUIRE(event.getContent() == content.get());
+    REQUIRE(event.getContent() == contentPtr);
     return Status::OK;
   });
 
@@ -45,7 +46,7 @@ TEST_CASE("message queue is routing an event to a generic client", "[MessageQueu
   auto client = queue->createClient("clientId");
   client->setOnEvent(std::bind(&EventSink::onEvent, &eventSink.get(), _1));
 
-  auto event = Event::makeShared("created", "resource", content);
+  auto event = Event::makeShared("created", "resource", std::move(content));
   queue->addEvent(event);
   queue->idle();
 
@@ -71,13 +72,14 @@ TEST_CASE("message queue is not routing an event to a deleted generic client", "
 }
 
 TEST_CASE("message queue is routing a response to a generic client", "[MessageQueue]") {
-  auto requestContent = Content::makeShared();
+  auto requestContent = Content::makeUnique();
+  auto requestContentPtr = requestContent.get();
   auto responseContent = Content::makeUnique();
   auto responseContentPtr = responseContent.get();
 
   Mock<EventSink> eventSink;
   When(Method(eventSink, onRequest)).Do([&](const Content& param) {
-    REQUIRE(&param == requestContent.get());
+    REQUIRE(&param == requestContentPtr);
     return std::move(responseContent);
   });
 
@@ -104,7 +106,7 @@ TEST_CASE("message queue is routing a response to a generic client", "[MessageQu
 
   controller->addOnRequest<Content>("get", std::bind(&EventSink::onRequest, &eventSink.get(), _1));
 
-  client->sendRequest("get", "resource", requestContent);
+  client->sendRequest("get", "resource", std::move(requestContent));
   queue->idle();
 
   Verify(Method(eventSink, onRequest));
@@ -112,11 +114,12 @@ TEST_CASE("message queue is routing a response to a generic client", "[MessageQu
 }
 
 TEST_CASE("message queue is routing an event to a resource client", "[MessageQueue]") {
-  auto content = Content::makeShared();
+  auto content = Content::makeUnique();
+  auto contentPtr = content.get();
 
   Mock<EventSink> eventSink;
   When(Method(eventSink, onEventContent)).Do([=](const Content& param) {
-    REQUIRE(&param == content.get());
+    REQUIRE(&param == contentPtr);
     return Status::OK;
   });
 
@@ -129,7 +132,7 @@ TEST_CASE("message queue is routing an event to a resource client", "[MessageQue
   auto client = queue->createClient("clientId", "resource");
   client->addOnEvent<Content>("created", std::bind(&EventSink::onEventContent, &eventSink.get(), _1));
 
-  auto event = Event::makeShared("created", "resource", content);
+  auto event = Event::makeShared("created", "resource", std::move(content));
   queue->addEvent(event);
   queue->idle();
 
@@ -137,13 +140,14 @@ TEST_CASE("message queue is routing an event to a resource client", "[MessageQue
 }
 
 TEST_CASE("message queue is routing a response to a resource client", "[MessageQueue]") {
-  auto requestContent = Content::makeShared();
+  auto requestContent = Content::makeUnique();
+  auto requestContentPtr = requestContent.get();
   auto responseContent = Content::makeUnique();
   auto responseContentPtr = responseContent.get();
 
   Mock<EventSink> eventSink;
   When(Method(eventSink, onRequest)).Do([&](const Content& param) {
-    REQUIRE(&param == requestContent.get());
+    REQUIRE(&param == requestContentPtr);
     return std::move(responseContent);
   });
 
@@ -167,15 +171,15 @@ TEST_CASE("message queue is routing a response to a resource client", "[MessageQ
 
   controller->addOnRequest<Content>("get", std::bind(&EventSink::onRequest, &eventSink.get(), _1));
 
-  client->sendRequest("get", requestContent);
+  client->sendRequest("get", std::move(requestContent));
   queue->idle();
 
   Verify(Method(eventSink, onRequest));
   Verify(Method(eventSink, onResponseContent));
 }
 
-TEST_CASE("message queue is failing to route a response to an impicitly deleted client", "[MessageQueue]") {
-  auto requestContent = Content::makeShared();
+TEST_CASE("message queue is failing to route a response to an implicitly deleted client", "[MessageQueue]") {
+  auto requestContent = Content::makeUnique();
   auto responseContent = Content::makeUnique();
 
   Mock<EventSink> eventSink;
@@ -199,7 +203,7 @@ TEST_CASE("message queue is failing to route a response to an impicitly deleted 
   auto controller = queue->createController("resource");
   controller->addOnRequest<Content>("get", std::bind(&EventSink::onRequest, &eventSink.get(), _1));
 
-  clientPtr->sendRequest("get", requestContent);
+  clientPtr->sendRequest("get", std::move(requestContent));
   queue->idle();
 
   Verify(Method(eventSink, onRequest));
@@ -208,7 +212,7 @@ TEST_CASE("message queue is failing to route a response to an impicitly deleted 
 }
 
 TEST_CASE("message queue is failing to route a response to an explicitly deleted client", "[MessageQueue]") {
-  auto requestContent = Content::makeShared();
+  auto requestContent = Content::makeUnique();
   auto responseContent = Content::makeUnique();
 
   Mock<EventSink> eventSink;
@@ -227,7 +231,7 @@ TEST_CASE("message queue is failing to route a response to an explicitly deleted
   auto controller = queue->createController("resource");
   controller->addOnRequest<Content>("get", std::bind(&EventSink::onRequest, &eventSink.get(), _1));
 
-  client->sendRequest("get", requestContent);
+  client->sendRequest("get", std::move(requestContent));
   queue->removeClient(client);
   queue->idle();
 
@@ -237,7 +241,7 @@ TEST_CASE("message queue is failing to route a response to an explicitly deleted
 }
 
 TEST_CASE("message queue is failing to route a request if there is no controller to handle it", "[MessageQueue]") {
-  auto requestContent = Content::makeShared();
+  auto requestContent = Content::makeUnique();
 
   Mock<EventSink> eventSink;
 
@@ -256,14 +260,14 @@ TEST_CASE("message queue is failing to route a request if there is no controller
   auto client = queue->createClient("clientId", "resource");
   client->addOnResponse<Status>("get", std::bind(&EventSink::onResponseStatus, &eventSink.get(), _1));
 
-  client->sendRequest("get", requestContent);
+  client->sendRequest("get", std::move(requestContent));
   queue->idle();
 
   Verify(Method(eventSink, onResponseStatus));
 }
 
 TEST_CASE("message queue is failing to route a request if the controller was implicitly deleted", "[MessageQueue]") {
-  auto requestContent = Content::makeShared();
+  auto requestContent = Content::makeUnique();
   auto responseContent = Content::makeUnique();
 
   Mock<EventSink> eventSink;
@@ -288,14 +292,14 @@ TEST_CASE("message queue is failing to route a request if the controller was imp
     controller->addOnRequest<Content>("get", std::bind(&EventSink::onRequest, &eventSink.get(), _1));
   }
   
-  client->sendRequest("get", requestContent);
+  client->sendRequest("get", std::move(requestContent));
   queue->idle();
 
   Verify(Method(eventSink, onResponseStatus));
 }
 
 TEST_CASE("message queue is failing to route a request if the controller was explicitly deleted", "[MessageQueue]") {
-  auto requestContent = Content::makeShared();
+  auto requestContent = Content::makeUnique();
   auto responseContent = Content::makeUnique();
 
   Mock<EventSink> eventSink;
@@ -316,7 +320,7 @@ TEST_CASE("message queue is failing to route a request if the controller was exp
   client->addOnResponse<Status>("get", std::bind(&EventSink::onResponseStatus, &eventSink.get(), _1));
   auto controller = queue->createController("resource");
 
-  client->sendRequest("get", requestContent);
+  client->sendRequest("get", std::move(requestContent));
   queue->removeController(controller);
   queue->idle();
 

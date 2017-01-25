@@ -17,8 +17,15 @@ namespace Messaging {
 class Event : public Core::IEntity {
   TYPE_INFO(Event, IEntity, "event")
   public:
+  	/**
+  	Constructs an event.
+  	*/
     Event(std::string eventType, std::string resource);
-    Event(std::string eventType,std::string resource, IEntity::Shared content);
+
+  	/**
+  	Constructs an event.
+  	*/
+    Event(std::string eventType, std::string resource, IEntity::Unique content);
 
     /**
       The event type (created, updated, deleted etc.).
@@ -38,7 +45,7 @@ class Event : public Core::IEntity {
   private:
     std::string     eventType;
     std::string     resource;
-    IEntity::Shared content;
+    IEntity::Unique content;
 };
 
 }

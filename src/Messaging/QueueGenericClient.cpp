@@ -8,6 +8,12 @@ QueueGenericClient::QueueGenericClient(std::string clientId, IMessageQueue& mess
   clientId(clientId), messageQueue(messageQueue) {
 }
 
+Status
+QueueGenericClient::sendRequest(std::string requestType, std::string resource, IEntity::Unique content) {
+	auto request = Request::makeShared(clientId, requestType, resource, std::move(content));
+	return messageQueue.addRequest(request);
+}
+
 void
 QueueGenericClient::onResponse(const Response& response) const {
   if (onResponseHandler) {
@@ -20,10 +26,4 @@ QueueGenericClient::onEvent(const Event& event) const {
   if (onEventHandler) {
     onEventHandler(event);
   }
-}
-
-Status
-QueueGenericClient::sendRequest(std::string requestType, std::string resource, IEntity::Shared content) {
-  auto request = Request::makeShared(requestType, clientId, resource, content);
-  return messageQueue.addRequest(request);
 }

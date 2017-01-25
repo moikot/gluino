@@ -18,8 +18,10 @@ namespace {
 }
 
 TEST_CASE("can serialize a response", "[ResponseSerializer]") {
-  auto content = Content::makeShared();
-  auto response = Response::makeUnique("get", "rec", "res", content);
+  auto content = Content::makeUnique();
+  auto contentPtr = content.get();
+
+  auto response = Response::makeUnique("rec", "get", "res", std::move(content));
 
   Mock<ISerializationContext> context;
 
@@ -33,7 +35,7 @@ TEST_CASE("can serialize a response", "[ResponseSerializer]") {
 
   When(Method(context, setEntity)).Do([=](const std::string& key, const Core::IEntity& entity) {
     REQUIRE(key == "content");
-    REQUIRE(&entity == content.get());
+    REQUIRE(&entity == contentPtr);
     return Status::OK;
   });
 
@@ -76,8 +78,7 @@ TEST_CASE("response serialization fails", "[ResponseSerializer]") {
     );
   }
 
-  auto content = Content::makeShared();
-  auto response = Response::makeUnique("get", "rec", "res", content);
+  auto response = Response::makeUnique("rec", "get", "res", Content::makeUnique());
 
   ISerializer::Unique serializer = ResponseSerializer::makeUnique();
   auto result = serializer->serialize(*response, context.get());

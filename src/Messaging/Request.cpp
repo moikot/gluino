@@ -2,14 +2,14 @@
 
 using namespace Messaging;
 
-Request::Request(std::string requestType, std::string sender,
+Request::Request(std::string sender, std::string requestType,
   std::string resource) :
-  requestType(requestType), sender(sender),
+  sender(sender), requestType(requestType),
   resource(resource) {
 }
 
-Request::Request(std::string requestType, std::string sender,
-  std::string resource, IEntity::Shared content) :
-  requestType(requestType), sender(sender),
-  resource(resource), content(content) {
+Request::Request(std::string sender, std::string requestType,
+  std::string resource, IEntity::Unique content) :
+  sender(sender), requestType(requestType),
+  resource(resource), content(std::move(content)) {
 }

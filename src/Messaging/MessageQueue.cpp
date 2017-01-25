@@ -150,8 +150,8 @@ MessageQueue::getRequestHandler(const Request& request) {
 void
 MessageQueue::sendResponseFor(const Request& request, IEntity::Unique result) {
   auto response = Response::makeShared(
+		  request.getSender(),
           request.getRequestType(),
-          request.getSender(),
           request.getResource(),
           std::move(result)
          );

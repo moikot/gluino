@@ -43,21 +43,21 @@ TEST_CASE("queue generic client can send a request", "[QueueGenericClient]") {
 TEST_CASE("queue generic client can process a response", "[QueueGenericClient]") {
   Mock<IMessageQueue> messageQueue;
   auto client = QueueGenericClient::makeUnique("id", messageQueue.get());
-  auto result = Status::makeShared(Status::OK);
-  auto resultPtr = result.get();
+  auto content = Status::makeUnique(Status::OK);
+  auto contentPtr = content.get();
 
   Mock<EventSink> eventSink;
   When(Method(eventSink, onResponse)).Do([=](const Response& response) {
     REQUIRE(response.getRequestType() == "get");
     REQUIRE(response.getReceiver() == "receiver");
     REQUIRE(response.getResource() == "resource");
-    REQUIRE(&response.getContent() == resultPtr);
+    REQUIRE(&response.getContent() == contentPtr);
     return Status::OK;
   });
 
   client->setOnResponse(std::bind(&EventSink::onResponse, &eventSink.get(), _1));
 
-  Response response("get", "receiver", "resource", std::move(result));
+  Response response("receiver", "get", "resource", std::move(content));
   client->onResponse(response);
 
   Verify(Method(eventSink, onResponse));
@@ -65,20 +65,21 @@ TEST_CASE("queue generic client can process a response", "[QueueGenericClient]")
 
 TEST_CASE("queue generic client can process an event", "[QueueGenericClient]") {
   Mock<IMessageQueue> messageQueue;
-  auto client = QueueGenericClient::makeUnique("id", messageQueue.get());
-  auto content = Content::makeShared();
+  auto client = QueueGenericClient::makeShared("id", messageQueue.get());
+  auto content = Content::makeUnique();
+  auto contentPtr = content.get();
 
   Mock<EventSink> eventSink;
   When(Method(eventSink, onEvent)).Do([=](const Event& event) {
     REQUIRE(event.getEventType() == "created");
     REQUIRE(event.getResource() == "resource");
-    REQUIRE(event.getContent() == content.get());
+    REQUIRE(event.getContent() == contentPtr);
     return Status::OK;
   });
 
   client->setOnEvent(std::bind(&EventSink::onEvent, &eventSink.get(), _1));
 
-  Event event("created", "resource", content);
+  Event event("created", "resource", std::move(content));
   client->onEvent(event);
 
   Verify(Method(eventSink, onEvent));
