@@ -25,7 +25,7 @@ TEST_CASE("Response can be constructed", "[Response]") {
   }
 
   SECTION("receiver retained") {
-	  REQUIRE(response->getReceiver() == "receiver");
+	REQUIRE(response->getReceiver() == "receiver");
   }
 
   SECTION("request type retained") {
@@ -39,4 +39,12 @@ TEST_CASE("Response can be constructed", "[Response]") {
   SECTION("content retained") {
     REQUIRE(&response->getContent() == contentPtr);
   }
+}
+
+TEST_CASE("Receiver can be changed", "[Request]") {
+	auto response = Response::makeUnique("receiver", "get", "resource", Content::makeUnique());
+
+	response->setReceiver("new_receiver");
+
+	REQUIRE(response->getReceiver() == "new_receiver");
 }

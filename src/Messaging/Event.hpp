@@ -25,7 +25,7 @@ class Event : public Core::IEntity {
   	/**
   	Constructs an event.
   	*/
-    Event(std::string eventType, std::string resource, IEntity::Shared content);
+    Event(std::string eventType, std::string resource, IEntity::Unique content);
 
     /**
       The event type (created, updated, deleted etc.).
@@ -45,7 +45,7 @@ class Event : public Core::IEntity {
   private:
     std::string     eventType;
     std::string     resource;
-    IEntity::Shared content;
+    IEntity::Unique content;
 };
 
 }

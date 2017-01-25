@@ -27,17 +27,17 @@ class Request : public Core::IEntity {
   	Constructs a request.
   	*/
     Request(std::string sender, std::string requestType,
-      std::string resource, IEntity::Shared content);
-
-  	/**
-  	Constructs a request based on anther one and replaces the receiver.
-  	*/
-  	Request(std::string sender, Request&& request);
+      std::string resource, IEntity::Unique content);
 
   	/**
   	The request sender.
   	*/
   	std::string getSender() const { return sender; };
+
+	/**
+	Set the request sender.
+	*/
+	void setSender(std::string value) { sender = value; };
 
     /**
       The request type (create, get, update, delete etc.).
@@ -58,7 +58,7 @@ class Request : public Core::IEntity {
     std::string     sender;
     std::string     requestType;
     std::string     resource;
-    IEntity::Shared content;
+    IEntity::Unique content;
 };
 
 }

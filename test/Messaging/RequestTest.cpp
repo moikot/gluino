@@ -44,15 +44,12 @@ TEST_CASE("Request can be constructed", "[Request]") {
 		REQUIRE(requestNoContent->getContent() == nullptr);
 		REQUIRE(requestWithContent->getContent() == contentPtr);
 	}
+}
 
-	SECTION("based on another request with the sender replaced") {
-		auto newRequest = Request::makeUnique("new_sender", std::move(*requestWithContent));
-		REQUIRE(newRequest->getSender() == "new_sender");
-		REQUIRE(newRequest->getRequestType() == "get");
-		REQUIRE(newRequest->getResource() == "resource");
+TEST_CASE("Sender can be changed", "[Request]") {
+	auto request = Request::makeUnique("sender", "get", "resource");
 
-		// Content moved
-		REQUIRE(newRequest->getContent() == contentPtr);
-		REQUIRE(requestWithContent->getContent() == nullptr);
-	}
+	request->setSender("new_sender");
+
+	REQUIRE(request->getSender() == "new_sender");
 }

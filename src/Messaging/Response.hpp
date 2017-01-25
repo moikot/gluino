@@ -24,26 +24,14 @@ class Response : public Core::IEntity {
 		std::string resource, IEntity::Unique content);
 
 	/**
-	Constructs a response based on anther one and replaces the receiver.
-	*/
-	Response(std::string receiver, Response&& response);
-
-	/**
-	Move semantic.
-	*/
-	Response(Response && op) = default;
-	Response& operator=(Response && op) = default;
-
-	/**
-	Copy semantic.
-	*/
-	Response(const Response& op) = delete;
-	Response& operator=(const Response& op) = delete;
-
-	/**
 	The response receiver.
 	*/
 	std::string getReceiver() const { return receiver; };
+
+	/**
+	Set the response receiver.
+	*/
+	void setReceiver(std::string value) { receiver = value; };
 
     /**
       The request type (create, get, update, delete etc.).

@@ -7,8 +7,3 @@ Response::Response(std::string receiver, std::string requestType,
   receiver(receiver), requestType(requestType),
   resource(resource), content(std::move(content)) {
 }
-
-Response::Response(std::string receiver, Response&& response) : 
-	Response(std::move(response)) {
-	this->receiver = receiver;
-}
