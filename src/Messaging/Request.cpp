@@ -9,12 +9,12 @@ Request::Request(std::string sender, std::string requestType,
 }
 
 Request::Request(std::string sender, std::string requestType,
-  std::string resource, IEntity::Unique content) :
+  std::string resource, IEntity::Shared content) :
   sender(sender), requestType(requestType),
-  resource(resource), content(std::move(content)) {
+  resource(resource), content(content) {
 }
 
-Request::Request(std::string sender, Request&& request) : 
+Request::Request(std::string sender, Request&& request) :
 	Request(std::move(request)) {
 	this->sender = sender;
 }

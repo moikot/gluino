@@ -17,39 +17,27 @@ namespace Messaging {
 class Request : public Core::IEntity {
   TYPE_INFO(Request, IEntity, "request")
   public:
-	/**
-	Constructs a request.
-	*/
+  	/**
+  	Constructs a request.
+  	*/
     Request(std::string sender, std::string requestType,
       std::string resource);
 
-	/**
-	Constructs a request.
-	*/
+  	/**
+  	Constructs a request.
+  	*/
     Request(std::string sender, std::string requestType,
-      std::string resource, IEntity::Unique content);
+      std::string resource, IEntity::Shared content);
 
-	/**
-	Constructs a response based on anther one and replaces the receiver.
-	*/
-	Request(std::string sender, Request&& request);
+  	/**
+  	Constructs a request based on anther one and replaces the receiver.
+  	*/
+  	Request(std::string sender, Request&& request);
 
-	/**
-	Move semantic.
-	*/
-	Request(Request && op) = default;
-	Request& operator=(Request && op) = default;
-
-	/**
-	Copy semantic.
-	*/
-	Request(const Request& op) = delete;
-	Request& operator=(const Request& op) = delete;
-
-	/**
-	The request sender.
-	*/
-	std::string getSender() const { return sender; };
+  	/**
+  	The request sender.
+  	*/
+  	std::string getSender() const { return sender; };
 
     /**
       The request type (create, get, update, delete etc.).
@@ -67,10 +55,10 @@ class Request : public Core::IEntity {
     const IEntity* getContent() const { return content.get(); };
 
   private:
-	std::string     sender;
+    std::string     sender;
     std::string     requestType;
     std::string     resource;
-    IEntity::Unique content;
+    IEntity::Shared content;
 };
 
 }
