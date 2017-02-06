@@ -65,7 +65,7 @@ TEST_CASE("queue resource controller can process a request", "[QueueResourceCont
     REQUIRE(&param == contentPtr);
     return Status::makeUnique(Status::OK);
   });
-  client->addOnRequest<Content>("create", std::bind(&EventSink::onRequest, &eventSink.get(), _1));
+  client->addOnRequest("create", [&](const Content& c) { return eventSink.get().onRequest(c); });
 
   Request request("sender", "create", "resource", std::move(content));
   auto handler = client->getRequestHandler(request);

@@ -21,12 +21,16 @@ namespace Messaging {
     virtual Core::IEntity::Unique makeRequest(const Request& request) const = 0;
   };
 
-  class ResourceRequestHandlerVoid : public ResourceRequestHandler {
-    TYPE_PTRS(ResourceRequestHandlerVoid)
+  template <typename T, class = void>
+  class ResourceRequestHandlerImpl;
+
+  template<typename T>
+  class ResourceRequestHandlerImpl<T,
+    typename std::enable_if<Core::function_traits<T>::value == 0>::type> : public ResourceRequestHandler {
     public:
-      ResourceRequestHandlerVoid(
+      ResourceRequestHandlerImpl(
         std::string requestType,
-        std::function<Core::IEntity::Unique()> onRequest) :
+        T onRequest) :
         requestType(requestType),
         onRequest(onRequest) {
       }
@@ -40,21 +44,23 @@ namespace Messaging {
       }
 
       virtual Core::IEntity::Unique makeRequest(const Request&) const override {
-          return onRequest();
+         return onRequest();
       }
 
     private:
       const std::string requestType;
-      const std::function<Core::IEntity::Unique()> onRequest;
+      const T onRequest;
   };
 
-  template<class T>
-  class ResourceRequestHandlerTyped : public ResourceRequestHandler {
-    TYPE_PTRS(ResourceRequestHandlerTyped)
-    public:
-      ResourceRequestHandlerTyped(
+  template<typename T>
+  class ResourceRequestHandlerImpl<T,
+    typename std::enable_if<Core::function_traits<T>::value == 1>::type> : public ResourceRequestHandler {
+    typedef typename Core::function_traits<T> traits;
+
+  public:
+      ResourceRequestHandlerImpl(
         std::string requestType,
-        std::function<Core::IEntity::Unique(const T&)> onRequest) :
+        T onRequest) :
         requestType(requestType),
         onRequest(onRequest) {
       }
@@ -64,16 +70,16 @@ namespace Messaging {
       }
 
       virtual std::string getContentType() const override {
-        return T::TypeId();
+        return Core::base_type<typename traits::template arg<0>::type>::TypeId();
       }
 
       virtual Core::IEntity::Unique makeRequest(const Request& request) const override {
-        return onRequest(static_cast<const T&>(*request.getContent()));
+        return onRequest(static_cast<typename traits::template arg<0>::type>(*request.getContent()));
       }
 
     private:
       const std::string requestType;
-      const std::function<Core::IEntity::Unique(const T&)> onRequest;
+      const T onRequest;
   };
 
 }

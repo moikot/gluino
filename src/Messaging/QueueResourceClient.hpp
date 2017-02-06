@@ -11,6 +11,7 @@
 #include "ResourceResponseHandler.hpp"
 #include "ResourceEventHandler.hpp"
 #include "Core/Status.hpp"
+#include "Core/Memory.hpp"
 
 #include <vector>
 
@@ -30,18 +31,14 @@ class QueueResourceClient : public QueueClient {
     Core::Status sendRequest(std::string requestType);
     Core::Status sendRequest(std::string requestType, Core::IEntity::Unique content);
 
-    template<class T>
-    void addOnResponse(std::string requestType, std::function<void(const T&)> onResponse) {
-      responseHandlers.push_back(ResourceResponseHandlerTyped<T>::makeUnique(requestType, onResponse));
+    template<typename T>
+    void addOnResponse(std::string requestType, T onResponse) {
+      responseHandlers.push_back(Core::makeUnique<ResourceResponseHandlerImpl<T>>(requestType, onResponse));
     }
 
-    void addOnEvent(std::string eventType, std::function<void()> onEvent) {
-      eventHandlers.push_back(ResourceEventHandlerVoid::makeUnique(eventType, onEvent));
-    }
-
-    template<class T>
-    void addOnEvent(std::string eventType, std::function<void(const T&)> onEvent) {
-      eventHandlers.push_back(ResourceEventHandlerTyped<T>::makeUnique(eventType, onEvent));
+    template<typename T>
+    void addOnEvent(std::string eventType, T onEvent) {
+      eventHandlers.push_back(Core::makeUnique<ResourceEventHandlerImpl<T>>(eventType, onEvent));
     }
 
   private:

@@ -21,12 +21,16 @@ namespace Messaging {
     virtual void processEvent(const Event& event) const = 0;
   };
 
-  class ResourceEventHandlerVoid : public ResourceEventHandler {
-    TYPE_PTRS(ResourceEventHandlerVoid)
+  template <typename T, class = void>
+  class ResourceEventHandlerImpl;
+
+  template<typename T>
+  class ResourceEventHandlerImpl<T,
+    typename std::enable_if<Core::function_traits<T>::value == 0>::type> : public ResourceEventHandler {
     public:
-      ResourceEventHandlerVoid(
+      ResourceEventHandlerImpl(
         std::string eventType,
-        std::function<void()> onEvent) :
+        T onEvent) :
         eventType(eventType),
         onEvent(onEvent) {
       }
@@ -45,16 +49,17 @@ namespace Messaging {
 
     private:
       const std::string eventType;
-      const std::function<void()> onEvent;
+      const T onEvent;
   };
 
-  template<class T>
-  class ResourceEventHandlerTyped : public ResourceEventHandler {
-    TYPE_PTRS(ResourceEventHandlerTyped)
+  template<typename T>
+  class ResourceEventHandlerImpl<T,
+    typename std::enable_if<Core::function_traits<T>::value == 1>::type> : public ResourceEventHandler {
+    typedef typename Core::function_traits<T> traits;
     public:
-      ResourceEventHandlerTyped(
+      ResourceEventHandlerImpl(
         std::string eventType,
-        std::function<void(const T&)> onEvent) :
+        T onEvent) :
         eventType(eventType),
         onEvent(onEvent) {
       }
@@ -64,16 +69,16 @@ namespace Messaging {
       }
 
       virtual std::string getContentType() const override {
-        return T::TypeId();
+        return Core::base_type<typename traits::template arg<0>::type>::TypeId();
       }
 
       virtual void processEvent(const Event& event) const override {
-        onEvent(static_cast<const T&>(*event.getContent()));
+        onEvent(static_cast<typename traits::template arg<0>::type>(*event.getContent()));
       }
 
     private:
       const std::string eventType;
-      const std::function<void(const T&)> onEvent;
+      const T onEvent;
   };
 
 }

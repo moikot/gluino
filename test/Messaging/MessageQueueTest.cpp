@@ -104,7 +104,7 @@ TEST_CASE("message queue is routing a response to a generic client", "[MessageQu
   auto controller = queue->createController("resource");
   queue->createController("resource_controller_after");
 
-  controller->addOnRequest<Content>("get", std::bind(&EventSink::onRequest, &eventSink.get(), _1));
+  controller->addOnRequest("get", [&](const Content& c){ return eventSink.get().onRequest(c); });
 
   client->sendRequest("get", "resource", std::move(requestContent));
   queue->idle();
@@ -112,6 +112,7 @@ TEST_CASE("message queue is routing a response to a generic client", "[MessageQu
   Verify(Method(eventSink, onRequest));
   Verify(Method(eventSink, onResponse));
 }
+
 
 TEST_CASE("message queue is routing an event to a resource client", "[MessageQueue]") {
   auto content = Content::makeUnique();
@@ -130,7 +131,7 @@ TEST_CASE("message queue is routing an event to a resource client", "[MessageQue
   auto queue = MessageQueue::makeUnique(logger);
 
   auto client = queue->createClient("clientId", "resource");
-  client->addOnEvent<Content>("created", std::bind(&EventSink::onEventContent, &eventSink.get(), _1));
+  client->addOnEvent("created", [&](const Content& c){ eventSink.get().onEventContent(c); });
 
   auto event = Event::makeShared("created", "resource", std::move(content));
   queue->addEvent(event);
@@ -163,13 +164,12 @@ TEST_CASE("message queue is routing a response to a resource client", "[MessageQ
   auto queue = MessageQueue::makeUnique(logger);
 
   auto client = queue->createClient("clientId", "resource");
-  client->addOnResponse<Content>("get", std::bind(&EventSink::onResponseContent, &eventSink.get(), _1));
+  client->addOnResponse("get", [&](const Content& c){ return eventSink.get().onResponseContent(c); });
 
   queue->createController("resource_controller_before");
   auto controller = queue->createController("resource");
   queue->createController("resource_controller_after");
-
-  controller->addOnRequest<Content>("get", std::bind(&EventSink::onRequest, &eventSink.get(), _1));
+  controller->addOnRequest("get", [&](const Content& c){ return eventSink.get().onRequest(c); });
 
   client->sendRequest("get", std::move(requestContent));
   queue->idle();
@@ -190,7 +190,7 @@ TEST_CASE("message queue is failing to route a response to an implicitly deleted
   Mock<ILogger> loggerInstanse;
   Fake(Method(loggerInstanse, message));
   Fake(Method(loggerInstanse, error));
-  
+
   auto logger = ILogger::Shared(&loggerInstanse.get(), [](...) {});
   auto queue = MessageQueue::makeUnique(logger);
 
@@ -201,7 +201,7 @@ TEST_CASE("message queue is failing to route a response to an implicitly deleted
   }
 
   auto controller = queue->createController("resource");
-  controller->addOnRequest<Content>("get", std::bind(&EventSink::onRequest, &eventSink.get(), _1));
+  controller->addOnRequest("get", [&](const Content& c) { return eventSink.get().onRequest(c); });
 
   clientPtr->sendRequest("get", std::move(requestContent));
   queue->idle();
@@ -229,7 +229,7 @@ TEST_CASE("message queue is failing to route a response to an explicitly deleted
 
   auto client = queue->createClient("clientId", "resource");
   auto controller = queue->createController("resource");
-  controller->addOnRequest<Content>("get", std::bind(&EventSink::onRequest, &eventSink.get(), _1));
+  controller->addOnRequest("get", [&](const Content& c) { return eventSink.get().onRequest(c); });
 
   client->sendRequest("get", std::move(requestContent));
   queue->removeClient(client);
@@ -258,7 +258,7 @@ TEST_CASE("message queue is failing to route a request if there is no controller
   auto queue = MessageQueue::makeUnique(logger);
 
   auto client = queue->createClient("clientId", "resource");
-  client->addOnResponse<Status>("get", std::bind(&EventSink::onResponseStatus, &eventSink.get(), _1));
+  client->addOnResponse("get", [&](const Status& c){ return eventSink.get().onResponseStatus(c); });
 
   client->sendRequest("get", std::move(requestContent));
   queue->idle();
@@ -285,13 +285,13 @@ TEST_CASE("message queue is failing to route a request if the controller was imp
   auto queue = MessageQueue::makeUnique(logger);
 
   auto client = queue->createClient("clientId", "resource");
-  client->addOnResponse<Status>("get", std::bind(&EventSink::onResponseStatus, &eventSink.get(), _1));
+  client->addOnResponse("get", [&](const Status& c){ return eventSink.get().onResponseStatus(c); });
 
   {
     auto controller = queue->createController("resource");
-    controller->addOnRequest<Content>("get", std::bind(&EventSink::onRequest, &eventSink.get(), _1));
+    controller->addOnRequest("get", [&](const Content& c) { return eventSink.get().onRequest(c); });
   }
-  
+
   client->sendRequest("get", std::move(requestContent));
   queue->idle();
 
@@ -317,7 +317,7 @@ TEST_CASE("message queue is failing to route a request if the controller was exp
   auto queue = MessageQueue::makeUnique(logger);
 
   auto client = queue->createClient("clientId", "resource");
-  client->addOnResponse<Status>("get", std::bind(&EventSink::onResponseStatus, &eventSink.get(), _1));
+  client->addOnResponse("get", [&](const Status& c){ return eventSink.get().onResponseStatus(c); });
   auto controller = queue->createController("resource");
 
   client->sendRequest("get", std::move(requestContent));
