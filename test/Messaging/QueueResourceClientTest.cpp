@@ -68,7 +68,7 @@ TEST_CASE("queue resource client can process a response", "[QueueResourceClient]
     REQUIRE(&result == resultPtr);
     return Status::OK;
   });
-  client->addOnResponse<Status>("get", std::bind(&EventSink::onResponse, &eventSink.get(), _1));
+  client->addOnResponse("get", [&](const Status& c){ return eventSink.get().onResponse(c); });
 
   Response response("receiver", "get", "resource", std::move(result));
   client->onResponse(response);
@@ -87,7 +87,7 @@ TEST_CASE("queue resource client can process an event", "[QueueResourceClient]")
     REQUIRE(&param == contentPtr);
     return Status::OK;
   });
-  client->addOnEvent<Content>("created", std::bind(&EventSink::onEvent, &eventSink.get(), _1));
+  client->addOnEvent("created", [&](const Content& c){ eventSink.get().onEvent(c); });
 
   Event event("created", "resource", std::move(content));
   client->onEvent(event);

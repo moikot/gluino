@@ -23,9 +23,9 @@ class QueueGenericClient : public QueueClient {
 
     std::string getClientId() const override { return clientId; }
 
-	Core::Status sendRequest(std::string requestType,
-		std::string resource, Core::IEntity::Unique content
-	);
+  	Core::Status sendRequest(std::string requestType,
+  		std::string resource, Core::IEntity::Unique content
+  	);
 
     void onResponse(const Response& response) const override;
     void onEvent(const Event& event) const override;

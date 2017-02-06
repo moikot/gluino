@@ -22,12 +22,12 @@ namespace Messaging {
   };
 
   template<class T>
-  class ResourceResponseHandlerTyped : public ResourceResponseHandler {
-    TYPE_PTRS(ResourceResponseHandlerTyped)
+  class ResourceResponseHandlerImpl : public ResourceResponseHandler {
+    typedef typename Core::function_traits<T> traits;
     public:
-      ResourceResponseHandlerTyped(
+      ResourceResponseHandlerImpl(
         std::string requestType,
-        std::function<void(const T&)> onResponse) :
+        T onResponse) :
         requestType(requestType),
         onResponse(onResponse) {
       }
@@ -37,16 +37,16 @@ namespace Messaging {
       }
 
       virtual std::string getContentType() const override {
-        return T::TypeId();
+        return Core::base_type<typename traits::template arg<0>::type>::TypeId();
       }
 
       virtual void processResponse(const Response& response) const override {
-        onResponse(static_cast<const T&>(response.getContent()));
+        onResponse(static_cast<typename traits::template arg<0>::type>(response.getContent()));
       }
 
     private:
       const std::string requestType;
-      const std::function<void(const T&)> onResponse;
+      const T onResponse;
   };
 
 }
