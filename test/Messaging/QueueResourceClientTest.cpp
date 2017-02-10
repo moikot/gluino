@@ -1,6 +1,7 @@
 #include "Utils/Testing.hpp"
 
 #include "Messaging/IMessageQueue.hpp"
+#include "FakeMessageQueue.h"
 
 using namespace Core;
 using namespace Messaging;
@@ -22,36 +23,38 @@ namespace {
 }
 
 TEST_CASE("queue resource client can send a request", "[QueueResourceClient]") {
-  Mock<IMessageQueue> messageQueue;
+  Mock<IMockableMessageQueue> messageQueue;
 
-  When(Method(messageQueue, addRequest)).Do([=](Request::Shared request) {
-    REQUIRE(request->getRequestType() == "get");
-    REQUIRE(request->getSender() == "clientId");
-    REQUIRE(request->getResource() == "resource");
-    REQUIRE(request->getContent() == nullptr);
+  When(Method(messageQueue, addRequest)).Do([=](const Request& request) {
+    REQUIRE(request.getRequestType() == "get");
+    REQUIRE(request.getSender() == "clientId");
+    REQUIRE(request.getResource() == "resource");
+    REQUIRE(request.getContent() == nullptr);
     return Status::OK;
   });
 
-  auto client = QueueResourceClient::makeUnique("clientId", "resource", messageQueue.get());
+  FakeMessageQueue mq(messageQueue.get());
+  auto client = QueueResourceClient::makeUnique("clientId", "resource", mq);
   client->sendRequest("get");
 
   Verify(Method(messageQueue, addRequest));
 }
 
 TEST_CASE("queue resource client can send a request with content", "[QueueResourceClient]") {
-  Mock<IMessageQueue> messageQueue;
+  Mock<IMockableMessageQueue> messageQueue;
   auto content = Content::makeUnique();
   auto contentPtr = content.get();
 
-  When(Method(messageQueue, addRequest)).Do([=](Request::Shared request) {
-    REQUIRE(request->getRequestType() == "get");
-    REQUIRE(request->getSender() == "clientId");
-    REQUIRE(request->getResource() == "resource");
-    REQUIRE(request->getContent() == contentPtr);
+  When(Method(messageQueue, addRequest)).Do([=](const Request& request) {
+    REQUIRE(request.getRequestType() == "get");
+    REQUIRE(request.getSender() == "clientId");
+    REQUIRE(request.getResource() == "resource");
+    REQUIRE(request.getContent() == contentPtr);
     return Status::OK;
   });
 
-  auto client = QueueResourceClient::makeUnique("clientId", "resource", messageQueue.get());
+  FakeMessageQueue mq(messageQueue.get());
+  auto client = QueueResourceClient::makeUnique("clientId", "resource", mq);
   client->sendRequest("get", std::move(content));
 
   Verify(Method(messageQueue, addRequest));

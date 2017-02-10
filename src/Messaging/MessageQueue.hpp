@@ -31,12 +31,12 @@ class MessageQueue : public IMessageQueue {
     /**
       Adds a request to the queue.
     */
-    virtual Core::Status addRequest(Request::Shared request) override;
+    virtual Core::Status addRequest(Request::Unique request) override;
 
     /**
       Adds a event to the queue.
     */
-    virtual Core::Status addEvent(Event::Shared event) override;
+    virtual Core::Status addEvent(Event::Unique event) override;
 
     /**
       Creates a queue client.
@@ -65,9 +65,9 @@ class MessageQueue : public IMessageQueue {
 
   private:
     Core::ILogger::Shared logger;
-    std::queue<Request::Shared> requests;
-    std::queue<Response::Shared> responses;
-    std::queue<Event::Shared> events;
+    std::queue<Request::Unique> requests;
+    std::queue<Response::Unique> responses;
+    std::queue<Event::Unique> events;
 
     std::list<QueueClient::Shared> clients;
     std::list<QueueResourceController::Shared> controllers;

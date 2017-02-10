@@ -1,6 +1,7 @@
 #include "Utils/Testing.hpp" 
 
 #include "Messaging/IMessageQueue.hpp"
+#include "FakeMessageQueue.h"
 
 using namespace Core;
 using namespace Messaging;
@@ -22,19 +23,20 @@ namespace {
 }
 
 TEST_CASE("queue generic client can send a request", "[QueueGenericClient]") {
-  Mock<IMessageQueue> messageQueue;
+  Mock<IMockableMessageQueue> messageQueue;
   auto content = Content::makeUnique();
   auto contentPtr = content.get();
-
-  When(Method(messageQueue, addRequest)).Do([=](Request::Shared request) {
-    REQUIRE(request->getRequestType() == "get");
-    REQUIRE(request->getSender() == "clientId");
-    REQUIRE(request->getResource() == "resource");
-    REQUIRE(request->getContent() == contentPtr);
+  
+  When(Method(messageQueue, addRequest)).Do([=](const Request& request) {
+    REQUIRE(request.getRequestType() == "get");
+    REQUIRE(request.getSender() == "clientId");
+    REQUIRE(request.getResource() == "resource");
+    REQUIRE(request.getContent() == contentPtr);
     return Status::OK;
   });
 
-  auto client = QueueGenericClient::makeUnique("clientId", messageQueue.get());
+  FakeMessageQueue mq(messageQueue.get());
+  auto client = QueueGenericClient::makeUnique("clientId", mq);
   client->sendRequest("get", "resource", std::move(content));
 
   Verify(Method(messageQueue, addRequest));

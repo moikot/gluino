@@ -34,10 +34,10 @@ class Request : public Core::IEntity {
   	*/
   	std::string getSender() const { return sender; };
 
-	/**
-	Set the request sender.
-	*/
-	void setSender(std::string value) { sender = value; };
+	  /**
+	  Set the request sender.
+	  */
+	  void setSender(std::string value) { sender = value; };
 
     /**
       The request type (create, get, update, delete etc.).

@@ -10,8 +10,8 @@ QueueGenericClient::QueueGenericClient(std::string clientId, IMessageQueue& mess
 
 Status
 QueueGenericClient::sendRequest(std::string requestType, std::string resource, IEntity::Unique content) {
-	auto request = Request::makeShared(clientId, requestType, resource, std::move(content));
-	return messageQueue.addRequest(request);
+	auto request = Request::makeUnique(clientId, requestType, resource, std::move(content));
+	return messageQueue.addRequest(std::move(request));
 }
 
 void

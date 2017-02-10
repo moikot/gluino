@@ -1,6 +1,7 @@
 #include "Utils/Testing.hpp"
 
 #include "Messaging/IMessageQueue.hpp"
+#include "FakeMessageQueue.h"
 
 using namespace Core;
 using namespace Messaging;
@@ -21,34 +22,36 @@ namespace {
 }
 
 TEST_CASE("queue resource controller can send an event", "[QueueResourceController]") {
-  Mock<IMessageQueue> messageQueue;
+  Mock<IMockableMessageQueue> messageQueue;
 
-  When(Method(messageQueue, addEvent)).Do([=](Event::Shared event) {
-    REQUIRE(event->getEventType() == "created");
-    REQUIRE(event->getResource() == "resource");
-    REQUIRE(event->getContent() == nullptr);
+  When(Method(messageQueue, addEvent)).Do([=](const Event& event) {
+    REQUIRE(event.getEventType() == "created");
+    REQUIRE(event.getResource() == "resource");
+    REQUIRE(event.getContent() == nullptr);
     return Status::OK;
   });
 
-  auto client = QueueResourceController::makeUnique("resource", messageQueue.get());
+  FakeMessageQueue mq(messageQueue.get());
+  auto client = QueueResourceController::makeUnique("resource", mq);
   client->sendEvent("created");
 
   Verify(Method(messageQueue, addEvent));
 }
 
 TEST_CASE("queue resource controller can send an event with content", "[QueueResourceController]") {
-  Mock<IMessageQueue> messageQueue;
+  Mock<IMockableMessageQueue> messageQueue;
   auto content = Content::makeUnique();
   auto contentPtr = content.get();
 
-  When(Method(messageQueue, addEvent)).Do([=](Event::Shared event) {
-    REQUIRE(event->getEventType() == "created");
-    REQUIRE(event->getResource() == "resource");
-    REQUIRE(event->getContent() == contentPtr);
+  When(Method(messageQueue, addEvent)).Do([=](const Event& event) {
+    REQUIRE(event.getEventType() == "created");
+    REQUIRE(event.getResource() == "resource");
+    REQUIRE(event.getContent() == contentPtr);
     return Status::OK;
   });
 
-  auto client = QueueResourceController::makeUnique("resource", messageQueue.get());
+  FakeMessageQueue mq(messageQueue.get());
+  auto client = QueueResourceController::makeUnique("resource", mq);
   client->sendEvent("created", std::move(content));
 
   Verify(Method(messageQueue, addEvent));

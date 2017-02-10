@@ -12,14 +12,14 @@ QueueResourceController::QueueResourceController(std::string resource, IMessageQ
 
 Core::Status
 QueueResourceController::sendEvent(std::string eventType) {
-  auto event = Event::makeShared(eventType, resource);
-  return messageQueue.addEvent(event);
+  auto event = Event::makeUnique(eventType, resource);
+  return messageQueue.addEvent(std::move(event));
 }
 
 Core::Status
 QueueResourceController::sendEvent(std::string eventType, Core::IEntity::Unique content) {
-  auto event = Event::makeShared(eventType, resource, std::move(content));
-  return messageQueue.addEvent(event);
+  auto event = Event::makeUnique(eventType, resource, std::move(content));
+  return messageQueue.addEvent(std::move(event));
 }
 
 RequestHandler

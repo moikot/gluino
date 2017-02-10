@@ -16,32 +16,32 @@ void
 MessageQueue::idle() {
   while (!requests.empty())
   {
-    auto request = requests.front();
-    requests.pop();
+    auto& request = requests.front();
     processRequest(*request);
+    requests.pop();
   }
   while (!responses.empty())
   {
-    auto response = responses.front();
-    responses.pop();
+    auto& response = responses.front();
     processResponse(*response);
+    responses.pop();
   }
   while (!events.empty()) {
-    auto event = events.front();
-    events.pop();
+    auto& event = events.front();
     processEvent(*event);
+    events.pop();
   }
 }
 
 Status
-MessageQueue::addRequest(Request::Shared request) {
-  requests.push(request);
+MessageQueue::addRequest(Request::Unique request) {
+  requests.emplace(std::move(request));
   return Status::OK;
 }
 
 Status
-MessageQueue::addEvent(Event::Shared event) {
-  events.push(event);
+MessageQueue::addEvent(Event::Unique event) {
+  events.emplace(std::move(event));
   return Status::OK;
 }
 
@@ -149,12 +149,12 @@ MessageQueue::getRequestHandler(const Request& request) {
 
 void
 MessageQueue::sendResponseFor(const Request& request, IEntity::Unique result) {
-  auto response = Response::makeShared(
+  auto response = Response::makeUnique(
 		  request.getSender(),
           request.getRequestType(),
           request.getResource(),
           std::move(result)
          );
 
-  responses.push(response);
+  responses.emplace(std::move(response));
 }

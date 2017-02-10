@@ -46,8 +46,8 @@ TEST_CASE("message queue is routing an event to a generic client", "[MessageQueu
   auto client = queue->createClient("clientId");
   client->setOnEvent(std::bind(&EventSink::onEvent, &eventSink.get(), _1));
 
-  auto event = Event::makeShared("created", "resource", std::move(content));
-  queue->addEvent(event);
+  auto event = Event::makeUnique("created", "resource", std::move(content));
+  queue->addEvent(std::move(event));
   queue->idle();
 
   Verify(Method(eventSink, onEvent));
@@ -67,7 +67,7 @@ TEST_CASE("message queue is not routing an event to a deleted generic client", "
     client.reset();
   }
 
-  queue->addEvent(Event::makeShared("created", "resource"));
+  queue->addEvent(Event::makeUnique("created", "resource"));
   queue->idle();
 }
 
@@ -133,8 +133,8 @@ TEST_CASE("message queue is routing an event to a resource client", "[MessageQue
   auto client = queue->createClient("clientId", "resource");
   client->addOnEvent("created", [&](const Content& c){ eventSink.get().onEventContent(c); });
 
-  auto event = Event::makeShared("created", "resource", std::move(content));
-  queue->addEvent(event);
+  auto event = Event::makeUnique("created", "resource", std::move(content));
+  queue->addEvent(std::move(event));
   queue->idle();
 
   Verify(Method(eventSink, onEventContent));
