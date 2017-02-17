@@ -27,22 +27,22 @@ namespace Messaging {
       return queue.addEvent(*event);
     }
 
-    virtual QueueGenericClient::Unique createClient(std::string clinetId) {
+    virtual QueueGenericClient::Unique createClient(std::string) {
       return nullptr;
     }
 
-    virtual QueueResourceClient::Unique createClient(std::string clinetId, std::string resource) {
+    virtual QueueResourceClient::Unique createClient(std::string, std::string) {
       return nullptr;
     }
 
-    virtual void removeClient(const QueueClient& client) {
+    virtual void removeClient(const QueueClient&) {
     }
 
-    virtual QueueResourceController::Unique createController(std::string resource) {
+    virtual QueueResourceController::Unique createController(std::string) {
       return nullptr;
     }
 
-    virtual void removeController(const QueueResourceController& controller) {
+    virtual void removeController(const QueueResourceController&) {
     }
 
   private:
