@@ -20,6 +20,10 @@ class QueueGenericClient : public QueueClient {
   TYPE_PTRS(QueueGenericClient)
   public:
     QueueGenericClient(std::string clientId, IMessageQueue& messageQueue);
+    virtual ~QueueGenericClient() override;
+
+    QueueGenericClient(const QueueGenericClient&) = delete;
+    QueueGenericClient& operator=(const QueueGenericClient&) = delete;
 
     std::string getClientId() const override { return clientId; }
 

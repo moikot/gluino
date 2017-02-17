@@ -45,35 +45,35 @@ MessageQueue::addEvent(Event::Unique event) {
   return Status::OK;
 }
 
-QueueGenericClient::Shared
+QueueGenericClient::Unique
 MessageQueue::createClient(std::string clientId) {
-  auto client = QueueGenericClient::makeShared(clientId, *this);
-  clients.push_back(client);
+  auto client = QueueGenericClient::makeUnique(clientId, *this);
+  clients.push_back(client.get());
   return client;
 }
 
-QueueResourceClient::Shared
+QueueResourceClient::Unique
 MessageQueue::createClient(std::string clientId, std::string resource) {
-  auto client = QueueResourceClient::makeShared(clientId, resource, *this);
-  clients.push_back(client);
+  auto client = QueueResourceClient::makeUnique(clientId, resource, *this);
+  clients.push_back(client.get());
   return client;
 }
 
 void
-MessageQueue::removeClient(QueueClient::Shared client) {
-  clients.remove(client);
+MessageQueue::removeClient(const QueueClient& client) {
+  clients.remove(&client);
 }
 
-QueueResourceController::Shared
+QueueResourceController::Unique
 MessageQueue::createController(std::string resource) {
-  auto controller = QueueResourceController::makeShared(resource, *this);
-  controllers.push_back(controller);
+  auto controller = QueueResourceController::makeUnique(resource, *this);
+  controllers.push_back(controller.get());
   return controller;
 }
 
 void
-MessageQueue::removeController(QueueResourceController::Shared controller) {
-  controllers.remove(controller);
+MessageQueue::removeController(const QueueResourceController& controller) {
+  controllers.remove(&controller);
 }
 
 void
@@ -106,26 +106,15 @@ void
 MessageQueue::processEvent(const Event& event) {
   logger->message("Broadcasting event '" + event.getEventType() + "'.");
   std::list<QueueClient::Shared> deletedClients;
-  for(auto& client: clients) {
-    if (client.use_count() != 1) {
-	    client->onEvent(event);
-    } else {
-      deletedClients.push_back(client);
-    }
-  }
-  for(auto client: deletedClients) {
-    clients.remove(client);
+  for(auto client: clients) {
+	  client->onEvent(event);
   }
 }
 
-QueueClient::Shared
+const QueueClient*
 MessageQueue::getClient(std::string clientId) {
   for (auto& client : clients) {
     if (client->getClientId() == clientId) {
-      if (client.use_count() == 1) {
-        clients.remove(client);
-        return nullptr;
-      }
       return client;
     }
   }
@@ -137,10 +126,6 @@ MessageQueue::getRequestHandler(const Request& request) {
   for(auto& controller: controllers) {
     auto handler = controller->getRequestHandler(request);
     if (handler) {
-      if (controller.use_count() == 1) {
-        controllers.remove(controller);
-        return nullptr;
-      }
       return handler;
     }
   }

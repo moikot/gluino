@@ -62,38 +62,46 @@ TEST_CASE("queue resource client can send a request with content", "[QueueResour
 
 TEST_CASE("queue resource client can process a response", "[QueueResourceClient]") {
   Mock<IMessageQueue> messageQueue;
-  auto client = QueueResourceClient::makeUnique("id", "resource", messageQueue.get());
-  auto result = Status::makeUnique(Status::OK);
-  auto resultPtr = result.get();
+  When(Method(messageQueue, removeClient)).Do([](const QueueClient& c) {});
+  {
+    auto client = QueueResourceClient::makeUnique("id", "resource", messageQueue.get());
+    auto result = Status::makeUnique(Status::OK);
+    auto resultPtr = result.get();
 
-  Mock<EventSink> eventSink;
-  When(Method(eventSink, onResponse)).Do([=](const Status& result) {
-    REQUIRE(&result == resultPtr);
-    return Status::OK;
-  });
-  client->addOnResponse("get", [&](const Status& c){ return eventSink.get().onResponse(c); });
+    Mock<EventSink> eventSink;
+    When(Method(eventSink, onResponse)).Do([=](const Status& result) {
+      REQUIRE(&result == resultPtr);
+      return Status::OK;
+    });
+    client->addOnResponse("get", [&](const Status& c){ return eventSink.get().onResponse(c); });
 
-  Response response("receiver", "get", "resource", std::move(result));
-  client->onResponse(response);
+    Response response("receiver", "get", "resource", std::move(result));
+    client->onResponse(response);
 
-  Verify(Method(eventSink, onResponse));
+    Verify(Method(eventSink, onResponse));
+  }
+  Verify(Method(messageQueue, removeClient));
 }
 
 TEST_CASE("queue resource client can process an event", "[QueueResourceClient]") {
   Mock<IMessageQueue> messageQueue;
-  auto client = QueueResourceClient::makeUnique("id", "resource", messageQueue.get());
-  auto content = Content::makeUnique();
-  auto contentPtr = content.get();
+  When(Method(messageQueue, removeClient)).Do([](const QueueClient& c) {});
+  {
+    auto client = QueueResourceClient::makeUnique("id", "resource", messageQueue.get());
+    auto content = Content::makeUnique();
+    auto contentPtr = content.get();
 
-  Mock<EventSink> eventSink;
-  When(Method(eventSink, onEvent)).Do([=](const Content& param) {
-    REQUIRE(&param == contentPtr);
-    return Status::OK;
-  });
-  client->addOnEvent("created", [&](const Content& c){ eventSink.get().onEvent(c); });
+    Mock<EventSink> eventSink;
+    When(Method(eventSink, onEvent)).Do([=](const Content& param) {
+      REQUIRE(&param == contentPtr);
+      return Status::OK;
+    });
+    client->addOnEvent("created", [&](const Content& c){ eventSink.get().onEvent(c); });
 
-  Event event("created", "resource", std::move(content));
-  client->onEvent(event);
+    Event event("created", "resource", std::move(content));
+    client->onEvent(event);
 
-  Verify(Method(eventSink, onEvent));
+    Verify(Method(eventSink, onEvent));
+  }
+  Verify(Method(messageQueue, removeClient));
 }

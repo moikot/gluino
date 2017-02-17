@@ -59,29 +59,34 @@ TEST_CASE("queue resource controller can send an event with content", "[QueueRes
 
 TEST_CASE("queue resource controller can process a request", "[QueueResourceController]") {
   Mock<IMessageQueue> messageQueue;
-  auto client = QueueResourceController::makeUnique("resource", messageQueue.get());
-  auto content = Content::makeUnique();
-  auto contentPtr = content.get();
+  When(Method(messageQueue, removeController)).Do([](const QueueResourceController& c) {});
+  {
+    auto client = QueueResourceController::makeUnique("resource", messageQueue.get());
+    auto content = Content::makeUnique();
+    auto contentPtr = content.get();
 
-  Mock<EventSink> eventSink;
-  When(Method(eventSink, onRequest)).Do([=](const Content& param) {
-    REQUIRE(&param == contentPtr);
-    return Status::makeUnique(Status::OK);
-  });
-  client->addOnRequest("create", [&](const Content& c) { return eventSink.get().onRequest(c); });
+    Mock<EventSink> eventSink;
+    When(Method(eventSink, onRequest)).Do([=](const Content& param) {
+      REQUIRE(&param == contentPtr);
+      return Status::makeUnique(Status::OK);
+    });
+    client->addOnRequest("create", [&](const Content& c) { return eventSink.get().onRequest(c); });
 
-  Request request("sender", "create", "resource", std::move(content));
-  auto handler = client->getRequestHandler(request);
-  REQUIRE(handler != nullptr);
+    Request request("sender", "create", "resource", std::move(content));
+    auto handler = client->getRequestHandler(request);
+    REQUIRE(handler != nullptr);
 
-  auto response = handler(request);
-  REQUIRE(response != nullptr);
+    auto response = handler(request);
+    REQUIRE(response != nullptr);
 
-  Verify(Method(eventSink, onRequest));
+    Verify(Method(eventSink, onRequest));
+  }
+  Verify(Method(messageQueue, removeController));
 }
 
 TEST_CASE("queue resource controller cannot process a request for another resource", "[QueueResourceController]") {
   Mock<IMessageQueue> messageQueue;
+  When(Method(messageQueue, removeController)).Do([](const QueueResourceController& c) {});
   auto client = QueueResourceController::makeUnique("resource", messageQueue.get());
 
   Request request("create", "sender", "another resource");

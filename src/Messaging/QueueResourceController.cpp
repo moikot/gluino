@@ -10,6 +10,10 @@ QueueResourceController::QueueResourceController(std::string resource, IMessageQ
   resource(resource), messageQueue(messageQueue) {
 }
 
+QueueResourceController::~QueueResourceController() {
+  messageQueue.removeController(*this);
+}
+
 Core::Status
 QueueResourceController::sendEvent(std::string eventType) {
   auto event = Event::makeUnique(eventType, resource);
@@ -23,7 +27,7 @@ QueueResourceController::sendEvent(std::string eventType, Core::IEntity::Unique 
 }
 
 RequestHandler
-QueueResourceController::getRequestHandler(const Request& request) {
+QueueResourceController::getRequestHandler(const Request& request) const {
   if (request.getResource() != resource) {
     return nullptr;
   }

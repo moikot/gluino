@@ -23,6 +23,10 @@ class QueueResourceClient : public QueueClient {
   TYPE_PTRS(QueueResourceClient)
   public:
     QueueResourceClient(std::string clientId, std::string resource, IMessageQueue& messageQueue);
+    virtual ~QueueResourceClient() override;
+
+    QueueResourceClient(const QueueResourceClient&) = delete;
+    QueueResourceClient& operator=(const QueueResourceClient&) = delete;
 
     std::string getClientId() const override { return clientId; }
     void onResponse(const Response& response) const override;

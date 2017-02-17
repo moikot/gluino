@@ -7,6 +7,10 @@ QueueResourceClient::QueueResourceClient(std::string clientId, std::string resou
   clientId(clientId), resource(resource), messageQueue(messageQueue) {
 }
 
+QueueResourceClient::~QueueResourceClient() {
+  messageQueue.removeClient(*this);
+}
+
 Core::Status
 QueueResourceClient::sendRequest(std::string requestType) {
   auto request = Request::makeUnique(clientId, requestType, resource);

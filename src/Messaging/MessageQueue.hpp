@@ -41,27 +41,27 @@ class MessageQueue : public IMessageQueue {
     /**
       Creates a queue client.
     */
-    virtual QueueGenericClient::Shared createClient(std::string clinetId) override;
+    virtual QueueGenericClient::Unique createClient(std::string clinetId) override;
 
     /**
     Creates a queue client.
     */
-    virtual QueueResourceClient::Shared createClient(std::string clinetId, std::string resource) override;
+    virtual QueueResourceClient::Unique createClient(std::string clinetId, std::string resource) override;
 
     /**
       Removes the queue client.
     */
-    virtual void removeClient(QueueClient::Shared client) override;
+    virtual void removeClient(const QueueClient& client) override;
 
     /**
       Creates a queue controller.
     */
-    virtual QueueResourceController::Shared createController(std::string resource) override;
+    virtual QueueResourceController::Unique createController(std::string resource) override;
 
     /**
       Removes the queue controller.
     */
-    virtual void removeController(QueueResourceController::Shared controller) override;
+    virtual void removeController(const QueueResourceController& controller) override;
 
   private:
     Core::ILogger::Shared logger;
@@ -69,15 +69,15 @@ class MessageQueue : public IMessageQueue {
     std::queue<Response::Unique> responses;
     std::queue<Event::Unique> events;
 
-    std::list<QueueClient::Shared> clients;
-    std::list<QueueResourceController::Shared> controllers;
+    std::list<const QueueClient*> clients;
+    std::list<const QueueResourceController*> controllers;
 
     void processRequest(const Request& request);
     void processResponse(const Response& response);
     void processEvent(const Event& event);
 
-    QueueClient::Shared   getClient(std::string clientId);
-    RequestHandler        getRequestHandler(const Request& request);
+    const QueueClient*  getClient(std::string clientId);
+    RequestHandler      getRequestHandler(const Request& request);
 
     void sendResponseFor(
       const Request&          request,

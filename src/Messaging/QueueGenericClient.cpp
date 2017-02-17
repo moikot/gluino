@@ -8,6 +8,10 @@ QueueGenericClient::QueueGenericClient(std::string clientId, IMessageQueue& mess
   clientId(clientId), messageQueue(messageQueue) {
 }
 
+QueueGenericClient::~QueueGenericClient() {
+  messageQueue.removeClient(*this);
+}
+
 Status
 QueueGenericClient::sendRequest(std::string requestType, std::string resource, IEntity::Unique content) {
 	auto request = Request::makeUnique(clientId, requestType, resource, std::move(content));

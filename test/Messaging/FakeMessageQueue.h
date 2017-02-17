@@ -27,22 +27,22 @@ namespace Messaging {
       return queue.addEvent(*event);
     }
 
-    virtual QueueGenericClient::Shared createClient(std::string clinetId) {
+    virtual QueueGenericClient::Unique createClient(std::string clinetId) {
       return nullptr;
     }
 
-    virtual QueueResourceClient::Shared createClient(std::string clinetId, std::string resource) {
+    virtual QueueResourceClient::Unique createClient(std::string clinetId, std::string resource) {
       return nullptr;
     }
 
-    virtual void removeClient(QueueClient::Shared client) {
+    virtual void removeClient(const QueueClient& client) {
     }
 
-    virtual QueueResourceController::Shared createController(std::string resource) {
+    virtual QueueResourceController::Unique createController(std::string resource) {
       return nullptr;
     }
 
-    virtual void removeController(QueueResourceController::Shared controller) {
+    virtual void removeController(const QueueResourceController& controller) {
     }
 
   private:
@@ -52,4 +52,3 @@ namespace Messaging {
 }
 
 #endif /* end of include guard: FAKE_MESSAGE_QUEUE */
-

@@ -232,7 +232,7 @@ TEST_CASE("message queue is failing to route a response to an explicitly deleted
   controller->addOnRequest("get", [&](const Content& c) { return eventSink.get().onRequest(c); });
 
   client->sendRequest("get", std::move(requestContent));
-  queue->removeClient(client);
+  queue->removeClient(*client);
   queue->idle();
 
   Verify(Method(eventSink, onRequest));
@@ -321,7 +321,7 @@ TEST_CASE("message queue is failing to route a request if the controller was exp
   auto controller = queue->createController("resource");
 
   client->sendRequest("get", std::move(requestContent));
-  queue->removeController(controller);
+  queue->removeController(*controller);
   queue->idle();
 
   Verify(Method(eventSink, onResponseStatus));

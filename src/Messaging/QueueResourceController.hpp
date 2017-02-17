@@ -23,6 +23,10 @@ class QueueResourceController {
   TYPE_PTRS(QueueResourceController)
   public:
     QueueResourceController(std::string resource, IMessageQueue& messageQueue);
+    virtual ~QueueResourceController();
+
+    QueueResourceController(const QueueResourceController&) = delete;
+    QueueResourceController& operator=(const QueueResourceController&) = delete;
 
     Core::Status sendEvent(std::string eventType);
     Core::Status sendEvent(std::string eventType, Core::IEntity::Unique content);
@@ -32,7 +36,7 @@ class QueueResourceController {
       handlers.push_back(Core::makeUnique<ResourceRequestHandlerImpl<T>>(requestType, onRequest));
     }
 
-    RequestHandler getRequestHandler(const Request& request);
+    RequestHandler getRequestHandler(const Request& request) const;
 
   private:
     const std::string resource;
