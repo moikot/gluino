@@ -16,8 +16,6 @@ namespace Core {
 template <class T>
 class List : public IList {
   public:
-    typedef std::function<Core::Status(const T& item)> ForEachFunctionTyped;
-
     // From IList
     virtual Core::Status add(const IEntity& item) const override {
       return add((const T&)item);
@@ -29,12 +27,14 @@ class List : public IList {
       });
     };
 
+    // List
     Core::Status add(const T& value) {
       elements.push_back(value);
       return Core::Status::OK;
     };
 
-    Core::Status forEach(ForEachFunctionTyped func) const {
+    template<typename TFunc>
+    Core::Status forEach(TFunc func) const {
       for(auto element: elements) {
         auto result = func(element);
         if (!result.isOk())
