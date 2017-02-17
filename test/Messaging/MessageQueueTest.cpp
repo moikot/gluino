@@ -178,39 +178,6 @@ TEST_CASE("message queue is routing a response to a resource client", "[MessageQ
   Verify(Method(eventSink, onResponseContent));
 }
 
-TEST_CASE("message queue is failing to route a response to an implicitly deleted client", "[MessageQueue]") {
-  auto requestContent = Content::makeUnique();
-  auto responseContent = Content::makeUnique();
-
-  Mock<EventSink> eventSink;
-  When(Method(eventSink, onRequest)).Do([&](const Content&) {
-    return std::move(responseContent);
-  });
-
-  Mock<ILogger> loggerInstanse;
-  Fake(Method(loggerInstanse, message));
-  Fake(Method(loggerInstanse, error));
-
-  auto logger = ILogger::Shared(&loggerInstanse.get(), [](...) {});
-  auto queue = MessageQueue::makeUnique(logger);
-
-  QueueResourceClient* clientPtr;
-  {
-    auto client = queue->createClient("clientId", "resource");
-    clientPtr = client.get();
-  }
-
-  auto controller = queue->createController("resource");
-  controller->addOnRequest("get", [&](const Content& c) { return eventSink.get().onRequest(c); });
-
-  clientPtr->sendRequest("get", std::move(requestContent));
-  queue->idle();
-
-  Verify(Method(eventSink, onRequest));
-  Verify(Method(loggerInstanse, message));
-  Verify(Method(loggerInstanse, error));
-}
-
 TEST_CASE("message queue is failing to route a response to an explicitly deleted client", "[MessageQueue]") {
   auto requestContent = Content::makeUnique();
   auto responseContent = Content::makeUnique();
@@ -259,38 +226,6 @@ TEST_CASE("message queue is failing to route a request if there is no controller
 
   auto client = queue->createClient("clientId", "resource");
   client->addOnResponse("get", [&](const Status& c){ return eventSink.get().onResponseStatus(c); });
-
-  client->sendRequest("get", std::move(requestContent));
-  queue->idle();
-
-  Verify(Method(eventSink, onResponseStatus));
-}
-
-TEST_CASE("message queue is failing to route a request if the controller was implicitly deleted", "[MessageQueue]") {
-  auto requestContent = Content::makeUnique();
-  auto responseContent = Content::makeUnique();
-
-  Mock<EventSink> eventSink;
-
-  When(Method(eventSink, onResponseStatus)).Do([=](const Status& status) {
-    REQUIRE(status.getStatusCode() == StatusCode::NotFound);
-    return Status::OK;
-  });
-
-  Mock<ILogger> loggerInstanse;
-  Fake(Method(loggerInstanse, message));
-  Fake(Method(loggerInstanse, error));
-  auto logger = ILogger::Shared(&loggerInstanse.get(), [](...) {});
-
-  auto queue = MessageQueue::makeUnique(logger);
-
-  auto client = queue->createClient("clientId", "resource");
-  client->addOnResponse("get", [&](const Status& c){ return eventSink.get().onResponseStatus(c); });
-
-  {
-    auto controller = queue->createController("resource");
-    controller->addOnRequest("get", [&](const Content& c) { return eventSink.get().onRequest(c); });
-  }
 
   client->sendRequest("get", std::move(requestContent));
   queue->idle();
