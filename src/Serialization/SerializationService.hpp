@@ -19,8 +19,7 @@ namespace Serialization {
 class SerializationService : public ISerializationService {
   TYPE_PTRS(SerializationService)
   public:
-    explicit SerializationService(
-      std::shared_ptr<const IContextFactory> contextFactory);
+    explicit SerializationService(const IContextFactory& contextFactory);
 
     // From ISerializationService
     virtual Core::Status serialize(
@@ -39,13 +38,13 @@ class SerializationService : public ISerializationService {
       IDeserializationContext& context,
       Core::IEntity::Unique& entity) const override;
 
-    void addSerializer(ISerializer::Shared serializer);
+    void addSerializer(ISerializer::Unique serializer);
 
   private:
-    std::shared_ptr<const IContextFactory>   contextFactory;
-    std::list<std::shared_ptr<const ISerializer>>         serializers;
+    const IContextFactory&          contextFactory;
+    std::list<ISerializer::Unique>  serializers;
 
-    std::shared_ptr<const ISerializer> getSerialzier(std::string typeId) const;
+    const ISerializer* getSerialzier(std::string typeId) const;
 };
 
 }

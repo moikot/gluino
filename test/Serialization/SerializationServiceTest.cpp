@@ -1,6 +1,7 @@
 #include "Utils/Testing.hpp"
 
 #include "Serialization/SerializationService.hpp"
+#include "Serialization/FakeSerializer.hpp"
 #include "Serialization/FakeSerializationContext.hpp"
 #include "Serialization/FakeDeserializationContext.hpp"
 
@@ -23,9 +24,8 @@ TEST_CASE("can serialize an entity", "[SerializationService]") {
   Mock<IContextFactory> factoryInstance;
   Mock<ISerializer> serializerInstance;
 
-  auto serializer = ISerializer::Shared(&serializerInstance.get(), [](...) {});
-  auto factory = IContextFactory::Shared(&factoryInstance.get(), [](...) {});
-  auto service = SerializationService::makeUnique(factory);
+  auto serializer = FakeSerializer::makeUnique(serializerInstance.get());
+  auto service = SerializationService::makeUnique(factoryInstance.get());
 
   When(Method(context, setString).Using("_type","content")).Do([](const std::string&, const std::string&) {
     return Status::OK;
@@ -48,7 +48,7 @@ TEST_CASE("can serialize an entity", "[SerializationService]") {
     return Status::OK;
   });
 
-  service->addSerializer(serializer);
+  service->addSerializer(std::move(serializer));
 
   auto entity = Content::makeUnique();
   std::string json;
@@ -62,9 +62,8 @@ TEST_CASE("entity serialization fails", "[SerializationService]") {
   Mock<IContextFactory> factoryInstance;
   Mock<ISerializer> serializerInstance;
 
-  auto serializer = ISerializer::Shared(&serializerInstance.get(), [](...) {});
-  auto factory = IContextFactory::Shared(&factoryInstance.get(), [](...) {});
-  auto service = SerializationService::makeUnique(factory);
+  auto serializer = FakeSerializer::makeUnique(serializerInstance.get());
+  auto service = SerializationService::makeUnique(factoryInstance.get());
 
   SECTION("if createSerializationContext fails") {
     When(Method(factoryInstance, createSerializationContext)).Do([&](
@@ -72,7 +71,7 @@ TEST_CASE("entity serialization fails", "[SerializationService]") {
       ISerializationContext::Unique&) {
       return Status::NotImplemented;
     });
-    service->addSerializer(serializer);
+    service->addSerializer(std::move(serializer));
   }
 
   SECTION("if setString for _type fails") {
@@ -85,7 +84,7 @@ TEST_CASE("entity serialization fails", "[SerializationService]") {
     When(Method(context, setString).Using("_type","content")).Do([](const std::string&, const std::string&) {
       return Status::NotImplemented;
     });
-    service->addSerializer(serializer);
+    service->addSerializer(std::move(serializer));
   }
 
   SECTION("if the serializer is not found") {
@@ -112,9 +111,8 @@ TEST_CASE("can deserialize an entity", "[SerializationService]") {
   Mock<IContextFactory> factoryInstance;
   Mock<ISerializer> serializerInstance;
 
-  auto serializer = ISerializer::Shared(&serializerInstance.get(), [](...) {});
-  auto factory = IContextFactory::Shared(&factoryInstance.get(), [](...) {});
-  auto service = SerializationService::makeUnique(factory);
+  auto serializer = FakeSerializer::makeUnique(serializerInstance.get());
+  auto service = SerializationService::makeUnique(factoryInstance.get());
 
   When(Method(context, getString)).Do([](const std::string&, std::string& value) {
     value = "content";
@@ -138,7 +136,7 @@ TEST_CASE("can deserialize an entity", "[SerializationService]") {
     return Status::OK;
   });
 
-  service->addSerializer(serializer);
+  service->addSerializer(std::move(serializer));
 
   Core::IEntity::Unique entity;
   auto result = service->deserialize("json", entity);
@@ -151,9 +149,8 @@ TEST_CASE("entity deserialization fails", "[SerializationService]") {
   Mock<IContextFactory> factoryInstance;
   Mock<ISerializer> serializerInstance;
 
-  auto serializer = ISerializer::Shared(&serializerInstance.get(), [](...) {});
-  auto factory = IContextFactory::Shared(&factoryInstance.get(), [](...) {});
-  auto service = SerializationService::makeUnique(factory);
+  auto serializer = FakeSerializer::makeUnique(serializerInstance.get());
+  auto service = SerializationService::makeUnique(factoryInstance.get());
 
   SECTION("if createDeserializationContext fails") {
     When(Method(factoryInstance, createDeserializationContext)).Do([&](
@@ -162,7 +159,7 @@ TEST_CASE("entity deserialization fails", "[SerializationService]") {
       IDeserializationContext::Unique&) {
       return Status::NotImplemented;
     });
-    service->addSerializer(serializer);
+    service->addSerializer(std::move(serializer));
   }
 
   SECTION("if getString for _type fails") {
@@ -176,7 +173,7 @@ TEST_CASE("entity deserialization fails", "[SerializationService]") {
       con = FakeDeserializationContext::makeUnique(context.get());
       return Status::OK;
     });
-    service->addSerializer(serializer);
+    service->addSerializer(std::move(serializer));
   }
 
   SECTION("if the serializer is not found") {

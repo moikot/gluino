@@ -21,7 +21,7 @@ namespace Messaging {
 class MessageQueue : public IMessageQueue {
   TYPE_PTRS(MessageQueue)
   public:
-    explicit MessageQueue(Core::ILogger::Shared logger);
+    explicit MessageQueue(Core::ILogger& logger);
 
     /**
       This method should be called for dispatching the messages.
@@ -64,7 +64,7 @@ class MessageQueue : public IMessageQueue {
     virtual void removeController(const QueueResourceController& controller) override;
 
   private:
-    Core::ILogger::Shared logger;
+    Core::ILogger& logger;
     std::queue<Request::Unique> requests;
     std::queue<Response::Unique> responses;
     std::queue<Event::Unique> events;
