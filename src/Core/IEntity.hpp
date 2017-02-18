@@ -33,7 +33,7 @@ public:
     @return True if this class is the class of a particular type; false otherwise.
   */
   virtual bool isType(const std::string&) const {
-    return false; // Returns always false for IEntity
+    return false; // Returns always false for the abstract IEntity
   }
 };
 

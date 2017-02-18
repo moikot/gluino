@@ -17,21 +17,21 @@ namespace Messaging {
 class Response : public Core::IEntity {
   TYPE_INFO(Response, IEntity, "response")
   public:
-	/**
-	Constructs a response.
-	*/
-    Response(std::string receiver, std::string requestType, 
-		std::string resource, IEntity::Unique content);
+    /**
+      Constructs a response.
+    */
+    Response(std::string receiver, std::string requestType,
+    std::string resource, IEntity::Unique content);
 
-	/**
-	The response receiver.
-	*/
-	std::string getReceiver() const { return receiver; };
+    /**
+      The response receiver.
+    */
+    std::string getReceiver() const { return receiver; };
 
-	/**
-	Set the response receiver.
-	*/
-	void setReceiver(std::string value) { receiver = value; };
+    /**
+      Set the response receiver.
+    */
+    void setReceiver(std::string value) { receiver = value; };
 
     /**
       The request type (create, get, update, delete etc.).
@@ -49,7 +49,7 @@ class Response : public Core::IEntity {
     const IEntity& getContent() const { return *content; }
 
   private:
-	std::string     receiver;
+    std::string     receiver;
     std::string     requestType;
     std::string     resource;
     IEntity::Unique content;

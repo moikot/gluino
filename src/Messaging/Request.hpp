@@ -17,30 +17,30 @@ namespace Messaging {
 class Request : public Core::IEntity {
   TYPE_INFO(Request, IEntity, "request")
   public:
-  	/**
-  	Constructs a request.
-  	*/
+    /**
+      Constructs a request.
+    */
     Request(std::string sender, std::string requestType,
-      std::string resource);
-
-  	/**
-  	Constructs a request.
-  	*/
-    Request(std::string sender, std::string requestType,
-      std::string resource, IEntity::Unique content);
-
-  	/**
-  	The request sender.
-  	*/
-  	std::string getSender() const { return sender; };
-
-	  /**
-	  Set the request sender.
-	  */
-	  void setSender(std::string value) { sender = value; };
+    std::string resource);
 
     /**
-      The request type (create, get, update, delete etc.).
+      Constructs a request.
+    */
+    Request(std::string sender, std::string requestType,
+    std::string resource, IEntity::Unique content);
+
+    /**
+      The request sender.
+    */
+    std::string getSender() const { return sender; };
+
+    /**
+      Set the request sender.
+    */
+    void setSender(std::string value) { sender = value; };
+
+    /**
+      The request type.
     */
     std::string getRequestType() const { return requestType; }
 

@@ -29,11 +29,12 @@ class QueueResourceClient : public QueueClient {
     QueueResourceClient& operator=(const QueueResourceClient&) = delete;
 
     std::string getClientId() const override { return clientId; }
-    void onResponse(const Response& response) const override;
-    void onEvent(const Event& event) const override;
 
     Core::Status sendRequest(std::string requestType);
     Core::Status sendRequest(std::string requestType, Core::IEntity::Unique content);
+
+    void onResponse(const Response& response) const override;
+    void onEvent(const Event& event) const override;
 
     template<typename T>
     void addOnResponse(std::string requestType, T onResponse) {
