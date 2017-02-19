@@ -15,18 +15,17 @@ namespace Core {
 
   template<typename ... Args>
   std::string stringFormat(const std::string& format, Args ... args) {
-    char buffer [0];
-    size_t size = snprintf(buffer, 0, format.c_str(), args ...);
+    size_t size = snprintf(nullptr, 0, format.c_str(), args ...);
     std::unique_ptr<char[]> buf(new char[size + 1]);
     snprintf(buf.get(), size + 1, format.c_str(), args ...);
     return std::string(buf.get(), size);
   }
 
   inline std::string ipToString(uint32_t ip) {
-      uint8_t a = (ip & (0xff << 24)) >> 24;
-      uint8_t b = (ip & (0xff << 16)) >> 16;
-      uint8_t c = (ip & (0xff << 8)) >> 8;
-      uint8_t d = (ip & 0xff);
+      uint8_t a = static_cast<uint8_t>((ip & (0xff << 24)) >> 24);
+      uint8_t b = static_cast<uint8_t>((ip & (0xff << 16)) >> 16);
+      uint8_t c = static_cast<uint8_t>((ip & (0xff << 8)) >> 8);
+      uint8_t d = static_cast<uint8_t>(ip & 0xff);
       return stringFormat("%hu.%hu.%hu.%hu", a, b, c, d);
   }
 

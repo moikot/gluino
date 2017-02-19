@@ -17,7 +17,7 @@ namespace {
 
 }
 
-TEST_CASE("successful casting", "[Casting]") {
+TEST_CASE("successful casting", "[Memory]") {
 
 	SECTION("unique to unique casting succeeds") {
 		std::unique_ptr<BaseClass> base = std::make_unique<DerivedClass>();
@@ -43,7 +43,7 @@ TEST_CASE("successful casting", "[Casting]") {
 
 }
 
-TEST_CASE("unsuccessful casting", "[Casting]") {
+TEST_CASE("unsuccessful casting", "[Memory]") {
 
 	SECTION("unique to unique casting fails") {
 		auto base = std::make_unique<BaseClass>();
