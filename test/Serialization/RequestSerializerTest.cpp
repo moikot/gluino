@@ -19,10 +19,10 @@ namespace {
 }
 
 TEST_CASE("request serialization is not implemented", "[RequestSerializer]") {
-  auto event = Request::makeUnique("sender", "get", "res", Content::makeUnique());
+  auto event = makeUnique<Request>("sender", "get", "res", makeUnique<Content>());
 
   Mock<ISerializationContext> context;
-  ISerializer::Unique serializer = RequestSerializer::makeUnique();
+  std::unique_ptr<ISerializer> serializer = makeUnique<RequestSerializer>();
 
   auto result = serializer->serialize(*event, context.get());
   REQUIRE(result.getStatusCode() == StatusCode::InternalServerError);
@@ -31,7 +31,7 @@ TEST_CASE("request serialization is not implemented", "[RequestSerializer]") {
 
 TEST_CASE("can deserialize a request", "[RequestSerializer]") {
 
-  auto content = Content::makeUnique();
+  auto content = makeUnique<Content>();
   auto contentPtr = content.get();
   Mock<IDeserializationContext> context;
 
@@ -47,13 +47,13 @@ TEST_CASE("can deserialize a request", "[RequestSerializer]") {
 
   When(Method(context, hasKey).Using("content")).Return(true);
 
-  When(Method(context, getEntity).Using("content", _)).Do([&](const std::string&, Core::IEntity::Unique& entity) {
+  When(Method(context, getEntity).Using("content", _)).Do([&](const std::string&, std::unique_ptr<IEntity>& entity) {
     entity = std::move(content);
     return Status::OK;
   });
 
-  ISerializer::Unique serializer = RequestSerializer::makeUnique();
-  IEntity::Unique entity;
+  std::unique_ptr<ISerializer> serializer = makeUnique<RequestSerializer>();
+  std::unique_ptr<IEntity> entity;
 
   auto result = serializer->deserialize(entity, context.get());
   REQUIRE(result.isOk() == true);
@@ -98,14 +98,14 @@ TEST_CASE("request deserialization fails", "[RequestSerializer]") {
       return Status::OK;
     });
     When(Method(context, hasKey).Using("content")).Return(true);
-    When(Method(context, getEntity).Using("content", _)).Do([&](const std::string&, Core::IEntity::Unique&) {
+    When(Method(context, getEntity).Using("content", _)).Do([&](const std::string&, std::unique_ptr<IEntity>&) {
       return Status::NotImplemented;
     });
   }
 
-  ISerializer::Unique serializer = RequestSerializer::makeUnique();
+  std::unique_ptr<ISerializer> serializer = makeUnique<RequestSerializer>();
 
-  IEntity::Unique entity;
+  std::unique_ptr<IEntity> entity;
   auto result = serializer->deserialize(entity, context.get());
 
   REQUIRE(result.isOk() == false);

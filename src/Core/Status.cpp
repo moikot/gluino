@@ -1,4 +1,5 @@
 #include "Status.hpp"
+#include "Casting.hpp"
 
 using namespace Core;
 
@@ -11,7 +12,7 @@ Status::Status(const StatusCode& statusCode, const std::string& message) :
 
 Status::Status(const StatusCode& statusCode, const std::string& message,
              Status innerResult) :
-  statusCode(statusCode), message(message), innerStatus(makeUnique(innerResult)) {
+  statusCode(statusCode), message(message), innerStatus(makeUnique<Status>(innerResult)) {
 }
 
 Status::Status(Status && op) = default;
@@ -21,7 +22,7 @@ Status& Status::operator = (Status && op) = default;
 Status::Status(const Status& status) :
   statusCode(status.statusCode), message(status.message) {
   if (status.getInnerStatus()) {
-    innerStatus = Status::makeUnique(*status.getInnerStatus());
+    innerStatus = makeUnique<Status>(*status.getInnerStatus());
   }
 }
 
@@ -31,7 +32,7 @@ Status::operator = (const Status& status) {
     statusCode = status.statusCode;
     message = status.message;
     if (status.getInnerStatus()) {
-      innerStatus = Status::makeUnique(*status.getInnerStatus());
+      innerStatus = makeUnique<Status>(*status.getInnerStatus());
     }
   }
   return *this;

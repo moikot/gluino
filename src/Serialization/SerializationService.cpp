@@ -16,7 +16,7 @@ SerializationService::serialize(
   const IEntity& entity,
   std::string& json) const {
 
-  ISerializationContext::Unique context;
+  std::unique_ptr<ISerializationContext> context;
   auto result = contextFactory.createSerializationContext(*this, context);
   if (!result.isOk())
     return result;
@@ -50,9 +50,9 @@ SerializationService::serialize (
 Core::Status
 SerializationService::deserialize(
   const std::string& json,
-  Core::IEntity::Unique& entity) const {
+  std::unique_ptr<IEntity>& entity) const {
 
-  IDeserializationContext::Unique context;
+  std::unique_ptr<IDeserializationContext> context;
   auto result = contextFactory.createDeserializationContext(*this, json, context);
   if (!result.isOk())
     return result;
@@ -63,7 +63,7 @@ SerializationService::deserialize(
 Core::Status
 SerializationService::deserialize(
   IDeserializationContext& context,
-  Core::IEntity::Unique& entity) const {
+  std::unique_ptr<IEntity>& entity) const {
 
   std::string typeId;
   auto result = context.getString(TYPE_FIELD, typeId);
@@ -79,7 +79,7 @@ SerializationService::deserialize(
 }
 
 void
-SerializationService::addSerializer(ISerializer::Unique serializer) {
+SerializationService::addSerializer(std::unique_ptr<ISerializer> serializer) {
   serializers.push_back(std::move(serializer));
 }
 
@@ -87,7 +87,7 @@ const ISerializer*
 SerializationService::getSerialzier(std::string typeId) const {
 
   auto findIter = std::find_if(serializers.begin(), serializers.end(),
-    [&](const ISerializer::Unique& serializer){
+    [&](const std::unique_ptr<ISerializer>& serializer){
       return serializer->getTypeId() == typeId;
     });
 

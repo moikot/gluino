@@ -6,6 +6,6 @@ Event::Event(std::string eventType, std::string resource) :
   eventType(eventType), resource(resource) {
 }
 
-Event::Event(std::string eventType, std::string resource, IEntity::Unique content) :
+Event::Event(std::string eventType, std::string resource, std::unique_ptr<IEntity> content) :
   eventType(eventType), resource(resource), content(std::move(content)) {
 }

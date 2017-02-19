@@ -21,7 +21,7 @@ class Response : public Core::IEntity {
       Constructs a response.
     */
     Response(std::string receiver, std::string requestType,
-    std::string resource, IEntity::Unique content);
+    std::string resource, std::unique_ptr<IEntity> content);
 
     /**
       The response receiver.
@@ -52,7 +52,7 @@ class Response : public Core::IEntity {
     std::string     receiver;
     std::string     requestType;
     std::string     resource;
-    IEntity::Unique content;
+    std::unique_ptr<IEntity> content;
 };
 
 }

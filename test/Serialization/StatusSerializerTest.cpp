@@ -1,5 +1,6 @@
 #include "Utils/Testing.hpp"
 
+#include "Core/Casting.hpp"
 #include "Serialization/StatusSerializer.hpp"
 
 using namespace Core;
@@ -18,7 +19,7 @@ namespace {
 
 TEST_CASE("can serialize a status", "[StatusSerializer]") {
   auto innerStatus = Status::NotImplemented;
-  auto status = Status::makeUnique(StatusCode::InternalServerError, "serverError", innerStatus);
+  auto status = makeUnique<Status>(StatusCode::InternalServerError, "serverError", innerStatus);
 
   Mock<ISerializationContext> context;
 
@@ -36,7 +37,7 @@ TEST_CASE("can serialize a status", "[StatusSerializer]") {
     return Status::OK;
   });
 
-  ISerializer::Unique serializer = StatusSerializer::makeUnique();
+  std::unique_ptr<ISerializer> serializer = makeUnique<StatusSerializer>();
 
   auto result = serializer->serialize(*status, context.get());
   REQUIRE(result.isOk() == true);
@@ -76,19 +77,19 @@ TEST_CASE("status serialization fails", "[StatusSerializer]") {
   }
 
   auto innerStatus = Status::NotImplemented;
-  auto status = Status::makeUnique(StatusCode::OK, "serverError", innerStatus);
+  auto status = makeUnique<Status>(StatusCode::OK, "serverError", innerStatus);
 
-  ISerializer::Unique serializer = StatusSerializer::makeUnique();
+  std::unique_ptr<ISerializer> serializer = makeUnique<StatusSerializer>();
   auto result = serializer->serialize(*status, context.get());
 
   REQUIRE(result.isOk() == false);
 }
 
 TEST_CASE("status deserialization is not implemented", "[StatusSerializer]") {
-  IEntity::Unique entity;
+  std::unique_ptr<IEntity> entity;
   Mock<IDeserializationContext> context;
 
-  ISerializer::Unique serializer = StatusSerializer::makeUnique();
+  std::unique_ptr<ISerializer> serializer = makeUnique<StatusSerializer>();
 
   auto result = serializer->deserialize(entity, context.get());
   REQUIRE(result.getStatusCode() == StatusCode::InternalServerError);

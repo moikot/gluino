@@ -30,11 +30,11 @@ struct ISerializationService {
 
   virtual Core::Status deserialize(
     const std::string& json,
-    Core::IEntity::Unique& entity) const = 0;
+    std::unique_ptr<Core::IEntity>& entity) const = 0;
 
   virtual Core::Status deserialize(
     IDeserializationContext& context,
-    Core::IEntity::Unique& entity) const = 0;
+    std::unique_ptr<Core::IEntity>& entity) const = 0;
 };
 
 }

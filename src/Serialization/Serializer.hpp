@@ -15,7 +15,7 @@ namespace Serialization {
 
 template <typename T>
 class Serializer : public ISerializer {
-  typedef typename T::Unique TUnique;
+  typedef typename std::unique_ptr<T> TUnique;
   public:
     // From ISerializer
     virtual const std::string& getTypeId() const override {
@@ -37,7 +37,7 @@ class Serializer : public ISerializer {
     }
 
     virtual Core::Status deserialize(
-      Core::IEntity::Unique& entity,
+      std::unique_ptr<Core::IEntity>& entity,
       IDeserializationContext& context) const override {
       TUnique entityT;
       auto result = deserialize(entityT, context);

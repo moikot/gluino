@@ -26,7 +26,7 @@ struct ISerializer {
     ISerializationContext& context) const = 0;
 
   virtual Core::Status deserialize(
-    Core::IEntity::Unique& entity,
+    std::unique_ptr<Core::IEntity>& entity,
     IDeserializationContext& context) const = 0;
 };
 

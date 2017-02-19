@@ -19,26 +19,26 @@ namespace Messaging {
     virtual void idle() override {
     }
 
-    virtual Core::Status addRequest(Request::Unique request) override {
+    virtual Core::Status addRequest(std::unique_ptr<Request> request) override {
       return queue.addRequest(*request);
     }
 
-    virtual Core::Status addEvent(Event::Unique event) override {
+    virtual Core::Status addEvent(std::unique_ptr<Event> event) override {
       return queue.addEvent(*event);
     }
 
-    virtual QueueGenericClient::Unique createClient(std::string) {
+    virtual std::unique_ptr<QueueGenericClient> createClient(std::string) {
       return nullptr;
     }
 
-    virtual QueueResourceClient::Unique createClient(std::string, std::string) {
+    virtual std::unique_ptr<QueueResourceClient> createClient(std::string, std::string) {
       return nullptr;
     }
 
     virtual void removeClient(const QueueClient&) {
     }
 
-    virtual QueueResourceController::Unique createController(std::string) {
+    virtual std::unique_ptr<QueueResourceController> createController(std::string) {
       return nullptr;
     }
 

@@ -48,7 +48,7 @@ class Status : public IEntity {
   private:
     StatusCode		  statusCode;
     std::string		  message;
-    Status::Unique	innerStatus;
+    std::unique_ptr<Status>	innerStatus;
 };
 
 }

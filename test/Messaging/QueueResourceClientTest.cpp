@@ -1,5 +1,6 @@
 #include "Utils/Testing.hpp"
 
+#include "Core/Casting.hpp"
 #include "Messaging/IMessageQueue.hpp"
 #include "FakeMessageQueue.h"
 
@@ -34,7 +35,7 @@ TEST_CASE("queue resource client can send a request", "[QueueResourceClient]") {
   });
 
   FakeMessageQueue mq(messageQueue.get());
-  auto client = QueueResourceClient::makeUnique("clientId", "resource", mq);
+  auto client = makeUnique<QueueResourceClient>("clientId", "resource", mq);
   client->sendRequest("get");
 
   Verify(Method(messageQueue, addRequest));
@@ -42,7 +43,7 @@ TEST_CASE("queue resource client can send a request", "[QueueResourceClient]") {
 
 TEST_CASE("queue resource client can send a request with content", "[QueueResourceClient]") {
   Mock<IMockableMessageQueue> messageQueue;
-  auto content = Content::makeUnique();
+  auto content = makeUnique<Content>();
   auto contentPtr = content.get();
 
   When(Method(messageQueue, addRequest)).Do([=](const Request& request) {
@@ -54,7 +55,7 @@ TEST_CASE("queue resource client can send a request with content", "[QueueResour
   });
 
   FakeMessageQueue mq(messageQueue.get());
-  auto client = QueueResourceClient::makeUnique("clientId", "resource", mq);
+  auto client = makeUnique<QueueResourceClient>("clientId", "resource", mq);
   client->sendRequest("get", std::move(content));
 
   Verify(Method(messageQueue, addRequest));
@@ -62,10 +63,10 @@ TEST_CASE("queue resource client can send a request with content", "[QueueResour
 
 TEST_CASE("queue resource client can process a response", "[QueueResourceClient]") {
   Mock<IMessageQueue> messageQueue;
-  When(Method(messageQueue, removeClient)).Do([](const QueueClient& c) {});
+  When(Method(messageQueue, removeClient)).Do([](const QueueClient&) {});
   {
-    auto client = QueueResourceClient::makeUnique("id", "resource", messageQueue.get());
-    auto result = Status::makeUnique(Status::OK);
+    auto client = makeUnique<QueueResourceClient>("id", "resource", messageQueue.get());
+    auto result = makeUnique<Status>(Status::OK);
     auto resultPtr = result.get();
 
     Mock<EventSink> eventSink;
@@ -85,10 +86,10 @@ TEST_CASE("queue resource client can process a response", "[QueueResourceClient]
 
 TEST_CASE("queue resource client can process an event", "[QueueResourceClient]") {
   Mock<IMessageQueue> messageQueue;
-  When(Method(messageQueue, removeClient)).Do([](const QueueClient& c) {});
+  When(Method(messageQueue, removeClient)).Do([](const QueueClient&) {});
   {
-    auto client = QueueResourceClient::makeUnique("id", "resource", messageQueue.get());
-    auto content = Content::makeUnique();
+    auto client = makeUnique<QueueResourceClient>("id", "resource", messageQueue.get());
+    auto content = makeUnique<Content>();
     auto contentPtr = content.get();
 
     Mock<EventSink> eventSink;

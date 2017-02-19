@@ -1,5 +1,6 @@
 #include "Utils/Testing.hpp" 
 
+#include "Core/Casting.hpp"
 #include "Messaging/Request.hpp"
 
 using namespace Core;
@@ -14,11 +15,11 @@ namespace {
 }
 
 TEST_CASE("Request can be constructed", "[Request]") {
-	auto content = Content::makeUnique();
+	auto content = makeUnique<Content>();
 	auto contentPtr = content.get();
 
-	auto requestNoContent = Request::makeUnique("sender", "get", "resource");
-	auto requestWithContent = Request::makeUnique("sender", "get", "resource", std::move(content));
+	auto requestNoContent = makeUnique<Request>("sender", "get", "resource");
+	auto requestWithContent = makeUnique<Request>("sender", "get", "resource", std::move(content));
 
 	SECTION("type is correct") {
 		REQUIRE(requestNoContent->getTypeId() == "request");
@@ -47,7 +48,7 @@ TEST_CASE("Request can be constructed", "[Request]") {
 }
 
 TEST_CASE("Sender can be changed", "[Request]") {
-	auto request = Request::makeUnique("sender", "get", "resource");
+	auto request = makeUnique<Request>("sender", "get", "resource");
 
 	request->setSender("new_sender");
 

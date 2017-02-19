@@ -21,7 +21,7 @@ class EventSerializer : public Serializer<Messaging::Event> {
       ISerializationContext& context) const override;
 
     virtual Core::Status deserialize(
-      Messaging::Event::Unique& event,
+      std::unique_ptr<Messaging::Event>& event,
       IDeserializationContext& context) const override;
 };
 

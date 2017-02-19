@@ -1,5 +1,6 @@
 #include "Utils/Testing.hpp"
 
+#include "Core/Casting.hpp"
 #include "Serialization/ResponseSerializer.hpp"
 
 using namespace Core;
@@ -18,10 +19,10 @@ namespace {
 }
 
 TEST_CASE("can serialize a response", "[ResponseSerializer]") {
-  auto content = Content::makeUnique();
+  auto content = makeUnique<Content>();
   auto contentPtr = content.get();
 
-  auto response = Response::makeUnique("rec", "get", "res", std::move(content));
+  auto response = makeUnique<Response>("rec", "get", "res", std::move(content));
 
   Mock<ISerializationContext> context;
 
@@ -39,7 +40,7 @@ TEST_CASE("can serialize a response", "[ResponseSerializer]") {
     return Status::OK;
   });
 
-  ISerializer::Unique serializer = ResponseSerializer::makeUnique();
+  std::unique_ptr<ISerializer> serializer = makeUnique<ResponseSerializer>();
 
   auto result = serializer->serialize(*response, context.get());
   REQUIRE(result.isOk() == true);
@@ -78,19 +79,19 @@ TEST_CASE("response serialization fails", "[ResponseSerializer]") {
     );
   }
 
-  auto response = Response::makeUnique("rec", "get", "res", Content::makeUnique());
+  auto response = makeUnique<Response>("rec", "get", "res", makeUnique<Content>());
 
-  ISerializer::Unique serializer = ResponseSerializer::makeUnique();
+  std::unique_ptr<ISerializer> serializer = makeUnique<ResponseSerializer>();
   auto result = serializer->serialize(*response, context.get());
 
   REQUIRE(result.isOk() == false);
 }
 
 TEST_CASE("response deserialization is not implemented", "[ResponseSerializer]") {
-  IEntity::Unique entity;
+  std::unique_ptr<IEntity> entity;
   Mock<IDeserializationContext> context;
 
-  ISerializer::Unique serializer = ResponseSerializer::makeUnique();
+  std::unique_ptr<ISerializer> serializer = makeUnique<ResponseSerializer>();
 
   auto result = serializer->deserialize(entity, context.get());
   REQUIRE(result.getStatusCode() == StatusCode::InternalServerError);

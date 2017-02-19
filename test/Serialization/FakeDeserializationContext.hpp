@@ -33,7 +33,7 @@ struct FakeDeserializationContext : public Serialization::IDeserializationContex
     return context.getBool(key, value);
   }
 
-  virtual Core::Status getEntity(const std::string& key, Core::IEntity::Unique& entity) override {
+  virtual Core::Status getEntity(const std::string& key, std::unique_ptr<Core::IEntity>& entity) override {
     return context.getEntity(key, entity);
   }
 

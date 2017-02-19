@@ -31,22 +31,22 @@ class MessageQueue : public IMessageQueue {
     /**
       Adds a request to the queue.
     */
-    virtual Core::Status addRequest(Request::Unique request) override;
+    virtual Core::Status addRequest(std::unique_ptr<Request> request) override;
 
     /**
       Adds a event to the queue.
     */
-    virtual Core::Status addEvent(Event::Unique event) override;
+    virtual Core::Status addEvent(std::unique_ptr<Event> event) override;
 
     /**
       Creates a queue client.
     */
-    virtual QueueGenericClient::Unique createClient(std::string clinetId) override;
+    virtual std::unique_ptr<QueueGenericClient> createClient(std::string clinetId) override;
 
     /**
     Creates a queue client.
     */
-    virtual QueueResourceClient::Unique createClient(std::string clinetId, std::string resource) override;
+    virtual std::unique_ptr<QueueResourceClient> createClient(std::string clinetId, std::string resource) override;
 
     /**
       Removes the queue client.
@@ -56,7 +56,7 @@ class MessageQueue : public IMessageQueue {
     /**
       Creates a queue controller.
     */
-    virtual QueueResourceController::Unique createController(std::string resource) override;
+    virtual std::unique_ptr<QueueResourceController> createController(std::string resource) override;
 
     /**
       Removes the queue controller.
@@ -65,9 +65,9 @@ class MessageQueue : public IMessageQueue {
 
   private:
     Core::ILogger& logger;
-    std::queue<Request::Unique> requests;
-    std::queue<Response::Unique> responses;
-    std::queue<Event::Unique> events;
+    std::queue<std::unique_ptr<Request>> requests;
+    std::queue<std::unique_ptr<Response>> responses;
+    std::queue<std::unique_ptr<Event>> events;
 
     std::list<const QueueClient*> clients;
     std::list<const QueueResourceController*> controllers;
@@ -79,10 +79,7 @@ class MessageQueue : public IMessageQueue {
     const QueueClient*  getClient(std::string clientId);
     RequestHandler      getRequestHandler(const Request& request);
 
-    void sendResponseFor(
-      const Request&          request,
-      Core::IEntity::Unique   result
-    );
+    void sendResponseFor(const Request& request, std::unique_ptr<Core::IEntity> result);
 };
 
 }

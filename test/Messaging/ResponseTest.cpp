@@ -1,5 +1,6 @@
 #include "Utils/Testing.hpp"
 
+#include "Core/Casting.hpp"
 #include "Core/Status.hpp"
 #include "Messaging/Response.hpp"
 
@@ -15,10 +16,10 @@ namespace {
 }
 
 TEST_CASE("Response can be constructed", "[Response]") {
-  auto content = Content::makeUnique();
+  auto content = makeUnique<Content>();
   auto contentPtr = content.get();
 
-  auto response = Response::makeUnique("receiver", "get", "resource", std::move(content));
+  auto response = makeUnique<Response>("receiver", "get", "resource", std::move(content));
 
   SECTION("type is correct") {
     REQUIRE(response->getTypeId() == "response");
@@ -42,7 +43,7 @@ TEST_CASE("Response can be constructed", "[Response]") {
 }
 
 TEST_CASE("Receiver can be changed", "[Request]") {
-	auto response = Response::makeUnique("receiver", "get", "resource", Content::makeUnique());
+	auto response = makeUnique<Response>("receiver", "get", "resource", makeUnique<Content>());
 
 	response->setReceiver("new_receiver");
 

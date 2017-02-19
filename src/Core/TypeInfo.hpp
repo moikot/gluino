@@ -15,8 +15,6 @@ namespace Core {
 
 #define TYPE_INFO(Class, SuperClass, ClassTypeId) \
 public: \
-  TYPE_PTRS(Class) \
-  \
   static const std::string& TypeId() { \
     static std::string typeId(ClassTypeId); \
     return typeId; \

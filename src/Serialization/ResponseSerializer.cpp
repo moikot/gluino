@@ -29,6 +29,6 @@ ResponseSerializer::serialize(
 }
 
 Status
-ResponseSerializer::deserialize(Response::Unique&, IDeserializationContext&) const {
+ResponseSerializer::deserialize(std::unique_ptr<Response>&, IDeserializationContext&) const {
   return Status::NotImplemented;
 }

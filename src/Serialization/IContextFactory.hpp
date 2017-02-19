@@ -21,11 +21,11 @@ struct IContextFactory {
 
     virtual Core::Status createSerializationContext(
       const ISerializationService& serializationService,
-      ISerializationContext::Unique& context) const = 0;
+      std::unique_ptr<ISerializationContext>& context) const = 0;
 
     virtual Core::Status createDeserializationContext(
       const ISerializationService& serializationService, const std::string& json,
-      IDeserializationContext::Unique& context) const = 0;
+      std::unique_ptr<IDeserializationContext>& context) const = 0;
 };
 
 }

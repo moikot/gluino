@@ -1,6 +1,8 @@
 #include "QueueResourceClient.hpp"
 #include "IMessageQueue.hpp"
+#include "Core/Casting.hpp"
 
+using namespace Core;
 using namespace Messaging;
 
 QueueResourceClient::QueueResourceClient(std::string clientId, std::string resource, IMessageQueue& messageQueue) :
@@ -13,13 +15,13 @@ QueueResourceClient::~QueueResourceClient() {
 
 Core::Status
 QueueResourceClient::sendRequest(std::string requestType) {
-  auto request = Request::makeUnique(clientId, requestType, resource);
+  auto request = makeUnique<Request>(clientId, requestType, resource);
   return messageQueue.addRequest(std::move(request));
 }
 
 Core::Status
-QueueResourceClient::sendRequest(std::string requestType, Core::IEntity::Unique content) {
-  auto request = Request::makeUnique(clientId, requestType, resource, std::move(content));
+QueueResourceClient::sendRequest(std::string requestType, std::unique_ptr<IEntity> content) {
+  auto request = makeUnique<Request>(clientId, requestType, resource, std::move(content));
   return messageQueue.addRequest(std::move(request));
 }
 

@@ -18,7 +18,7 @@ namespace Messaging {
     virtual ~ResourceRequestHandler() = default;
     virtual std::string getRequestType() const = 0;
     virtual std::string getContentType() const = 0;
-    virtual Core::IEntity::Unique makeRequest(const Request& request) const = 0;
+    virtual std::unique_ptr<Core::IEntity> makeRequest(const Request& request) const = 0;
   };
 
   template <typename T, class = void>
@@ -43,7 +43,7 @@ namespace Messaging {
         return "";
       }
 
-      virtual Core::IEntity::Unique makeRequest(const Request&) const override {
+      virtual std::unique_ptr<Core::IEntity> makeRequest(const Request&) const override {
          return onRequest();
       }
 
@@ -73,7 +73,7 @@ namespace Messaging {
         return Core::base_type<typename traits::template arg<0>::type>::TypeId();
       }
 
-      virtual Core::IEntity::Unique makeRequest(const Request& request) const override {
+      virtual std::unique_ptr<Core::IEntity> makeRequest(const Request& request) const override {
         return onRequest(static_cast<typename traits::template arg<0>::type>(*request.getContent()));
       }
 

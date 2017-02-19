@@ -21,7 +21,7 @@ class StatusSerializer : public Serializer<Core::Status> {
       ISerializationContext& context) const override;
 
     virtual Core::Status deserialize(
-      Core::Status::Unique& status,
+      std::unique_ptr<Core::Status>& status,
       IDeserializationContext& context) const override;
 };
 

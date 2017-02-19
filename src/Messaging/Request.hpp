@@ -27,7 +27,7 @@ class Request : public Core::IEntity {
       Constructs a request.
     */
     Request(std::string sender, std::string requestType,
-    std::string resource, IEntity::Unique content);
+    std::string resource, std::unique_ptr<Core::IEntity> content);
 
     /**
       The request sender.
@@ -58,7 +58,7 @@ class Request : public Core::IEntity {
     std::string     sender;
     std::string     requestType;
     std::string     resource;
-    IEntity::Unique content;
+    std::unique_ptr<IEntity> content;
 };
 
 }

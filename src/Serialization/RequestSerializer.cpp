@@ -1,4 +1,5 @@
 #include "RequestSerializer.hpp"
+#include "Core/Casting.hpp"
 
 using namespace Core;
 using namespace Messaging;
@@ -15,7 +16,7 @@ RequestSerializer::serialize(const Request&, ISerializationContext&) const {
 
 Status
 RequestSerializer::deserialize(
-  Request::Unique& request,
+  std::unique_ptr<Request>& request,
   IDeserializationContext& context) const {
 
   std::string requestType;
@@ -28,13 +29,13 @@ RequestSerializer::deserialize(
   if (!result.isOk())
     return result;
 
-  Core::IEntity::Unique content;
+  std::unique_ptr<IEntity> content;
   if (context.hasKey(FIELD_CONTENT)) {
     result = context.getEntity(FIELD_CONTENT, content);
     if (!result.isOk())
       return result;
   }
 
-  request = Request::makeUnique("", requestType, resource, std::move(content));
+  request = makeUnique<Request>("", requestType, resource, std::move(content));
   return Status::OK;
 }

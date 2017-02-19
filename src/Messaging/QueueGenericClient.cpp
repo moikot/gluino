@@ -1,5 +1,6 @@
 #include "QueueGenericClient.hpp"
 #include "IMessageQueue.hpp"
+#include "Core/Casting.hpp"
 
 using namespace Core;
 using namespace Messaging;
@@ -13,8 +14,8 @@ QueueGenericClient::~QueueGenericClient() {
 }
 
 Status
-QueueGenericClient::sendRequest(std::string requestType, std::string resource, IEntity::Unique content) {
-	auto request = Request::makeUnique(clientId, requestType, resource, std::move(content));
+QueueGenericClient::sendRequest(std::string requestType, std::string resource, std::unique_ptr<IEntity> content) {
+	auto request = makeUnique<Request>(clientId, requestType, resource, std::move(content));
 	return messageQueue.addRequest(std::move(request));
 }
 

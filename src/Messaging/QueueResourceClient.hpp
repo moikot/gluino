@@ -11,7 +11,6 @@
 #include "ResourceResponseHandler.hpp"
 #include "ResourceEventHandler.hpp"
 #include "Core/Status.hpp"
-#include "Core/Memory.hpp"
 
 #include <vector>
 
@@ -31,7 +30,7 @@ class QueueResourceClient : public QueueClient {
     std::string getClientId() const override { return clientId; }
 
     Core::Status sendRequest(std::string requestType);
-    Core::Status sendRequest(std::string requestType, Core::IEntity::Unique content);
+    Core::Status sendRequest(std::string requestType, std::unique_ptr<Core::IEntity> content);
 
     void onResponse(const Response& response) const override;
     void onEvent(const Event& event) const override;
@@ -50,8 +49,8 @@ class QueueResourceClient : public QueueClient {
     const std::string clientId;
     const std::string resource;
     IMessageQueue& messageQueue;
-    std::vector<ResourceResponseHandler::Unique> responseHandlers;
-    std::vector<ResourceEventHandler::Unique> eventHandlers;
+    std::vector<std::unique_ptr<ResourceResponseHandler>> responseHandlers;
+    std::vector<std::unique_ptr<ResourceEventHandler>> eventHandlers;
 };
 
 }

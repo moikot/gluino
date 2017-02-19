@@ -21,7 +21,7 @@ class ResponseSerializer : public Serializer<Messaging::Response> {
       ISerializationContext& context) const override;
 
     virtual Core::Status deserialize(
-      Messaging::Response::Unique& response,
+      std::unique_ptr<Messaging::Response>& response,
       IDeserializationContext& context) const override;
 };
 

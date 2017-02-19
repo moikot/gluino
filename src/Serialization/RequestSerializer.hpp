@@ -21,7 +21,7 @@ class RequestSerializer : public Serializer<Messaging::Request> {
       ISerializationContext& context) const override;
 
     virtual Core::Status deserialize(
-      Messaging::Request::Unique& request,
+      std::unique_ptr<Messaging::Request>& request,
       IDeserializationContext& context) const override;
 };
 

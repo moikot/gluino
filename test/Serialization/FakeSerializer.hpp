@@ -26,7 +26,7 @@ struct FakeSerializer : public Serialization::ISerializer {
     }
 
   virtual Core::Status deserialize(
-    Core::IEntity::Unique& entity,
+    std::unique_ptr<Core::IEntity>& entity,
     Serialization::IDeserializationContext& context) const {
         return serializer.deserialize(entity, context);
     }

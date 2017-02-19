@@ -30,6 +30,6 @@ StatusSerializer::serialize(const Status& status,
 }
 
 Core::Status
-StatusSerializer::deserialize(Status::Unique&, IDeserializationContext&) const {
+StatusSerializer::deserialize(std::unique_ptr<Status>&, IDeserializationContext&) const {
   return Status::NotImplemented;
 }

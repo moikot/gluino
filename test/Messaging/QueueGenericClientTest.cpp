@@ -1,5 +1,6 @@
 #include "Utils/Testing.hpp"
 
+#include "Core/Casting.hpp"
 #include "Messaging/IMessageQueue.hpp"
 #include "FakeMessageQueue.h"
 
@@ -24,7 +25,7 @@ namespace {
 
 TEST_CASE("queue generic client can send a request", "[QueueGenericClient]") {
   Mock<IMockableMessageQueue> messageQueue;
-  auto content = Content::makeUnique();
+  auto content = makeUnique<Content>();
   auto contentPtr = content.get();
 
   When(Method(messageQueue, addRequest)).Do([=](const Request& request) {
@@ -36,7 +37,7 @@ TEST_CASE("queue generic client can send a request", "[QueueGenericClient]") {
   });
 
   FakeMessageQueue mq(messageQueue.get());
-  auto client = QueueGenericClient::makeUnique("clientId", mq);
+  auto client = makeUnique<QueueGenericClient>("clientId", mq);
   client->sendRequest("get", "resource", std::move(content));
 
   Verify(Method(messageQueue, addRequest));
@@ -44,10 +45,10 @@ TEST_CASE("queue generic client can send a request", "[QueueGenericClient]") {
 
 TEST_CASE("queue generic client can process a response", "[QueueGenericClient]") {
   Mock<IMessageQueue> messageQueue;
-  When(Method(messageQueue, removeClient)).Do([](const QueueClient& c) {});
+  When(Method(messageQueue, removeClient)).Do([](const QueueClient&) {});
   {
-    auto client = QueueGenericClient::makeUnique("id", messageQueue.get());
-    auto content = Status::makeUnique(Status::OK);
+    auto client = makeUnique<QueueGenericClient>("id", messageQueue.get());
+    auto content = makeUnique<Status>(Status::OK);
     auto contentPtr = content.get();
 
     Mock<EventSink> eventSink;
@@ -71,10 +72,10 @@ TEST_CASE("queue generic client can process a response", "[QueueGenericClient]")
 
 TEST_CASE("queue generic client can process an event", "[QueueGenericClient]") {
   Mock<IMessageQueue> messageQueue;
-  When(Method(messageQueue, removeClient)).Do([](const QueueClient& c) {});
+  When(Method(messageQueue, removeClient)).Do([](const QueueClient&) {});
   {
-    auto client = QueueGenericClient::makeShared("id", messageQueue.get());
-    auto content = Content::makeUnique();
+    auto client = std::make_shared<QueueGenericClient>("id", messageQueue.get());
+    auto content = makeUnique<Content>();
     auto contentPtr = content.get();
 
     Mock<EventSink> eventSink;

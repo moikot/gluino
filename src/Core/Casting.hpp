@@ -12,12 +12,17 @@
 
 namespace Core {
 
+template <typename T, typename... Args>
+std::unique_ptr<T> makeUnique(Args&&... args) {
+  return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+
 template<class Derived, class Base>
 Derived
 cast(Base base) {
   if (base != nullptr) {
     if(std::is_convertible<typename std::remove_pointer<Base>::type,
-       typename std::remove_pointer<Derived>::type>::value == true) {
+       typename std::remove_pointer<Derived>::type>::value) {
       return reinterpret_cast<Derived>(base);
     }
     if (base->isType(std::remove_pointer<Derived>::type::TypeId())) {

@@ -1,7 +1,9 @@
 #include "Utils/Testing.hpp"
 
+#include "Core/Casting.hpp"
 #include "Messaging/Event.hpp"
 
+using namespace Core;
 using namespace Messaging;
 
 namespace {
@@ -13,11 +15,11 @@ namespace {
 }
 
 TEST_CASE("Event can be constructed", "[Event]") {
-  auto content = Content::makeUnique();
+  auto content = makeUnique<Content>();
   auto contentPtr = content.get();
 
-  auto eventNoContent = Event::makeUnique("created", "resource");
-  auto eventWithContent = Event::makeUnique("created", "resource", std::move(content));
+  auto eventNoContent = makeUnique<Event>("created", "resource");
+  auto eventWithContent = makeUnique<Event>("created", "resource", std::move(content));
 
   SECTION("type is correct") {
     REQUIRE(eventNoContent->getTypeId() == "event");

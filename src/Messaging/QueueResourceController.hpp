@@ -9,7 +9,6 @@
 
 #include "ResourceRequestHandler.hpp"
 #include "Core/Status.hpp"
-#include "Core/Memory.hpp"
 
 #include <vector>
 
@@ -17,7 +16,7 @@ namespace Messaging {
 
 class IMessageQueue;
 
-typedef std::function<Core::IEntity::Unique(const Request&)> RequestHandler;
+typedef std::function<std::unique_ptr<Core::IEntity>(const Request&)> RequestHandler;
 
 class QueueResourceController {
   TYPE_PTRS(QueueResourceController)
@@ -29,7 +28,7 @@ class QueueResourceController {
     QueueResourceController& operator=(const QueueResourceController&) = delete;
 
     Core::Status sendEvent(std::string eventType);
-    Core::Status sendEvent(std::string eventType, Core::IEntity::Unique content);
+    Core::Status sendEvent(std::string eventType, std::unique_ptr<Core::IEntity> content);
 
     template<typename T>
     void addOnRequest(std::string requestType, T onRequest) {
@@ -41,7 +40,7 @@ class QueueResourceController {
   private:
     const std::string resource;
     IMessageQueue& messageQueue;
-    std::vector<ResourceRequestHandler::Unique> handlers;
+    std::vector<std::unique_ptr<ResourceRequestHandler>> handlers;
 };
 
 }

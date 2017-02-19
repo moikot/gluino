@@ -1,5 +1,6 @@
 #include "Utils/Testing.hpp"
 
+#include "Core/Casting.hpp"
 #include "Serialization/EventSerializer.hpp"
 
 using namespace Core;
@@ -18,10 +19,10 @@ namespace {
 }
 
 TEST_CASE("can serialize a request", "[EventSerializer]") {
-  auto content = Content::makeUnique();
+  auto content = makeUnique<Content>();
   auto contentPtr = content.get();
 
-  auto event = Event::makeUnique("get", "res", std::move(content));
+  auto event = makeUnique<Event>("get", "res", std::move(content));
 
   Mock<ISerializationContext> context;
 
@@ -39,7 +40,7 @@ TEST_CASE("can serialize a request", "[EventSerializer]") {
     return Status::OK;
   });
 
-  ISerializer::Unique serializer = EventSerializer::makeUnique();
+  std::unique_ptr<ISerializer> serializer = makeUnique<EventSerializer>();
 
   auto result = serializer->serialize(*event, context.get());
   REQUIRE(result.isOk() == true);
@@ -78,19 +79,19 @@ TEST_CASE("event serialization fails", "[EventSerializer]") {
     );
   }
 
-  auto event = Event::makeUnique("get", "res", Content::makeUnique());
+  auto event = makeUnique<Event>("get", "res", makeUnique<Content>());
 
-  ISerializer::Unique serializer = EventSerializer::makeUnique();
+  std::unique_ptr<ISerializer> serializer = makeUnique<EventSerializer>();
   auto result = serializer->serialize(*event, context.get());
 
   REQUIRE(result.isOk() == false);
 }
 
 TEST_CASE("event deserialization is not implemented", "[EventSerializer]") {
-  IEntity::Unique entity;
+  std::unique_ptr<IEntity> entity;
   Mock<IDeserializationContext> context;
 
-  ISerializer::Unique serializer = EventSerializer::makeUnique();
+  std::unique_ptr<ISerializer> serializer = makeUnique<EventSerializer>();
 
   auto result = serializer->deserialize(entity, context.get());
   REQUIRE(result.getStatusCode() == StatusCode::InternalServerError);

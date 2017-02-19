@@ -9,7 +9,7 @@ Request::Request(std::string sender, std::string requestType,
 }
 
 Request::Request(std::string sender, std::string requestType,
-  std::string resource, IEntity::Unique content) :
+  std::string resource, std::unique_ptr<IEntity> content) :
   sender(sender), requestType(requestType),
   resource(resource), content(std::move(content)) {
 }

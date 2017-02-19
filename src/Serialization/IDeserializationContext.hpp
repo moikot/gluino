@@ -25,7 +25,7 @@ struct IDeserializationContext {
   virtual Core::Status
     getBool(const std::string& key, bool& value) = 0;
   virtual Core::Status
-    getEntity(const std::string& key, Core::IEntity::Unique& entity) = 0;
+    getEntity(const std::string& key, std::unique_ptr<Core::IEntity>& entity) = 0;
 };
 
 }

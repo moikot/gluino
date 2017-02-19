@@ -32,17 +32,17 @@ class SerializationService : public ISerializationService {
 
     virtual Core::Status deserialize(
       const std::string& json,
-      Core::IEntity::Unique& entity) const override;
+      std::unique_ptr<Core::IEntity>& entity) const override;
 
     virtual Core::Status deserialize(
       IDeserializationContext& context,
-      Core::IEntity::Unique& entity) const override;
+      std::unique_ptr<Core::IEntity>& entity) const override;
 
-    void addSerializer(ISerializer::Unique serializer);
+    void addSerializer(std::unique_ptr<ISerializer> serializer);
 
   private:
     const IContextFactory&          contextFactory;
-    std::list<ISerializer::Unique>  serializers;
+    std::list<std::unique_ptr<ISerializer>>  serializers;
 
     const ISerializer* getSerialzier(std::string typeId) const;
 };

@@ -1,5 +1,6 @@
 #include "QueueResourceController.hpp"
 #include "IMessageQueue.hpp"
+#include "Core/Casting.hpp"
 
 using namespace Core;
 using namespace Messaging;
@@ -16,13 +17,13 @@ QueueResourceController::~QueueResourceController() {
 
 Core::Status
 QueueResourceController::sendEvent(std::string eventType) {
-  auto event = Event::makeUnique(eventType, resource);
+  auto event = makeUnique<Event>(eventType, resource);
   return messageQueue.addEvent(std::move(event));
 }
 
 Core::Status
-QueueResourceController::sendEvent(std::string eventType, Core::IEntity::Unique content) {
-  auto event = Event::makeUnique(eventType, resource, std::move(content));
+QueueResourceController::sendEvent(std::string eventType, std::unique_ptr<IEntity> content) {
+  auto event = makeUnique<Event>(eventType, resource, std::move(content));
   return messageQueue.addEvent(std::move(event));
 }
 
