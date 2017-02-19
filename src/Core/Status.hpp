@@ -5,8 +5,8 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef CORE_STATUS_RESULT_HPP
-#define CORE_STATUS_RESULT_HPP
+#ifndef CORE_STATUS_HPP
+#define CORE_STATUS_HPP
 
 #include "IEntity.hpp"
 #include "StatusCode.hpp"
@@ -55,4 +55,4 @@ class Status : public IEntity {
 
 }
 
-#endif /* end of include guard: CORE_STATUS_RESULT_HPP */
+#endif /* end of include guard: CORE_STATUS_HPP */

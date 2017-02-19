@@ -4,8 +4,8 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef SERIALIZATION_NOTIFICATION_SERIALIZER_HPP
-#define SERIALIZATION_NOTIFICATION_SERIALIZER_HPP
+#ifndef SERIALIZATION_EVENT_SERIALIZER_HPP
+#define SERIALIZATION_EVENT_SERIALIZER_HPP
 
 #include "Serializer.hpp"
 #include "Messaging/Event.hpp"
@@ -26,4 +26,4 @@ class EventSerializer : public Serializer<Messaging::Event> {
 
 }
 
-#endif /* end of include guard: SERIALIZATION_NOTIFICATION_SERIALIZER_HPP */
+#endif /* end of include guard: SERIALIZATION_EVENT_SERIALIZER_HPP */

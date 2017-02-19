@@ -20,12 +20,12 @@ class Event : public Core::IEntity {
   TYPE_INFO(Event, IEntity, "event")
   public:
   	/**
-  	Constructs an event.
+  	  Constructs an event.
   	*/
     Event(std::string eventType, std::string resource);
 
   	/**
-  	Constructs an event.
+  	  Constructs an event.
   	*/
     Event(std::string eventType, std::string resource, std::unique_ptr<IEntity> content);
 

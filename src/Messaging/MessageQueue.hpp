@@ -64,6 +64,7 @@ class MessageQueue : public IMessageQueue {
 
   private:
     Core::ILogger& logger;
+
     std::queue<std::unique_ptr<Request>> requests;
     std::queue<std::unique_ptr<Response>> responses;
     std::queue<std::unique_ptr<Event>> events;

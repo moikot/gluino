@@ -4,8 +4,8 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef CORE_STRING_FORMAT_HPP
-#define CORE_STRING_FORMAT_HPP
+#ifndef CORE_FORMAT_HPP
+#define CORE_FORMAT_HPP
 
 #include <string>
 #include <memory>
@@ -65,6 +65,7 @@ namespace Core {
   inline std::string toString(long double val) {
     return stringFormat("%Lf", val);
   }
+
 }
 
-#endif /* end of include guard: CORE_STRING_FORMAT_HPP */
+#endif /* end of include guard: CORE_FORMAT_HPP */

@@ -45,7 +45,7 @@ class List : public IList {
 
   private:
     std::list<T> elements;
- };
+};
 
 }
 
