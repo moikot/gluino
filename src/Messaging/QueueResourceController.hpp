@@ -9,7 +9,7 @@
 
 #include "ResourceRequestHandler.hpp"
 #include "Core/Status.hpp"
-#include "Core/Casting.hpp"
+#include "Core/Memory.hpp"
 
 #include <vector>
 

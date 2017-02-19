@@ -1,5 +1,5 @@
 #include "RequestSerializer.hpp"
-#include "Core/Casting.hpp"
+#include "Core/Memory.hpp"
 
 using namespace Core;
 using namespace Messaging;

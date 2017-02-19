@@ -4,8 +4,8 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef CORE_CASTING_HPP
-#define CORE_CASTING_HPP
+#ifndef CORE_MEMORY_HPP
+#define CORE_MEMORY_HPP
 
 #include <memory>
 #include <type_traits>
@@ -74,4 +74,4 @@ castToShared(const std::shared_ptr<Base>& base) noexcept
 
 }
 
-#endif /* end of include guard: CORE_CASTING_HPP */
+#endif /* end of include guard: CORE_MEMORY_HPP */

@@ -1,6 +1,6 @@
 #include "Utils/Testing.hpp"
 
-#include "Core/Casting.hpp"
+#include "Core/Memory.hpp"
 #include "Serialization/ResponseSerializer.hpp"
 
 using namespace Core;

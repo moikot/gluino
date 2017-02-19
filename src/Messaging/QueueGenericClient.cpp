@@ -1,6 +1,6 @@
 #include "QueueGenericClient.hpp"
 #include "IMessageQueue.hpp"
-#include "Core/Casting.hpp"
+#include "Core/Memory.hpp"
 
 using namespace Core;
 using namespace Messaging;

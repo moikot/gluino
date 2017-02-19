@@ -10,7 +10,7 @@
 #include "QueueClient.hpp"
 #include "ResourceResponseHandler.hpp"
 #include "ResourceEventHandler.hpp"
-#include "Core/Casting.hpp"
+#include "Core/Memory.hpp"
 #include "Core/Status.hpp"
 
 #include <vector>
