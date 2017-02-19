@@ -25,11 +25,11 @@ class Status : public IEntity {
     Status(const StatusCode& statusCode, const std::string& message);
     Status(const StatusCode& statusCode, const std::string& message, Status innerStatus);
 
-    Status(Status && op);
-    Status& operator=(Status && op);
-
     Status(const Status& op);
     Status& operator=(const Status& op);
+
+    Status(Status && op) = default;
+    Status& operator=(Status && op) = default;
 
     bool isOk() const {
       return getStatusCode() == StatusCode::OK;
