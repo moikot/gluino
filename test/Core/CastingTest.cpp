@@ -20,7 +20,7 @@ namespace {
 TEST_CASE("successful casting", "[Casting]") {
 
 	SECTION("unique to unique casting succeeds") {
-		std::unique_ptr<BaseClass> base = makeUnique<DerivedClass>();
+		std::unique_ptr<BaseClass> base = std::make_unique<DerivedClass>();
 		auto basePtr = base.get();
 		auto derived = castToUnique<DerivedClass>(std::move(base));
 		REQUIRE(base.get() == nullptr);
@@ -28,7 +28,7 @@ TEST_CASE("successful casting", "[Casting]") {
 	}
 
 	SECTION("unique to shared casting succeeds") {
-		std::unique_ptr<BaseClass> base = makeUnique<DerivedClass>();
+		std::unique_ptr<BaseClass> base = std::make_unique<DerivedClass>();
 		auto basePtr = base.get();
 		auto derived = castToShared<DerivedClass>(std::move(base));
 		REQUIRE(base.get() == nullptr);
@@ -46,14 +46,14 @@ TEST_CASE("successful casting", "[Casting]") {
 TEST_CASE("unsuccessful casting", "[Casting]") {
 
 	SECTION("unique to unique casting fails") {
-		auto base = makeUnique<BaseClass>();
+		auto base = std::make_unique<BaseClass>();
 		auto derived = castToUnique<DerivedClass>(std::move(base));
 		REQUIRE(base.get() != nullptr);
 		REQUIRE(derived.get() == nullptr);
 	}
 
 	SECTION("unique to shared casting fails") {
-		auto base = makeUnique<BaseClass>();
+		auto base = std::make_unique<BaseClass>();
 		auto derived = castToShared<DerivedClass>(std::move(base));
 		REQUIRE(base.get() != nullptr);
 		REQUIRE(derived.get() == nullptr);

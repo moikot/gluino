@@ -15,11 +15,11 @@ namespace {
 }
 
 TEST_CASE("Request can be constructed", "[Request]") {
-	auto content = makeUnique<Content>();
+	auto content = std::make_unique<Content>();
 	auto contentPtr = content.get();
 
-	auto requestNoContent = makeUnique<Request>("sender", "get", "resource");
-	auto requestWithContent = makeUnique<Request>("sender", "get", "resource", std::move(content));
+	auto requestNoContent = std::make_unique<Request>("sender", "get", "resource");
+	auto requestWithContent = std::make_unique<Request>("sender", "get", "resource", std::move(content));
 
 	SECTION("type is correct") {
 		REQUIRE(requestNoContent->getTypeId() == "request");
@@ -48,7 +48,7 @@ TEST_CASE("Request can be constructed", "[Request]") {
 }
 
 TEST_CASE("Sender can be changed", "[Request]") {
-	auto request = makeUnique<Request>("sender", "get", "resource");
+	auto request = std::make_unique<Request>("sender", "get", "resource");
 
 	request->setSender("new_sender");
 

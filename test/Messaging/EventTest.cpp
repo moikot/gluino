@@ -15,11 +15,11 @@ namespace {
 }
 
 TEST_CASE("Event can be constructed", "[Event]") {
-  auto content = makeUnique<Content>();
+  auto content = std::make_unique<Content>();
   auto contentPtr = content.get();
 
-  auto eventNoContent = makeUnique<Event>("created", "resource");
-  auto eventWithContent = makeUnique<Event>("created", "resource", std::move(content));
+  auto eventNoContent = std::make_unique<Event>("created", "resource");
+  auto eventWithContent = std::make_unique<Event>("created", "resource", std::move(content));
 
   SECTION("type is correct") {
     REQUIRE(eventNoContent->getTypeId() == "event");

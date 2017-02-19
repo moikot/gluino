@@ -47,14 +47,14 @@ MessageQueue::addEvent(std::unique_ptr<Event> event) {
 
 std::unique_ptr<QueueGenericClient>
 MessageQueue::createClient(std::string clientId) {
-  auto client = makeUnique<QueueGenericClient>(clientId, *this);
+  auto client = std::make_unique<QueueGenericClient>(clientId, *this);
   clients.push_back(client.get());
   return client;
 }
 
 std::unique_ptr<QueueResourceClient>
 MessageQueue::createClient(std::string clientId, std::string resource) {
-  auto client = makeUnique<QueueResourceClient>(clientId, resource, *this);
+  auto client = std::make_unique<QueueResourceClient>(clientId, resource, *this);
   clients.push_back(client.get());
   return client;
 }
@@ -66,7 +66,7 @@ MessageQueue::removeClient(const QueueClient& client) {
 
 std::unique_ptr<QueueResourceController>
 MessageQueue::createController(std::string resource) {
-  auto controller = makeUnique<QueueResourceController>(resource, *this);
+  auto controller = std::make_unique<QueueResourceController>(resource, *this);
   controllers.push_back(controller.get());
   return controller;
 }
@@ -85,7 +85,7 @@ MessageQueue::processRequest(const Request& request) {
     result = handler(request);
   } else {
     logger.error("Unable to find a request handler.");
-    result = makeUnique<Status>(StatusCode::NotFound, "Unable to find a request handler.");
+    result = std::make_unique<Status>(StatusCode::NotFound, "Unable to find a request handler.");
   }
   sendResponseFor(request, std::move(result));
 }
@@ -133,7 +133,7 @@ MessageQueue::getRequestHandler(const Request& request) {
 
 void
 MessageQueue::sendResponseFor(const Request& request, std::unique_ptr<IEntity> result) {
-  auto response = makeUnique<Response>(
+  auto response = std::make_unique<Response>(
 		  request.getSender(),
           request.getRequestType(),
           request.getResource(),

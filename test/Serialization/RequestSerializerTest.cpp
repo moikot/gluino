@@ -19,10 +19,10 @@ namespace {
 }
 
 TEST_CASE("request serialization is not implemented", "[RequestSerializer]") {
-  auto event = makeUnique<Request>("sender", "get", "res", makeUnique<Content>());
+  auto event = std::make_unique<Request>("sender", "get", "res", std::make_unique<Content>());
 
   Mock<ISerializationContext> context;
-  std::unique_ptr<ISerializer> serializer = makeUnique<RequestSerializer>();
+  std::unique_ptr<ISerializer> serializer = std::make_unique<RequestSerializer>();
 
   auto result = serializer->serialize(*event, context.get());
   REQUIRE(result.getStatusCode() == StatusCode::InternalServerError);
@@ -31,7 +31,7 @@ TEST_CASE("request serialization is not implemented", "[RequestSerializer]") {
 
 TEST_CASE("can deserialize a request", "[RequestSerializer]") {
 
-  auto content = makeUnique<Content>();
+  auto content = std::make_unique<Content>();
   auto contentPtr = content.get();
   Mock<IDeserializationContext> context;
 
@@ -52,7 +52,7 @@ TEST_CASE("can deserialize a request", "[RequestSerializer]") {
     return Status::OK;
   });
 
-  std::unique_ptr<ISerializer> serializer = makeUnique<RequestSerializer>();
+  std::unique_ptr<ISerializer> serializer = std::make_unique<RequestSerializer>();
   std::unique_ptr<IEntity> entity;
 
   auto result = serializer->deserialize(entity, context.get());
@@ -103,7 +103,7 @@ TEST_CASE("request deserialization fails", "[RequestSerializer]") {
     });
   }
 
-  std::unique_ptr<ISerializer> serializer = makeUnique<RequestSerializer>();
+  std::unique_ptr<ISerializer> serializer = std::make_unique<RequestSerializer>();
 
   std::unique_ptr<IEntity> entity;
   auto result = serializer->deserialize(entity, context.get());

@@ -37,12 +37,12 @@ class QueueResourceClient : public QueueClient {
 
     template<typename T>
     void addOnResponse(std::string requestType, T onResponse) {
-      responseHandlers.push_back(Core::makeUnique<ResourceResponseHandlerImpl<T>>(requestType, onResponse));
+      responseHandlers.push_back(std::make_unique<ResourceResponseHandlerImpl<T>>(requestType, onResponse));
     }
 
     template<typename T>
     void addOnEvent(std::string eventType, T onEvent) {
-      eventHandlers.push_back(Core::makeUnique<ResourceEventHandlerImpl<T>>(eventType, onEvent));
+      eventHandlers.push_back(std::make_unique<ResourceEventHandlerImpl<T>>(eventType, onEvent));
     }
 
   private:

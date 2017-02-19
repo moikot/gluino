@@ -35,7 +35,7 @@ TEST_CASE("queue resource client can send a request", "[QueueResourceClient]") {
   });
 
   FakeMessageQueue mq(messageQueue.get());
-  auto client = makeUnique<QueueResourceClient>("clientId", "resource", mq);
+  auto client = std::make_unique<QueueResourceClient>("clientId", "resource", mq);
   client->sendRequest("get");
 
   Verify(Method(messageQueue, addRequest));
@@ -43,7 +43,7 @@ TEST_CASE("queue resource client can send a request", "[QueueResourceClient]") {
 
 TEST_CASE("queue resource client can send a request with content", "[QueueResourceClient]") {
   Mock<IMockableMessageQueue> messageQueue;
-  auto content = makeUnique<Content>();
+  auto content = std::make_unique<Content>();
   auto contentPtr = content.get();
 
   When(Method(messageQueue, addRequest)).Do([=](const Request& request) {
@@ -55,7 +55,7 @@ TEST_CASE("queue resource client can send a request with content", "[QueueResour
   });
 
   FakeMessageQueue mq(messageQueue.get());
-  auto client = makeUnique<QueueResourceClient>("clientId", "resource", mq);
+  auto client = std::make_unique<QueueResourceClient>("clientId", "resource", mq);
   client->sendRequest("get", std::move(content));
 
   Verify(Method(messageQueue, addRequest));
@@ -65,8 +65,8 @@ TEST_CASE("queue resource client can process a response", "[QueueResourceClient]
   Mock<IMessageQueue> messageQueue;
   When(Method(messageQueue, removeClient)).Do([](const QueueClient&) {});
   {
-    auto client = makeUnique<QueueResourceClient>("id", "resource", messageQueue.get());
-    auto result = makeUnique<Status>(Status::OK);
+    auto client = std::make_unique<QueueResourceClient>("id", "resource", messageQueue.get());
+    auto result = std::make_unique<Status>(Status::OK);
     auto resultPtr = result.get();
 
     Mock<EventSink> eventSink;
@@ -88,8 +88,8 @@ TEST_CASE("queue resource client can process an event", "[QueueResourceClient]")
   Mock<IMessageQueue> messageQueue;
   When(Method(messageQueue, removeClient)).Do([](const QueueClient&) {});
   {
-    auto client = makeUnique<QueueResourceClient>("id", "resource", messageQueue.get());
-    auto content = makeUnique<Content>();
+    auto client = std::make_unique<QueueResourceClient>("id", "resource", messageQueue.get());
+    auto content = std::make_unique<Content>();
     auto contentPtr = content.get();
 
     Mock<EventSink> eventSink;

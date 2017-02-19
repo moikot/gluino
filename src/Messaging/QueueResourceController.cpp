@@ -17,13 +17,13 @@ QueueResourceController::~QueueResourceController() {
 
 Core::Status
 QueueResourceController::sendEvent(std::string eventType) {
-  auto event = makeUnique<Event>(eventType, resource);
+  auto event = std::make_unique<Event>(eventType, resource);
   return messageQueue.addEvent(std::move(event));
 }
 
 Core::Status
 QueueResourceController::sendEvent(std::string eventType, std::unique_ptr<IEntity> content) {
-  auto event = makeUnique<Event>(eventType, resource, std::move(content));
+  auto event = std::make_unique<Event>(eventType, resource, std::move(content));
   return messageQueue.addEvent(std::move(event));
 }
 

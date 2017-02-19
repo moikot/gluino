@@ -33,7 +33,7 @@ TEST_CASE("queue resource controller can send an event", "[QueueResourceControll
   });
 
   FakeMessageQueue mq(messageQueue.get());
-  auto client = makeUnique<QueueResourceController>("resource", mq);
+  auto client = std::make_unique<QueueResourceController>("resource", mq);
   client->sendEvent("created");
 
   Verify(Method(messageQueue, addEvent));
@@ -41,7 +41,7 @@ TEST_CASE("queue resource controller can send an event", "[QueueResourceControll
 
 TEST_CASE("queue resource controller can send an event with content", "[QueueResourceController]") {
   Mock<IMockableMessageQueue> messageQueue;
-  auto content = makeUnique<Content>();
+  auto content = std::make_unique<Content>();
   auto contentPtr = content.get();
 
   When(Method(messageQueue, addEvent)).Do([=](const Event& event) {
@@ -52,7 +52,7 @@ TEST_CASE("queue resource controller can send an event with content", "[QueueRes
   });
 
   FakeMessageQueue mq(messageQueue.get());
-  auto client = makeUnique<QueueResourceController>("resource", mq);
+  auto client = std::make_unique<QueueResourceController>("resource", mq);
   client->sendEvent("created", std::move(content));
 
   Verify(Method(messageQueue, addEvent));
@@ -62,14 +62,14 @@ TEST_CASE("queue resource controller can process a request", "[QueueResourceCont
   Mock<IMessageQueue> messageQueue;
   When(Method(messageQueue, removeController)).Do([](const QueueResourceController&) {});
   {
-    auto client = makeUnique<QueueResourceController>("resource", messageQueue.get());
-    auto content = makeUnique<Content>();
+    auto client = std::make_unique<QueueResourceController>("resource", messageQueue.get());
+    auto content = std::make_unique<Content>();
     auto contentPtr = content.get();
 
     Mock<EventSink> eventSink;
     When(Method(eventSink, onRequest)).Do([=](const Content& param) {
       REQUIRE(&param == contentPtr);
-      return makeUnique<Status>(Status::OK);
+      return std::make_unique<Status>(Status::OK);
     });
     client->addOnRequest("create", [&](const Content& c) { return eventSink.get().onRequest(c); });
 
@@ -88,7 +88,7 @@ TEST_CASE("queue resource controller can process a request", "[QueueResourceCont
 TEST_CASE("queue resource controller cannot process a request for another resource", "[QueueResourceController]") {
   Mock<IMessageQueue> messageQueue;
   When(Method(messageQueue, removeController)).Do([](const QueueResourceController&) {});
-  auto client = makeUnique<QueueResourceController>("resource", messageQueue.get());
+  auto client = std::make_unique<QueueResourceController>("resource", messageQueue.get());
 
   Request request("create", "sender", "another resource");
   auto handler = client->getRequestHandler(request);

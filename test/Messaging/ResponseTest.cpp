@@ -16,10 +16,10 @@ namespace {
 }
 
 TEST_CASE("Response can be constructed", "[Response]") {
-  auto content = makeUnique<Content>();
+  auto content = std::make_unique<Content>();
   auto contentPtr = content.get();
 
-  auto response = makeUnique<Response>("receiver", "get", "resource", std::move(content));
+  auto response = std::make_unique<Response>("receiver", "get", "resource", std::move(content));
 
   SECTION("type is correct") {
     REQUIRE(response->getTypeId() == "response");
@@ -43,7 +43,7 @@ TEST_CASE("Response can be constructed", "[Response]") {
 }
 
 TEST_CASE("Receiver can be changed", "[Request]") {
-	auto response = makeUnique<Response>("receiver", "get", "resource", makeUnique<Content>());
+	auto response = std::make_unique<Response>("receiver", "get", "resource", std::make_unique<Content>());
 
 	response->setReceiver("new_receiver");
 

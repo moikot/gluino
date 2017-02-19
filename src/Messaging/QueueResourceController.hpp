@@ -32,7 +32,7 @@ class QueueResourceController {
 
     template<typename T>
     void addOnRequest(std::string requestType, T onRequest) {
-      handlers.push_back(Core::makeUnique<ResourceRequestHandlerImpl<T>>(requestType, onRequest));
+      handlers.push_back(std::make_unique<ResourceRequestHandlerImpl<T>>(requestType, onRequest));
     }
 
     RequestHandler getRequestHandler(const Request& request) const;

@@ -15,13 +15,13 @@ QueueResourceClient::~QueueResourceClient() {
 
 Core::Status
 QueueResourceClient::sendRequest(std::string requestType) {
-  auto request = makeUnique<Request>(clientId, requestType, resource);
+  auto request = std::make_unique<Request>(clientId, requestType, resource);
   return messageQueue.addRequest(std::move(request));
 }
 
 Core::Status
 QueueResourceClient::sendRequest(std::string requestType, std::unique_ptr<IEntity> content) {
-  auto request = makeUnique<Request>(clientId, requestType, resource, std::move(content));
+  auto request = std::make_unique<Request>(clientId, requestType, resource, std::move(content));
   return messageQueue.addRequest(std::move(request));
 }
 
