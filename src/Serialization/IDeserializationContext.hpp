@@ -13,7 +13,6 @@
 namespace Serialization {
 
 struct IDeserializationContext {
-  TYPE_PTRS_ABSTRACT(IDeserializationContext)
   virtual ~IDeserializationContext() = default;
 
   virtual bool hasKey(const std::string& key) = 0;

@@ -33,10 +33,6 @@ struct function_traits<ReturnType(ClassType::*)(Args...) const>
   };
 };
 
-#define TYPE_PTRS_ABSTRACT(Class)
-
-#define TYPE_PTRS(Class) TYPE_PTRS_ABSTRACT(Class)
-
 }
 
 #endif /* end of include guard: CORE_TYPE_PTRS_HPP */

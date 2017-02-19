@@ -16,7 +16,6 @@
 namespace Serialization {
 
 struct IContextFactory {
-    TYPE_PTRS_ABSTRACT(IContextFactory) 
     virtual ~IContextFactory() = default;
 
     virtual Core::Status createSerializationContext(

@@ -19,7 +19,6 @@ class IMessageQueue;
 typedef std::function<std::unique_ptr<Core::IEntity>(const Request&)> RequestHandler;
 
 class QueueResourceController {
-  TYPE_PTRS(QueueResourceController)
   public:
     QueueResourceController(std::string resource, IMessageQueue& messageQueue);
     virtual ~QueueResourceController();

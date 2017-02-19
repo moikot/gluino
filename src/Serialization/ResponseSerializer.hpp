@@ -13,7 +13,6 @@
 namespace Serialization {
 
 class ResponseSerializer : public Serializer<Messaging::Response> {
-  TYPE_PTRS(ResponseSerializer)
   protected:
     // From Serializer
     virtual Core::Status serialize(

@@ -19,7 +19,6 @@ namespace Messaging {
   The message queue.
 */
 class MessageQueue : public IMessageQueue {
-  TYPE_PTRS(MessageQueue)
   public:
     explicit MessageQueue(Core::ILogger& logger);
 

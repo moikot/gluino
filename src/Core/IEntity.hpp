@@ -15,7 +15,6 @@ namespace Core {
   The base class for all the domain objects.
 */
 class IEntity {
-TYPE_PTRS_ABSTRACT(IEntity)
 public:
   virtual ~IEntity() = default;
 

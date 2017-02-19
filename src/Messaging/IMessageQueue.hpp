@@ -18,7 +18,6 @@ namespace Messaging {
   The message queue interface.
 */
 class IMessageQueue : public Core::IService {
-  TYPE_PTRS_ABSTRACT(IMessageQueue)
   public:
 
     /**

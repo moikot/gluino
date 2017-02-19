@@ -13,7 +13,6 @@
 namespace Serialization {
 
 class StatusSerializer : public Serializer<Core::Status> {
-  TYPE_PTRS(StatusSerializer)
   protected:
     // From Serializer
     virtual Core::Status serialize(

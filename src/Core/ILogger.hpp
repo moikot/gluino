@@ -12,9 +12,7 @@
 namespace Core {
 
 struct ILogger {
-  TYPE_PTRS_ABSTRACT(ILogger)
   virtual ~ILogger() = default;
-
   virtual void message(const std::string& message) = 0;
   virtual void warning(const std::string& message) = 0;
   virtual void error(const std::string& message) = 0;

@@ -12,8 +12,6 @@
 #include <string>
 
 struct FakeSerializationContext : public Serialization::ISerializationContext {
-  TYPE_PTRS(FakeSerializationContext)
-
   explicit FakeSerializationContext(ISerializationContext& context) : context(context) {
   }
 

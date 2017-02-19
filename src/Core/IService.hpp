@@ -15,7 +15,6 @@ namespace Core {
   The base class for all the services.
 */
 struct IService {
-  TYPE_PTRS_ABSTRACT(IService)
   virtual ~IService() = default;
 
   /**

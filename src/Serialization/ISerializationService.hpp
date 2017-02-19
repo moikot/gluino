@@ -17,7 +17,6 @@
 namespace Serialization {
 
 struct ISerializationService {
-  TYPE_PTRS_ABSTRACT(ISerializationService)
   virtual ~ISerializationService() = default;
 
   virtual Core::Status serialize(

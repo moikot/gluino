@@ -19,7 +19,6 @@ namespace Messaging {
 class IMessageQueue;
 
 class QueueResourceClient : public QueueClient {
-  TYPE_PTRS(QueueResourceClient)
   public:
     QueueResourceClient(std::string clientId, std::string resource, IMessageQueue& messageQueue);
     virtual ~QueueResourceClient() override;

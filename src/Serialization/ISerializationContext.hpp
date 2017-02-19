@@ -13,7 +13,6 @@
 namespace Serialization {
 
 struct ISerializationContext {
-  TYPE_PTRS_ABSTRACT(ISerializationContext)
   virtual ~ISerializationContext() = default;
 
   virtual std::string toString() const = 0;

@@ -10,8 +10,6 @@
 #include "Serialization/ISerializer.hpp"
 
 struct FakeSerializer : public Serialization::ISerializer {
-  TYPE_PTRS(FakeSerializer)
-
   explicit FakeSerializer(ISerializer& serializer) : serializer(serializer) {
   }
 

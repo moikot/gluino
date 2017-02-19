@@ -18,7 +18,6 @@ namespace Core {
   The base class for all the collections of domain objects.
 */
 class IList : public IEntity {
-  TYPE_PTRS_ABSTRACT(IList)
   public:
     typedef std::function<Status(const IEntity& item)> ForEachFunction;
 

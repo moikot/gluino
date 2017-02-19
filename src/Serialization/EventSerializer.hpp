@@ -13,7 +13,6 @@
 namespace Serialization {
 
 class EventSerializer : public Serializer<Messaging::Event> {
-  TYPE_PTRS(EventSerializer)
   protected:
     // From Serializer
     virtual Core::Status serialize(

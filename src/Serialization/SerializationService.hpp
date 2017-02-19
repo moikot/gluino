@@ -17,7 +17,6 @@
 namespace Serialization {
 
 class SerializationService : public ISerializationService {
-  TYPE_PTRS(SerializationService)
   public:
     explicit SerializationService(const IContextFactory& contextFactory);
 

@@ -16,7 +16,6 @@
 namespace Serialization {
 
 struct ISerializer {
-  TYPE_PTRS_ABSTRACT(ISerializer)
   virtual ~ISerializer() = default;
 
   virtual const std::string& getTypeId() const = 0;

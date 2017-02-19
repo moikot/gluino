@@ -11,8 +11,6 @@ namespace Messaging {
   };
 
   struct FakeMessageQueue : public Messaging::IMessageQueue {
-	  TYPE_PTRS(FakeMessageQueue)
-
 		explicit FakeMessageQueue(IMockableMessageQueue& queue) : queue(queue) {
 	  }
 
