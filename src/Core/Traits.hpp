@@ -4,8 +4,8 @@
 // Gluino
 // https://github.com/anisimovsergey/gluino
 
-#ifndef CORE_TYPE_PTRS_HPP
-#define CORE_TYPE_PTRS_HPP
+#ifndef CORE_TRAITS_HPP
+#define CORE_TRAITS_HPP
 
 #include <memory>
 
@@ -35,4 +35,4 @@ struct function_traits<ReturnType(ClassType::*)(Args...) const>
 
 }
 
-#endif /* end of include guard: CORE_TYPE_PTRS_HPP */
+#endif /* end of include guard: CORE_TRAITS_HPP */

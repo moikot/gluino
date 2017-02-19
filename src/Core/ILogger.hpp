@@ -7,8 +7,6 @@
 #ifndef CORE_I_LOGGER_HPP
 #define CORE_I_LOGGER_HPP
 
-#include "Core/TypeInfo.hpp"
-
 namespace Core {
 
 struct ILogger {

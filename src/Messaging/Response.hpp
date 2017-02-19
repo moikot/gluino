@@ -9,6 +9,8 @@
 
 #include "Core/IEntity.hpp"
 
+#include <memory>
+
 namespace Messaging {
 
 /**

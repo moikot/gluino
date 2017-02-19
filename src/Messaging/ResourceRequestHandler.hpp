@@ -8,6 +8,7 @@
 #define MESSAGING_RESOURCE_REQUEST_HANDLER_HPP
 
 #include "Request.hpp"
+#include "Core/Traits.hpp"
 
 #include <functional>
 

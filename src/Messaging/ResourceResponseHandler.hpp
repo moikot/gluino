@@ -8,6 +8,7 @@
 #define MESSAGING_RESOURCE_RESPONSE_HANDLER_HPP
 
 #include "Response.hpp"
+#include "Core/Traits.hpp"
 
 #include <functional>
 

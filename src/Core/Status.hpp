@@ -11,6 +11,8 @@
 #include "IEntity.hpp"
 #include "StatusCode.hpp"
 
+#include <memory>
+
 namespace Core {
 
 class Status : public IEntity {

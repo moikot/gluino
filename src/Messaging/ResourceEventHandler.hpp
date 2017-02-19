@@ -8,6 +8,7 @@
 #define MESSAGING_RESOURCE_EVENT_HANDLER_HPP
 
 #include "Event.hpp"
+#include "Core/Traits.hpp"
 
 #include <functional>
 

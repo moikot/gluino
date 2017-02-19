@@ -7,9 +7,22 @@
 #ifndef CORE_I_ENTITY_HPP
 #define CORE_I_ENTITY_HPP
 
-#include "Core/TypeInfo.hpp"
+#include <string>
 
 namespace Core {
+
+#define TYPE_INFO(Class, SuperClass, ClassTypeId) \
+public: \
+  static const std::string& TypeId() { \
+    static std::string typeId(ClassTypeId); \
+    return typeId; \
+  } \
+  \
+  virtual const std::string& getTypeId() const override { return TypeId(); } \
+  \
+  virtual bool isType(const std::string& typeId) const override { \
+    return (typeId == ClassTypeId || SuperClass::isType(typeId)); \
+  } \
 
 /**
   The base class for all the domain objects.

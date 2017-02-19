@@ -7,8 +7,6 @@
 #ifndef CORE_I_SERVICE_HPP
 #define CORE_I_SERVICE_HPP
 
-#include "Core/TypeInfo.hpp"
-
 namespace Core {
 
 /**
