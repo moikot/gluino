@@ -8,7 +8,6 @@ using namespace Core;
 using namespace Messaging;
 
 using namespace fakeit;
-using namespace std::placeholders;
 
 namespace {
 

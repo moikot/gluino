@@ -7,7 +7,6 @@ using namespace Core;
 using namespace Messaging;
 
 using namespace fakeit;
-using namespace std::placeholders;
 
 namespace {
 
@@ -45,7 +44,7 @@ TEST_CASE("message queue is routing an event to a generic client", "[MessageQueu
   auto queue = std::make_unique<MessageQueue>(*logger);
 
   auto client = queue->createClient("clientId");
-  client->setOnEvent(std::bind(&EventSink::onEvent, &eventSink.get(), _1));
+  client->setOnEvent([&](const Event& e) { eventSink.get().onEvent(e); });
 
   auto event = std::make_unique<Event>("created", "resource", std::move(content));
   queue->addEvent(std::move(event));
@@ -64,7 +63,7 @@ TEST_CASE("message queue is not routing an event to a deleted generic client", "
   {
     Mock<EventSink> eventSink;
     auto client = queue->createClient("clientId");
-    client->setOnEvent(std::bind(&EventSink::onEvent, &eventSink.get(), _1));
+    client->setOnEvent([&](const Event& e) { eventSink.get().onEvent(e); });
     client.reset();
   }
 
@@ -99,7 +98,7 @@ TEST_CASE("message queue is routing a response to a generic client", "[MessageQu
   auto queue = std::make_unique<MessageQueue>(*logger);
 
   auto client = queue->createClient("clientId");
-  client->setOnResponse(std::bind(&EventSink::onResponse, &eventSink.get(), _1));
+  client->setOnResponse([&](const Response& e) { eventSink.get().onResponse(e); });
 
   queue->createController("resource_controller_before");
   auto controller = queue->createController("resource");

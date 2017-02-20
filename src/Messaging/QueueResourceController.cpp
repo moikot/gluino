@@ -5,8 +5,6 @@
 using namespace Core;
 using namespace Messaging;
 
-using namespace std::placeholders;
-
 QueueResourceController::QueueResourceController(std::string resource, IMessageQueue& messageQueue) :
   resource(resource), messageQueue(messageQueue) {
 }
@@ -41,7 +39,7 @@ QueueResourceController::getRequestHandler(const Request& request) const {
   for (auto& handler : handlers) {
     if (handler->getRequestType() == requestType &&
         handler->getContentType() == contentType) {
-      return std::bind(&ResourceRequestHandler::makeRequest, handler.get(), _1);
+      return [&](const Request& r){ return handler->makeRequest(r); };
     }
   }
   return nullptr;

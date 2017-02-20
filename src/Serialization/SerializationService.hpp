@@ -20,6 +20,9 @@ class SerializationService : public ISerializationService {
   public:
     explicit SerializationService(const IContextFactory& contextFactory);
 
+    // From IService
+    virtual void idle() override {};
+
     // From ISerializationService
     virtual Core::Status serialize(
       const Core::IEntity& entity,

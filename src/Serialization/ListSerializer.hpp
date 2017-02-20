@@ -14,7 +14,6 @@ namespace Serialization {
 
 template<typename T>
 class ListSerializer : public Serializer<T> {
-  TYPE_PTRS(ListSerializer<T>)
   typedef typename std::unique_ptr<T> TUnique;
   protected:
     // From Serializer

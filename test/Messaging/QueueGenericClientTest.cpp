@@ -8,7 +8,6 @@ using namespace Core;
 using namespace Messaging;
 
 using namespace fakeit;
-using namespace std::placeholders;
 
 namespace {
 
@@ -60,7 +59,7 @@ TEST_CASE("queue generic client can process a response", "[QueueGenericClient]")
       return Status::OK;
     });
 
-    client->setOnResponse(std::bind(&EventSink::onResponse, &eventSink.get(), _1));
+    client->setOnResponse([&](const Response& e) { eventSink.get().onResponse(e); });
 
     Response response("receiver", "get", "resource", std::move(content));
     client->onResponse(response);
@@ -86,7 +85,7 @@ TEST_CASE("queue generic client can process an event", "[QueueGenericClient]") {
       return Status::OK;
     });
 
-    client->setOnEvent(std::bind(&EventSink::onEvent, &eventSink.get(), _1));
+    client->setOnEvent([&](const Event& e) { eventSink.get().onEvent(e); });
 
     Event event("created", "resource", std::move(content));
     client->onEvent(event);

@@ -10,7 +10,6 @@ using namespace Core;
 using namespace Serialization;
 
 using namespace fakeit;
-using namespace std::placeholders;
 
 namespace {
 

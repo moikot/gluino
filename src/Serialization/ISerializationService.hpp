@@ -11,12 +11,13 @@
 #include "IDeserializationContext.hpp"
 
 #include "Core/IEntity.hpp"
+#include "Core/IService.hpp"
 
 #include <memory>
 
 namespace Serialization {
 
-struct ISerializationService {
+struct ISerializationService : public Core::IService {
   virtual ~ISerializationService() = default;
 
   virtual Core::Status serialize(
