@@ -14,7 +14,6 @@ namespace Serialization {
 
 template<typename T>
 class ListSerializer : public Serializer<T> {
-  typedef typename std::unique_ptr<T> TUnique;
   protected:
     // From Serializer
     virtual Core::Status serialize(
@@ -29,7 +28,7 @@ class ListSerializer : public Serializer<T> {
     }
 
     virtual Core::Status deserialize(
-     TUnique& list,
+     std::unique_ptr<T>& list,
      IDeserializationContext& context) const override {
        return Core::Status::NotImplemented;
     }

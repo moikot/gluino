@@ -17,11 +17,11 @@ template <class T>
 class List : public IList {
   public:
     // From IList
-    virtual Core::Status add(const IEntity& item) const override {
-      return add((const T&)item);
+    virtual Core::Status addEntity(const IEntity& item) override {
+      return add(static_cast<const T&>(item));
     }
 
-    virtual Core::Status forEach(ForEachFunction func) const override {
+    virtual Core::Status forEachEntity(ForEachFunction func) const override {
       return forEach([&](const T& element) {
         return func(element);
       });

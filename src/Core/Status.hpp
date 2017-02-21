@@ -17,7 +17,6 @@ namespace Core {
 
 class Status : public IEntity {
   TYPE_INFO(Status, IEntity, "status")
-
   public:
     static Status OK;
     static Status NotImplemented;

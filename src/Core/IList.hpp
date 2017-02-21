@@ -17,8 +17,7 @@ namespace Core {
 /**
   The base class for all the collections of domain objects.
 */
-class IList : public IEntity {
-  public:
+struct IList : public IEntity {
     typedef std::function<Status(const IEntity& item)> ForEachFunction;
 
     /**
@@ -27,7 +26,7 @@ class IList : public IEntity {
       @param item The domain object instance to add.
       @return The result of the operation.
     */
-    virtual Core::Status add(const IEntity& item) const = 0;
+    virtual Core::Status addEntity(const IEntity& item) = 0;
 
     /**
       Iterates through all the objects in the collection.
@@ -35,7 +34,7 @@ class IList : public IEntity {
       @param func The call back function called for each object in the collection.
       @return The result of the operation.
     */
-    virtual Core::Status forEach(ForEachFunction func) const = 0;
+    virtual Core::Status forEachEntity(ForEachFunction func) const = 0;
 };
 
 }

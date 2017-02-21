@@ -27,8 +27,7 @@ public: \
 /**
   The base class for all the domain objects.
 */
-class IEntity {
-public:
+struct IEntity {
   virtual ~IEntity() = default;
 
   /**

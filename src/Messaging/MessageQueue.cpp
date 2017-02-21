@@ -5,10 +5,6 @@
 using namespace Core;
 using namespace Messaging;
 
-namespace {
-  static const std::string messageQueueSenderId = "messageQueue";
-}
-
 MessageQueue::MessageQueue(ILogger& logger): logger(logger) {
 }
 
