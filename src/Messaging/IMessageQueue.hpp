@@ -10,14 +10,14 @@
 #include "QueueGenericClient.hpp"
 #include "QueueResourceClient.hpp"
 #include "QueueResourceController.hpp"
-#include "Core/IService.hpp"
+#include "Core/IIdleService.hpp"
 
 namespace Messaging {
 
 /**
   The message queue interface.
 */
-class IMessageQueue : public Core::IService {
+class IMessageQueue : public Core::IIdleService {
   public:
 
     /**
