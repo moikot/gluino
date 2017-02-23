@@ -17,9 +17,7 @@ namespace Messaging {
 /**
   The message queue interface.
 */
-class IMessageQueue : public Core::IIdleService {
-  public:
-
+struct IMessageQueue : public Core::IIdleService {
     /**
       Adds a new request to the message queue.
 

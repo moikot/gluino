@@ -15,7 +15,7 @@
 
 namespace Messaging {
 
-class IMessageQueue;
+struct IMessageQueue;
 
 typedef std::function<std::unique_ptr<Core::IEntity>(const Request&)> RequestHandler;
 

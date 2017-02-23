@@ -14,7 +14,7 @@
 
 namespace Messaging {
 
-class IMessageQueue;
+struct IMessageQueue;
 
 class QueueGenericClient : public QueueClient {
   public:
