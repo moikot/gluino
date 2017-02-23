@@ -7,16 +7,14 @@
 #ifndef CORE_I_IDLE_SERVICE_HPP
 #define CORE_I_IDLE_SERVICE_HPP
 
-#include "Core/IEntity.hpp"
+#include "Core/IService.hpp"
 
 namespace Core {
 
 /**
   The base class for idle services.
 */
-struct IIdleService : public IEntity  {
-  TYPE_INFO(IIdleService, IEntity, "idleService")
-  virtual ~IIdleService() = default;
+struct IIdleService : public IService  {
   virtual void idle() = 0;
 };
 
