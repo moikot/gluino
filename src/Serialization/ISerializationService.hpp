@@ -10,13 +10,13 @@
 #include "ISerializationContext.hpp"
 #include "IDeserializationContext.hpp"
 
-#include "Core/IService.hpp"
-
 #include <memory>
 
 namespace Serialization {
 
-struct ISerializationService : public Core::IService {
+struct ISerializationService  {
+  virtual ~ISerializationService() = default;
+
   virtual Core::Status serialize(
     const Core::IEntity& object,
     std::string& json) const = 0;

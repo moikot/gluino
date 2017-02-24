@@ -7,13 +7,12 @@
 #ifndef CORE_I_LOGGER_HPP
 #define CORE_I_LOGGER_HPP
 
-#include "Core/IService.hpp"
-
 #include <string>
 
 namespace Core {
 
-struct ILogger : public IService {
+struct ILogger {
+  virtual ~ILogger() = default;
   virtual void message(const std::string& message) = 0;
   virtual void warning(const std::string& message) = 0;
   virtual void error(const std::string& message) = 0;
