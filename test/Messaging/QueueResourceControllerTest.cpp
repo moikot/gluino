@@ -25,7 +25,7 @@ TEST_CASE("queue resource controller can send an event", "[QueueResourceControll
   Mock<IMockableMessageQueue> messageQueue;
 
   When(Method(messageQueue, addEvent)).Do([=](const Event& event) {
-    REQUIRE(event.getEventType() == "created");
+    REQUIRE(event.getEventType() == EventType::Created);
     REQUIRE(event.getResource() == "resource");
     REQUIRE(event.getContent() == nullptr);
     return Status::OK;
@@ -33,7 +33,7 @@ TEST_CASE("queue resource controller can send an event", "[QueueResourceControll
 
   FakeMessageQueue mq(messageQueue.get());
   auto client = std::make_unique<QueueResourceController>("resource", mq);
-  client->sendEvent("created");
+  client->sendEvent(EventType::Created);
 
   Verify(Method(messageQueue, addEvent));
 }
@@ -44,7 +44,7 @@ TEST_CASE("queue resource controller can send an event with content", "[QueueRes
   auto contentPtr = content.get();
 
   When(Method(messageQueue, addEvent)).Do([=](const Event& event) {
-    REQUIRE(event.getEventType() == "created");
+    REQUIRE(event.getEventType() == EventType::Created);
     REQUIRE(event.getResource() == "resource");
     REQUIRE(event.getContent() == contentPtr);
     return Status::OK;
@@ -52,7 +52,7 @@ TEST_CASE("queue resource controller can send an event with content", "[QueueRes
 
   FakeMessageQueue mq(messageQueue.get());
   auto client = std::make_unique<QueueResourceController>("resource", mq);
-  client->sendEvent("created", std::move(content));
+  client->sendEvent(EventType::Created, std::move(content));
 
   Verify(Method(messageQueue, addEvent));
 }
@@ -70,9 +70,9 @@ TEST_CASE("queue resource controller can process a request", "[QueueResourceCont
       REQUIRE(&param == contentPtr);
       return std::make_unique<Status>(Status::OK);
     });
-    client->addOnRequest("create", [&](const Content& c) { return eventSink.get().onRequest(c); });
+    client->addOnRequest(RequestType::Create, [&](const Content& c) { return eventSink.get().onRequest(c); });
 
-    Request request("sender", "create", "resource", std::move(content));
+    Request request("sender", RequestType::Create, "resource", std::move(content));
     auto handler = client->getRequestHandler(request);
     REQUIRE(handler != nullptr);
 
@@ -89,7 +89,7 @@ TEST_CASE("queue resource controller cannot process a request for another resour
   When(Method(messageQueue, removeController)).Do([](const QueueResourceController&) {});
   auto client = std::make_unique<QueueResourceController>("resource", messageQueue.get());
 
-  Request request("create", "sender", "another resource");
+  Request request("sender", RequestType::Create, "another resource");
   auto handler = client->getRequestHandler(request);
 
   REQUIRE(handler == nullptr);

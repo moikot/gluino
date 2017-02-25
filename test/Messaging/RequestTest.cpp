@@ -1,4 +1,4 @@
-#include "Utils/Testing.hpp" 
+#include "Utils/Testing.hpp"
 
 #include "Core/Memory.hpp"
 #include "Messaging/Request.hpp"
@@ -18,8 +18,8 @@ TEST_CASE("Request can be constructed", "[Request]") {
 	auto content = std::make_unique<Content>();
 	auto contentPtr = content.get();
 
-	auto requestNoContent = std::make_unique<Request>("sender", "get", "resource");
-	auto requestWithContent = std::make_unique<Request>("sender", "get", "resource", std::move(content));
+	auto requestNoContent = std::make_unique<Request>("sender", RequestType::Read, "resource");
+	auto requestWithContent = std::make_unique<Request>("sender", RequestType::Read, "resource", std::move(content));
 
 	SECTION("type is correct") {
 		REQUIRE(requestNoContent->getTypeId() == "request");
@@ -32,8 +32,8 @@ TEST_CASE("Request can be constructed", "[Request]") {
 	}
 
 	SECTION("requestWithContent type retained") {
-		REQUIRE(requestNoContent->getRequestType() == "get");
-		REQUIRE(requestWithContent->getRequestType() == "get");
+		REQUIRE(requestNoContent->getRequestType() == RequestType::Read);
+		REQUIRE(requestWithContent->getRequestType() == RequestType::Read);
 	}
 
 	SECTION("resource retained") {
@@ -48,7 +48,7 @@ TEST_CASE("Request can be constructed", "[Request]") {
 }
 
 TEST_CASE("Sender can be changed", "[Request]") {
-	auto request = std::make_unique<Request>("sender", "get", "resource");
+	auto request = std::make_unique<Request>("sender", RequestType::Read, "resource");
 
 	request->setSender("new_sender");
 

@@ -21,11 +21,11 @@ TEST_CASE("can serialize a response", "[ResponseSerializer]") {
   auto content = std::make_unique<Content>();
   auto contentPtr = content.get();
 
-  auto response = std::make_unique<Response>("rec", "get", "res", std::move(content));
+  auto response = std::make_unique<Response>("rec", RequestType::Read, "res", std::move(content));
 
   Mock<ISerializationContext> context;
 
-  When(Method(context, setString).Using("requestType","get")).Do([](const std::string&, const std::string&) {
+  When(Method(context, setString).Using("requestType", "read")).Do([](const std::string&, const std::string&) {
     return Status::OK;
   });
 
@@ -52,13 +52,13 @@ TEST_CASE("response serialization fails", "[ResponseSerializer]") {
   Mock<ISerializationContext> context;
 
   SECTION("if setString for requestType fails") {
-    When(Method(context, setString).Using("requestType","get")).Return(
+    When(Method(context, setString).Using("requestType", "read")).Return(
       Status::NotImplemented
     );
   }
 
   SECTION("if setString for resource fails") {
-    When(Method(context, setString).Using("requestType","get")).Return(
+    When(Method(context, setString).Using("requestType", "read")).Return(
       Status::OK
     );
     When(Method(context, setString).Using("resource", "res")).Return(
@@ -67,7 +67,7 @@ TEST_CASE("response serialization fails", "[ResponseSerializer]") {
   }
 
   SECTION("if setEntity fails") {
-    When(Method(context, setString).Using("requestType","get")).Return(
+    When(Method(context, setString).Using("requestType", "read")).Return(
       Status::OK
     );
     When(Method(context, setString).Using("resource", "res")).Return(
@@ -78,7 +78,7 @@ TEST_CASE("response serialization fails", "[ResponseSerializer]") {
     );
   }
 
-  auto response = std::make_unique<Response>("rec", "get", "res", std::make_unique<Content>());
+  auto response = std::make_unique<Response>("rec", RequestType::Read, "res", std::make_unique<Content>());
 
   std::unique_ptr<ISerializer> serializer = std::make_unique<ResponseSerializer>();
   auto result = serializer->serialize(*response, context.get());

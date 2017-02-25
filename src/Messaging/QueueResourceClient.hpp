@@ -29,19 +29,19 @@ class QueueResourceClient : public QueueClient {
 
     std::string getClientId() const override { return clientId; }
 
-    Core::Status sendRequest(std::string requestType);
-    Core::Status sendRequest(std::string requestType, std::unique_ptr<Core::IEntity> content);
+    Core::Status sendRequest(RequestType requestType);
+    Core::Status sendRequest(RequestType requestType, std::unique_ptr<Core::IEntity> content);
 
     void onResponse(const Response& response) const override;
     void onEvent(const Event& event) const override;
 
     template<typename T>
-    void addOnResponse(std::string requestType, T onResponse) {
+    void addOnResponse(RequestType requestType, T onResponse) {
       responseHandlers.push_back(std::make_unique<ResourceResponseHandlerImpl<T>>(requestType, onResponse));
     }
 
     template<typename T>
-    void addOnEvent(std::string eventType, T onEvent) {
+    void addOnEvent(EventType eventType, T onEvent) {
       eventHandlers.push_back(std::make_unique<ResourceEventHandlerImpl<T>>(eventType, onEvent));
     }
 

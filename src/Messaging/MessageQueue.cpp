@@ -5,9 +5,6 @@
 using namespace Core;
 using namespace Messaging;
 
-MessageQueue::MessageQueue(ILogger& logger): logger(logger) {
-}
-
 void
 MessageQueue::idle() {
   while (!requests.empty())
@@ -74,13 +71,11 @@ MessageQueue::removeController(const QueueResourceController& controller) {
 
 void
 MessageQueue::processRequest(const Request& request) {
-  logger.message("Processing a request from '" + request.getSender() + "'");
   std::unique_ptr<IEntity> result;
   auto handler = getRequestHandler(request);
   if (handler) {
     result = handler(request);
   } else {
-    logger.error("Unable to find a request handler.");
     result = std::make_unique<Status>(StatusCode::NotFound, "Unable to find a request handler.");
   }
   sendResponseFor(request, std::move(result));
@@ -89,18 +84,14 @@ MessageQueue::processRequest(const Request& request) {
 void
 MessageQueue::processResponse(const Response& response) {
   auto receiver = response.getReceiver();
-  logger.message("Processing a response to '" + receiver + "'");
   auto client = getClient(receiver);
   if (client) {
     client->onResponse(response);
-  } else {
-    logger.error("Unable to find client '" + receiver + "'");
   }
 }
 
 void
 MessageQueue::processEvent(const Event& event) {
-  logger.message("Broadcasting event '" + event.getEventType() + "'.");
   for(auto client: clients) {
 	  client->onEvent(event);
   }

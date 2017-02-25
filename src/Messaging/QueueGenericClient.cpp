@@ -14,7 +14,7 @@ QueueGenericClient::~QueueGenericClient() {
 }
 
 Status
-QueueGenericClient::sendRequest(std::string requestType, std::string resource, std::unique_ptr<IEntity> content) {
+QueueGenericClient::sendRequest(RequestType requestType, std::string resource, std::unique_ptr<IEntity> content) {
 	auto request = std::make_unique<Request>(clientId, requestType, resource, std::move(content));
 	return messageQueue.addRequest(std::move(request));
 }
