@@ -28,7 +28,7 @@ TEST_CASE("queue generic client can send a request", "[QueueGenericClient]") {
   auto contentPtr = content.get();
 
   When(Method(messageQueue, addRequest)).Do([=](const Request& request) {
-    REQUIRE(request.getRequestType() == "get");
+    REQUIRE(request.getRequestType() == RequestType::Read);
     REQUIRE(request.getSender() == "clientId");
     REQUIRE(request.getResource() == "resource");
     REQUIRE(request.getContent() == contentPtr);
@@ -37,7 +37,7 @@ TEST_CASE("queue generic client can send a request", "[QueueGenericClient]") {
 
   FakeMessageQueue mq(messageQueue.get());
   auto client = std::make_unique<QueueGenericClient>("clientId", mq);
-  client->sendRequest("get", "resource", std::move(content));
+  client->sendRequest(RequestType::Read, "resource", std::move(content));
 
   Verify(Method(messageQueue, addRequest));
 }
@@ -52,7 +52,7 @@ TEST_CASE("queue generic client can process a response", "[QueueGenericClient]")
 
     Mock<EventSink> eventSink;
     When(Method(eventSink, onResponse)).Do([=](const Response& response) {
-      REQUIRE(response.getRequestType() == "get");
+      REQUIRE(response.getRequestType() == RequestType::Read);
       REQUIRE(response.getReceiver() == "receiver");
       REQUIRE(response.getResource() == "resource");
       REQUIRE(&response.getContent() == contentPtr);
@@ -61,7 +61,7 @@ TEST_CASE("queue generic client can process a response", "[QueueGenericClient]")
 
     client->setOnResponse([&](const Response& e) { eventSink.get().onResponse(e); });
 
-    Response response("receiver", "get", "resource", std::move(content));
+    Response response("receiver", RequestType::Read, "resource", std::move(content));
     client->onResponse(response);
 
     Verify(Method(eventSink, onResponse));
@@ -79,7 +79,7 @@ TEST_CASE("queue generic client can process an event", "[QueueGenericClient]") {
 
     Mock<EventSink> eventSink;
     When(Method(eventSink, onEvent)).Do([=](const Event& event) {
-      REQUIRE(event.getEventType() == "created");
+      REQUIRE(event.getEventType() == EventType::Created);
       REQUIRE(event.getResource() == "resource");
       REQUIRE(event.getContent() == contentPtr);
       return Status::OK;
@@ -87,7 +87,7 @@ TEST_CASE("queue generic client can process an event", "[QueueGenericClient]") {
 
     client->setOnEvent([&](const Event& e) { eventSink.get().onEvent(e); });
 
-    Event event("created", "resource", std::move(content));
+    Event event(EventType::Created, "resource", std::move(content));
     client->onEvent(event);
 
     Verify(Method(eventSink, onEvent));

@@ -7,6 +7,7 @@
 #ifndef MESSAGING_RESPONSE_HPP
 #define MESSAGING_RESPONSE_HPP
 
+#include "RequestType.hpp"
 #include "Core/IEntity.hpp"
 
 #include <memory>
@@ -22,7 +23,7 @@ class Response : public Core::IEntity {
     /**
       Constructs a response.
     */
-    Response(std::string receiver, std::string requestType,
+    Response(std::string receiver, RequestType requestType,
     std::string resource, std::unique_ptr<IEntity> content);
 
     /**
@@ -38,7 +39,7 @@ class Response : public Core::IEntity {
     /**
       The request type (create, get, update, delete etc.).
     */
-    std::string getRequestType() const { return requestType; }
+    RequestType getRequestType() const { return requestType; }
 
     /**
       The resource identifier.
@@ -52,7 +53,7 @@ class Response : public Core::IEntity {
 
   private:
     std::string     receiver;
-    std::string     requestType;
+    RequestType     requestType;
     std::string     resource;
     std::unique_ptr<IEntity> content;
 };

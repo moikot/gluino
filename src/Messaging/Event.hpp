@@ -7,6 +7,7 @@
 #ifndef MESSAGING_EVENT_HPP
 #define MESSAGING_EVENT_HPP
 
+#include "EventType.hpp"
 #include "Core/IEntity.hpp"
 
 #include <memory>
@@ -22,17 +23,17 @@ class Event : public Core::IEntity {
   	/**
   	  Constructs an event.
   	*/
-    Event(std::string eventType, std::string resource);
+    Event(EventType eventType, std::string resource);
 
   	/**
   	  Constructs an event.
   	*/
-    Event(std::string eventType, std::string resource, std::unique_ptr<IEntity> content);
+    Event(EventType eventType, std::string resource, std::unique_ptr<IEntity> content);
 
     /**
       The event type (created, updated, deleted etc.).
     */
-    std::string getEventType() const { return eventType; }
+    EventType getEventType() const { return eventType; }
 
     /**
       The resource.
@@ -45,7 +46,7 @@ class Event : public Core::IEntity {
     const IEntity* getContent() const { return content.get(); };
 
   private:
-    std::string     eventType;
+    EventType       eventType;
     std::string     resource;
     std::unique_ptr<IEntity> content;
 };

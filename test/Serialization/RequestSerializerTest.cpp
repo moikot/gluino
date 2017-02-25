@@ -18,7 +18,7 @@ namespace {
 }
 
 TEST_CASE("request serialization is not implemented", "[RequestSerializer]") {
-  auto event = std::make_unique<Request>("sender", "get", "res", std::make_unique<Content>());
+  auto event = std::make_unique<Request>("sender", RequestType::Read, "res", std::make_unique<Content>());
 
   Mock<ISerializationContext> context;
   std::unique_ptr<ISerializer> serializer = std::make_unique<RequestSerializer>();
@@ -35,7 +35,7 @@ TEST_CASE("can deserialize a request", "[RequestSerializer]") {
   Mock<IDeserializationContext> context;
 
   When(Method(context, getString).Using("requestType", _)).Do([](const std::string&, std::string& value) {
-    value = "requestType";
+    value = "read";
     return Status::OK;
   });
 
@@ -58,7 +58,7 @@ TEST_CASE("can deserialize a request", "[RequestSerializer]") {
   REQUIRE(result.isOk() == true);
 
   auto request = castToUnique<Request>(std::move(entity));
-  REQUIRE(request->getRequestType() == "requestType");
+  REQUIRE(request->getRequestType() == RequestType::Read);
   REQUIRE(request->getSender() == "");
   REQUIRE(request->getResource() == "resource");
   REQUIRE(request->getContent() == contentPtr);

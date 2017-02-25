@@ -8,7 +8,6 @@
 #define MESSAGING_MESSAGE_QUEUE_HPP
 
 #include "IMessageQueue.hpp"
-#include "Core/ILogger.hpp"
 
 #include <queue>
 #include <list>
@@ -20,8 +19,6 @@ namespace Messaging {
 */
 class MessageQueue : public IMessageQueue {
   public:
-    explicit MessageQueue(Core::ILogger& logger);
-
     /**
       This method should be called for dispatching the messages.
     */
@@ -63,8 +60,6 @@ class MessageQueue : public IMessageQueue {
     virtual void removeController(const QueueResourceController& controller) override;
 
   private:
-    Core::ILogger& logger;
-
     std::queue<std::unique_ptr<Request>> requests;
     std::queue<std::unique_ptr<Response>> responses;
     std::queue<std::unique_ptr<Event>> events;

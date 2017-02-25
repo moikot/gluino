@@ -26,7 +26,7 @@ TEST_CASE("queue resource client can send a request", "[QueueResourceClient]") {
   Mock<IMockableMessageQueue> messageQueue;
 
   When(Method(messageQueue, addRequest)).Do([=](const Request& request) {
-    REQUIRE(request.getRequestType() == "get");
+    REQUIRE(request.getRequestType() == RequestType::Read);
     REQUIRE(request.getSender() == "clientId");
     REQUIRE(request.getResource() == "resource");
     REQUIRE(request.getContent() == nullptr);
@@ -35,7 +35,7 @@ TEST_CASE("queue resource client can send a request", "[QueueResourceClient]") {
 
   FakeMessageQueue mq(messageQueue.get());
   auto client = std::make_unique<QueueResourceClient>("clientId", "resource", mq);
-  client->sendRequest("get");
+  client->sendRequest(RequestType::Read);
 
   Verify(Method(messageQueue, addRequest));
 }
@@ -46,7 +46,7 @@ TEST_CASE("queue resource client can send a request with content", "[QueueResour
   auto contentPtr = content.get();
 
   When(Method(messageQueue, addRequest)).Do([=](const Request& request) {
-    REQUIRE(request.getRequestType() == "get");
+    REQUIRE(request.getRequestType() == RequestType::Read);
     REQUIRE(request.getSender() == "clientId");
     REQUIRE(request.getResource() == "resource");
     REQUIRE(request.getContent() == contentPtr);
@@ -55,7 +55,7 @@ TEST_CASE("queue resource client can send a request with content", "[QueueResour
 
   FakeMessageQueue mq(messageQueue.get());
   auto client = std::make_unique<QueueResourceClient>("clientId", "resource", mq);
-  client->sendRequest("get", std::move(content));
+  client->sendRequest(RequestType::Read, std::move(content));
 
   Verify(Method(messageQueue, addRequest));
 }
@@ -73,9 +73,9 @@ TEST_CASE("queue resource client can process a response", "[QueueResourceClient]
       REQUIRE(&result == resultPtr);
       return Status::OK;
     });
-    client->addOnResponse("get", [&](const Status& c){ return eventSink.get().onResponse(c); });
+    client->addOnResponse(RequestType::Read, [&](const Status& c){ return eventSink.get().onResponse(c); });
 
-    Response response("receiver", "get", "resource", std::move(result));
+    Response response("receiver", RequestType::Read, "resource", std::move(result));
     client->onResponse(response);
 
     Verify(Method(eventSink, onResponse));
@@ -96,9 +96,9 @@ TEST_CASE("queue resource client can process an event", "[QueueResourceClient]")
       REQUIRE(&param == contentPtr);
       return Status::OK;
     });
-    client->addOnEvent("created", [&](const Content& c){ eventSink.get().onEvent(c); });
+    client->addOnEvent(EventType::Created, [&](const Content& c){ eventSink.get().onEvent(c); });
 
-    Event event("created", "resource", std::move(content));
+    Event event(EventType::Created, "resource", std::move(content));
     client->onEvent(event);
 
     Verify(Method(eventSink, onEvent));

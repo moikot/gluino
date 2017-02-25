@@ -16,7 +16,7 @@ namespace Messaging {
 
   struct ResourceResponseHandler {
     virtual ~ResourceResponseHandler() = default;
-    virtual std::string getRequestType() const = 0;
+    virtual RequestType getRequestType() const = 0;
     virtual std::string getContentType() const = 0;
     virtual void processResponse(const Response& response) const = 0;
   };
@@ -26,13 +26,13 @@ namespace Messaging {
     typedef typename Core::function_traits<T> traits;
     public:
       ResourceResponseHandlerImpl(
-        std::string requestType,
+        RequestType requestType,
         T onResponse) :
         requestType(requestType),
         onResponse(onResponse) {
       }
 
-      virtual std::string getRequestType() const override {
+      virtual RequestType getRequestType() const override {
         return requestType;
       }
 
@@ -45,7 +45,7 @@ namespace Messaging {
       }
 
     private:
-      const std::string requestType;
+      const RequestType requestType;
       const T onResponse;
   };
 
