@@ -47,7 +47,7 @@ SerializationService::deserialize(const std::string& json) const {
   std::unique_ptr<IDeserializationContext> context;
   std::tie(result, context) = contextFactory.createDeserializationContext(*this, json);
   if (!result.isOk())
-    return result;
+    return std::make_tuple(result, nullptr);
 
   return deserialize(*context);
 }
