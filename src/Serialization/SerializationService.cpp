@@ -58,12 +58,12 @@ SerializationService::deserialize(const IDeserializationContext& context) const 
   std::string typeId;
   std::tie(result, typeId) = context.getString(TYPE_FIELD);
   if (!result.isOk())
-    return result;
+    return std::make_tuple(result, nullptr);
 
   auto serializer = getSerialzier(typeId);
   if (!serializer) {
-    return Status(StatusCode::BadRequest,
-      "Unable to find serializer for type """ + typeId + """.");
+    return std::make_tuple(Status(StatusCode::BadRequest,
+      "Unable to find serializer for type """ + typeId + """."), nullptr);
   }
   return serializer->deserialize(context);
 }
