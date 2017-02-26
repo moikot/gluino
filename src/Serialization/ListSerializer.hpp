@@ -28,7 +28,7 @@ class ListSerializer : public Serializer<T> {
 
     virtual std::tuple<Core::Status, std::unique_ptr<T>>
     deserializeImpl(const IDeserializationContext& context) const override {
-       return Core::Status::NotImplemented;
+       return std::make_tuple(Core::Status::NotImplemented, nullptr);
     }
 };
 
