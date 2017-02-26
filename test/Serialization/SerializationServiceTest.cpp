@@ -147,7 +147,7 @@ TEST_CASE("entity deserialization fails", "[SerializationService]") {
   SECTION("if createDeserializationContext fails") {
     When(Method(factoryInstance, createDeserializationContext)).Do([&](
       const ISerializationService&, const std::string&) {
-      return Status::NotImplemented;
+      return std::make_tuple(Status::NotImplemented, nullptr);
     });
     service->addSerializer(std::move(serializer));
   }
