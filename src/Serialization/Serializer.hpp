@@ -39,8 +39,8 @@ class Serializer : public ISerializer {
       std::unique_ptr<T> entity;
       std::tie(result, entity) = deserializeImpl(context);
       if (!result.isOk()) {
-        return Core::Status(Core::StatusCode::InternalServerError,
-          "Unable to deserialize an instance of type """ + getTypeId() + """.", result);
+        return std::make_tuple(Core::Status(Core::StatusCode::InternalServerError,
+          "Unable to deserialize an instance of type """ + getTypeId() + """.", result), nullptr);
       }
       return std::make_tuple(result, std::move(entity));
     }

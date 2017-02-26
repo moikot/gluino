@@ -21,18 +21,18 @@ RequestSerializer::deserializeImpl(const IDeserializationContext& context) const
   std::string requestType;
   std::tie(result, requestType) = context.getString(FIELD_REQUEST_TYPE);
   if (!result.isOk())
-    return result;
+    return std::make_tuple(result, nullptr);
 
   std::string resource;
   std::tie(result, resource) = context.getString(FIELD_RESOURCE);
   if (!result.isOk())
-    return result;
+    return std::make_tuple(result, nullptr);
 
   std::unique_ptr<IEntity> content;
   if (context.hasKey(FIELD_CONTENT)) {
     tie(result, content) = context.getEntity(FIELD_CONTENT);
     if (!result.isOk())
-      return result;
+      return std::make_tuple(result, nullptr);
   }
 
   auto request = std::make_unique<Request>("", RequestType(requestType), resource, std::move(content));
