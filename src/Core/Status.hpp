@@ -21,6 +21,7 @@ class Status : public IEntity {
     static Status OK;
     static Status NotImplemented;
 
+    Status(); 
     Status(const StatusCode& statusCode, const std::string& message);
     Status(const StatusCode& statusCode, const std::string& message, Status innerStatus);
 

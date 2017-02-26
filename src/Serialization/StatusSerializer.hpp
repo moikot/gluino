@@ -15,13 +15,11 @@ namespace Serialization {
 class StatusSerializer : public Serializer<Core::Status> {
   protected:
     // From Serializer
-    virtual Core::Status serialize(
-      const Core::Status& status,
-      ISerializationContext& context) const override;
+    virtual Core::Status
+      serializeImpl(ISerializationContext& context, const Core::Status& status) const override;
 
-    virtual Core::Status deserialize(
-      std::unique_ptr<Core::Status>& status,
-      IDeserializationContext& context) const override;
+    virtual std::tuple<Core::Status, std::unique_ptr<Core::Status>>
+      deserializeImpl(const IDeserializationContext& context) const override;
 };
 
 }

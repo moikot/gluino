@@ -15,24 +15,24 @@ struct FakeDeserializationContext : public Serialization::IDeserializationContex
   explicit FakeDeserializationContext(IDeserializationContext& context) : context(context) {
   }
 
-  virtual bool hasKey(const std::string& key) override {
+  virtual bool hasKey(const std::string& key) const override {
     return context.hasKey(key);
   }
 
-  virtual Core::Status getString(const std::string& key, std::string& value) override {
-    return context.getString(key, value);
+  virtual std::tuple<Core::Status, std::string> getString(const std::string& key) const override {
+    return context.getString(key);
   }
 
-  virtual Core::Status getInt(const std::string& key, int& value) override {
-    return context.getInt(key, value);
+  virtual std::tuple<Core::Status, int> getInt(const std::string& key) const override {
+    return context.getInt(key);
   }
 
-  virtual Core::Status getBool(const std::string& key, bool& value) override {
-    return context.getBool(key, value);
+  virtual std::tuple<Core::Status, bool> getBool(const std::string& key) const override {
+    return context.getBool(key);
   }
 
-  virtual Core::Status getEntity(const std::string& key, std::unique_ptr<Core::IEntity>& entity) override {
-    return context.getEntity(key, entity);
+  virtual std::tuple<Core::Status, std::unique_ptr<Core::IEntity>> getEntity(const std::string& key) const override {
+    return context.getEntity(key);
   }
 
   private:

@@ -15,13 +15,12 @@ namespace Serialization {
 class EventSerializer : public Serializer<Messaging::Event> {
   protected:
     // From Serializer
-    virtual Core::Status serialize(
-      const Messaging::Event& event,
-      ISerializationContext& context) const override;
+    virtual Core::Status serializeImpl(
+      ISerializationContext& context,
+      const Messaging::Event& event) const override;
 
-    virtual Core::Status deserialize(
-      std::unique_ptr<Messaging::Event>& event,
-      IDeserializationContext& context) const override;
+    virtual std::tuple<Core::Status, std::unique_ptr<Messaging::Event>>
+      deserializeImpl(const IDeserializationContext& context) const override;
 };
 
 }
