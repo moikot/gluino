@@ -17,16 +17,14 @@ struct FakeSerializer : public Serialization::ISerializer {
     return serializer.getTypeId();
   }
 
-  virtual Core::Status serialize(
-    const Core::IEntity& entity,
-    Serialization::ISerializationContext& context) const {
-      return serializer.serialize(entity, context);
+  virtual Core::Status
+    serialize(Serialization::ISerializationContext& context, const Core::IEntity& entity) const {
+      return serializer.serialize(context, entity);
     }
 
-  virtual Core::Status deserialize(
-    std::unique_ptr<Core::IEntity>& entity,
-    Serialization::IDeserializationContext& context) const {
-        return serializer.deserialize(entity, context);
+  virtual std::tuple<Core::Status, std::unique_ptr<Core::IEntity>>
+    deserialize(const Serialization::IDeserializationContext& context) const {
+        return serializer.deserialize(context);
     }
 
   private:

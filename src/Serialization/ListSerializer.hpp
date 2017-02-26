@@ -16,9 +16,8 @@ template<typename T>
 class ListSerializer : public Serializer<T> {
   protected:
     // From Serializer
-    virtual Core::Status serialize(
-      const T& list,
-      ISerializationContext& context) const override {
+    virtual Core::Status
+      serializeImpl(ISerializationContext& context, const T& list) const override {
 
       auto result = context.setEntity("elements", list);
       if (!result.isOk())
@@ -27,9 +26,8 @@ class ListSerializer : public Serializer<T> {
       return Core::Status::OK;
     }
 
-    virtual Core::Status deserialize(
-     std::unique_ptr<T>& list,
-     IDeserializationContext& context) const override {
+    virtual std::tuple<Core::Status, std::unique_ptr<T>>
+    deserializeImpl(const IDeserializationContext& context) const override {
        return Core::Status::NotImplemented;
     }
 };

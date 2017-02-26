@@ -9,9 +9,8 @@ using namespace Serialization;
 #define FIELD_CONTENT "content"
 
 Status
-EventSerializer::serialize(
-  const Messaging::Event& event,
-  ISerializationContext& context) const {
+EventSerializer::serializeImpl(ISerializationContext& context,
+  const Messaging::Event& event) const {
 
   auto result = context.setString(FIELD_EVENT_TYPE, event.getEventType());
   if (!result.isOk())
@@ -31,7 +30,7 @@ EventSerializer::serialize(
   return Status::OK;
 }
 
-Status
-EventSerializer::deserialize(std::unique_ptr<Event>&, IDeserializationContext&) const {
-  return Status::NotImplemented;
+std::tuple<Core::Status, std::unique_ptr<Messaging::Event>>
+EventSerializer::deserializeImpl(const IDeserializationContext&) const {
+  return std::make_tuple(Status::NotImplemented, nullptr);
 }
