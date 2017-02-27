@@ -19,7 +19,7 @@ TEST_CASE("Response can be constructed", "[Response]") {
   auto content = std::make_unique<Content>();
   auto contentPtr = content.get();
 
-  auto response = std::make_unique<Response>("receiver", "get", "resource", std::move(content));
+  auto response = std::make_unique<Response>("receiver", RequestType::Read, "resource", std::move(content));
 
   SECTION("type is correct") {
     REQUIRE(response->getTypeId() == "response");
@@ -30,7 +30,7 @@ TEST_CASE("Response can be constructed", "[Response]") {
   }
 
   SECTION("request type retained") {
-    REQUIRE(response->getRequestType() == "get");
+    REQUIRE(response->getRequestType() == RequestType::Read);
   }
 
   SECTION("resource retained") {
@@ -42,8 +42,8 @@ TEST_CASE("Response can be constructed", "[Response]") {
   }
 }
 
-TEST_CASE("Receiver can be changed", "[Request]") {
-	auto response = std::make_unique<Response>("receiver", "get", "resource", std::make_unique<Content>());
+TEST_CASE("Receiver can be changed", "[Response]") {
+	auto response = std::make_unique<Response>("receiver", RequestType::Read, "resource", std::make_unique<Content>());
 
 	response->setReceiver("new_receiver");
 

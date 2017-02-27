@@ -7,6 +7,7 @@
 #ifndef MESSAGING_QUEUE_GENERIC_CLIENT_HPP
 #define MESSAGING_QUEUE_GENERIC_CLIENT_HPP
 
+#include "RequestType.hpp"
 #include "QueueClient.hpp"
 #include "Core/Status.hpp"
 
@@ -26,7 +27,7 @@ class QueueGenericClient : public QueueClient {
 
     std::string getClientId() const override { return clientId; }
 
-  	Core::Status sendRequest(std::string requestType,
+  	Core::Status sendRequest(RequestType requestType,
   		std::string resource, std::unique_ptr<Core::IEntity> content
   	);
 

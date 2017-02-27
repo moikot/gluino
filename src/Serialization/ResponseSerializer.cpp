@@ -9,9 +9,8 @@ using namespace Serialization;
 #define FIELD_CONTENT "content"
 
 Status
-ResponseSerializer::serialize(
-  const Response& response,
-  ISerializationContext& context) const {
+ResponseSerializer::serializeImpl(ISerializationContext& context,
+  const Response& response) const {
 
   auto result = context.setString(FIELD_REQUEST_TYPE, response.getRequestType());
   if (!result.isOk())
@@ -28,7 +27,7 @@ ResponseSerializer::serialize(
   return Status::OK;
 }
 
-Status
-ResponseSerializer::deserialize(std::unique_ptr<Response>&, IDeserializationContext&) const {
-  return Status::NotImplemented;
+std::tuple<Core::Status, std::unique_ptr<Messaging::Response>>
+ResponseSerializer::deserializeImpl(const IDeserializationContext&) const {
+  return std::make_tuple(Status::NotImplemented, nullptr);
 }

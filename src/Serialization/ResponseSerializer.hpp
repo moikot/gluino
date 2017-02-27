@@ -15,13 +15,12 @@ namespace Serialization {
 class ResponseSerializer : public Serializer<Messaging::Response> {
   protected:
     // From Serializer
-    virtual Core::Status serialize(
-      const Messaging::Response& response,
-      ISerializationContext& context) const override;
+    virtual Core::Status serializeImpl(
+      ISerializationContext& context,
+      const Messaging::Response& response) const override;
 
-    virtual Core::Status deserialize(
-      std::unique_ptr<Messaging::Response>& response,
-      IDeserializationContext& context) const override;
+    virtual std::tuple<Core::Status, std::unique_ptr<Messaging::Response>>
+    deserializeImpl(const IDeserializationContext& context) const override;
 };
 
 }

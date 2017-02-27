@@ -21,21 +21,17 @@ class SerializationService : public ISerializationService {
     explicit SerializationService(const IContextFactory& contextFactory);
 
     // From ISerializationService
-    virtual Core::Status serialize(
-      const Core::IEntity& entity,
-      std::string& json) const override;
+    virtual std::tuple<Core::Status, std::string>
+      serialize(const Core::IEntity& entity) const override;
 
-    virtual Core::Status serialize(
-      const Core::IEntity& entity,
-      ISerializationContext& context) const override;
+    virtual Core::Status
+      serialize(ISerializationContext& context, const Core::IEntity& entity) const override;
 
-    virtual Core::Status deserialize(
-      const std::string& json,
-      std::unique_ptr<Core::IEntity>& entity) const override;
+    virtual std::tuple<Core::Status, std::unique_ptr<Core::IEntity>>
+      deserialize(const std::string& json) const override;
 
-    virtual Core::Status deserialize(
-      IDeserializationContext& context,
-      std::unique_ptr<Core::IEntity>& entity) const override;
+    virtual std::tuple<Core::Status, std::unique_ptr<Core::IEntity>>
+      deserialize(const IDeserializationContext& context) const override;
 
     void addSerializer(std::unique_ptr<ISerializer> serializer);
 

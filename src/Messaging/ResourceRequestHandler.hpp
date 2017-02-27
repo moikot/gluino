@@ -16,7 +16,7 @@ namespace Messaging {
 
   struct ResourceRequestHandler {
     virtual ~ResourceRequestHandler() = default;
-    virtual std::string getRequestType() const = 0;
+    virtual RequestType getRequestType() const = 0;
     virtual std::string getContentType() const = 0;
     virtual std::unique_ptr<Core::IEntity> makeRequest(const Request& request) const = 0;
   };
@@ -29,13 +29,13 @@ namespace Messaging {
     typename std::enable_if<Core::function_traits<T>::value == 0>::type> : public ResourceRequestHandler {
     public:
       ResourceRequestHandlerImpl(
-        std::string requestType,
+        RequestType requestType,
         T onRequest) :
         requestType(requestType),
         onRequest(onRequest) {
       }
 
-      virtual std::string getRequestType() const override {
+      virtual RequestType getRequestType() const override {
         return requestType;
       }
 
@@ -48,7 +48,7 @@ namespace Messaging {
       }
 
     private:
-      const std::string requestType;
+      const RequestType requestType;
       const T onRequest;
   };
 
@@ -59,13 +59,13 @@ namespace Messaging {
 
   public:
       ResourceRequestHandlerImpl(
-        std::string requestType,
+        RequestType requestType,
         T onRequest) :
         requestType(requestType),
         onRequest(onRequest) {
       }
 
-      virtual std::string getRequestType() const override {
+      virtual RequestType getRequestType() const override {
         return requestType;
       }
 
@@ -78,7 +78,7 @@ namespace Messaging {
       }
 
     private:
-      const std::string requestType;
+      const RequestType requestType;
       const T onRequest;
   };
 

@@ -10,14 +10,21 @@
 #include "QueueGenericClient.hpp"
 #include "QueueResourceClient.hpp"
 #include "QueueResourceController.hpp"
-#include "Core/IIdleService.hpp"
 
 namespace Messaging {
 
 /**
   The message queue interface.
 */
-struct IMessageQueue : public Core::IIdleService {
+struct IMessageQueue {
+    virtual ~IMessageQueue() = default;
+
+    /**
+      Call this method to process messages.
+
+    */
+    virtual void idle() = 0;
+
     /**
       Adds a new request to the message queue.
 

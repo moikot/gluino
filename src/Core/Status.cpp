@@ -6,6 +6,10 @@ using namespace Core;
 Status Status::OK(StatusCode::OK, "OK");
 Status Status::NotImplemented(StatusCode::NotImplemented, "Not implemented.");
 
+Status::Status() :
+  statusCode(StatusCode::OK), message("OK") {
+}
+
 Status::Status(const StatusCode& statusCode, const std::string& message) :
   statusCode(statusCode), message(message) {
 }

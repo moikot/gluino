@@ -8,8 +8,7 @@ using namespace Core;
 #define FIELD_INNER_STATUS "innerStatus"
 
 Core::Status
-StatusSerializer::serialize(const Status& status,
-                            ISerializationContext& context) const {
+StatusSerializer::serializeImpl(ISerializationContext& context, const Status& status) const {
 
   auto result = context.setInt(FIELD_CODE, (int)status.getStatusCode());
   if (!result.isOk())
@@ -29,7 +28,7 @@ StatusSerializer::serialize(const Status& status,
   return Status::OK;
 }
 
-Core::Status
-StatusSerializer::deserialize(std::unique_ptr<Status>&, IDeserializationContext&) const {
-  return Status::NotImplemented;
+std::tuple<Core::Status, std::unique_ptr<Core::Status>>
+StatusSerializer::deserializeImpl(const IDeserializationContext&) const {
+  return std::make_tuple(Status::NotImplemented, nullptr);
 }

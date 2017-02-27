@@ -16,15 +16,16 @@
 namespace Serialization {
 
 struct IContextFactory {
+    typedef std::tuple<Core::Status, std::unique_ptr<ISerializationContext>> SerializationContextResult;
+    typedef std::tuple<Core::Status, std::unique_ptr<IDeserializationContext>> DeserializationContextResult;
+
     virtual ~IContextFactory() = default;
 
-    virtual Core::Status createSerializationContext(
-      const ISerializationService& serializationService,
-      std::unique_ptr<ISerializationContext>& context) const = 0;
+    virtual SerializationContextResult createSerializationContext(
+      const ISerializationService& serializationService) const = 0;
 
-    virtual Core::Status createDeserializationContext(
-      const ISerializationService& serializationService, const std::string& json,
-      std::unique_ptr<IDeserializationContext>& context) const = 0;
+    virtual DeserializationContextResult createDeserializationContext(
+      const ISerializationService& serializationService, const std::string& json) const = 0;
 };
 
 }

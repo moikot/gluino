@@ -34,25 +34,24 @@ TEST_CASE("can serialize an entity", "[SerializationService]") {
   When(Method(context, toString)).Return("serialized");
 
   When(Method(factoryInstance, createSerializationContext)).Do([&](
-    const ISerializationService&,
-    std::unique_ptr<ISerializationContext>& con) {
-    con = std::make_unique<FakeSerializationContext>(context.get());
-    return Status::OK;
+    const ISerializationService&) {
+    auto con = std::make_unique<FakeSerializationContext>(context.get());
+    return std::make_tuple(Status::OK, std::move(con));
   });
 
   When(Method(serializerInstance, getTypeId)).Return(Content::TypeId());
 
   When(Method(serializerInstance, serialize)).Do([](
-    const Core::IEntity&,
-    ISerializationContext&) {
+        ISerializationContext&, const Core::IEntity&) {
     return Status::OK;
   });
 
   service->addSerializer(std::move(serializer));
 
   auto entity = std::make_unique<Content>();
+  Status result;
   std::string json;
-  auto result = service->serialize(*entity, json);
+  std::tie(result, json) = service->serialize(*entity);
 
   REQUIRE(result.isOk() == true);
 }
@@ -67,32 +66,27 @@ TEST_CASE("entity serialization fails", "[SerializationService]") {
 
   SECTION("if createSerializationContext fails") {
     When(Method(factoryInstance, createSerializationContext)).Do([&](
-      const ISerializationService&,
-      std::unique_ptr<ISerializationContext>&) {
-      return Status::NotImplemented;
+      const ISerializationService&) {
+      return std::make_tuple(Status::NotImplemented, std::unique_ptr<ISerializationContext>());
     });
-    service->addSerializer(std::move(serializer));
   }
 
   SECTION("if setString for _type fails") {
     When(Method(factoryInstance, createSerializationContext)).Do([&](
-      const ISerializationService&,
-      std::unique_ptr<ISerializationContext>& con) {
-      con = std::make_unique<FakeSerializationContext>(context.get());
-      return Status::OK;
+      const ISerializationService&) {
+      auto con = std::make_unique<FakeSerializationContext>(context.get());
+      return std::make_tuple(Status::OK, std::move(con));
     });
     When(Method(context, setString).Using("_type","content")).Do([](const std::string&, const std::string&) {
       return Status::NotImplemented;
     });
-    service->addSerializer(std::move(serializer));
   }
 
   SECTION("if the serializer is not found") {
     When(Method(factoryInstance, createSerializationContext)).Do([&](
-      const ISerializationService&,
-      std::unique_ptr<ISerializationContext>& con) {
-      con = std::make_unique<FakeSerializationContext>(context.get());
-      return Status::OK;
+      const ISerializationService&) {
+      auto con = std::make_unique<FakeSerializationContext>(context.get());
+      return std::make_tuple(Status::OK, std::move(con));
     });
     When(Method(context, setString).Using("_type","content")).Do([](const std::string&, const std::string&) {
       return Status::OK;
@@ -100,8 +94,9 @@ TEST_CASE("entity serialization fails", "[SerializationService]") {
   }
 
   auto entity = std::make_unique<Content>();
+  Status result;
   std::string json;
-  auto result = service->serialize(*entity, json);
+  std::tie(result, json) = service->serialize(*entity);
 
   REQUIRE(result.isOk() == false);
 }
@@ -114,32 +109,29 @@ TEST_CASE("can deserialize an entity", "[SerializationService]") {
   auto serializer = std::make_unique<FakeSerializer>(serializerInstance.get());
   auto service = std::make_unique<SerializationService>(factoryInstance.get());
 
-  When(Method(context, getString)).Do([](const std::string&, std::string& value) {
-    value = "content";
-    return Status::OK;
+  When(Method(context, getString)).Do([](const std::string&) {
+    return std::make_tuple(Status::OK, "content");
   });
 
   When(Method(factoryInstance, createDeserializationContext)).Do([&](
-    const ISerializationService&,
-    const std::string&,
-    std::unique_ptr<IDeserializationContext>& con) {
-    con = std::make_unique<FakeDeserializationContext>(context.get());
-    return Status::OK;
+    const ISerializationService&, const std::string&) {
+    auto con = std::make_unique<FakeDeserializationContext>(context.get());
+    return std::make_tuple(Status::OK, std::move(con));
   });
 
   When(Method(serializerInstance, getTypeId)).Return(Content::TypeId());
 
   When(Method(serializerInstance, deserialize)).Do([](
-    std::unique_ptr<IEntity>& entity,
-    IDeserializationContext&) {
-    entity = std::make_unique<Content>();
-    return Status::OK;
+    const IDeserializationContext&) {
+    auto entity = std::make_unique<Content>();
+    return std::make_tuple(Status::OK, std::move(entity));
   });
 
   service->addSerializer(std::move(serializer));
 
+  Status result;
   std::unique_ptr<IEntity> entity;
-  auto result = service->deserialize("json", entity);
+  std::tie(result, entity) = service->deserialize("json");
 
   REQUIRE(result.isOk() == true);
 }
@@ -154,44 +146,38 @@ TEST_CASE("entity deserialization fails", "[SerializationService]") {
 
   SECTION("if createDeserializationContext fails") {
     When(Method(factoryInstance, createDeserializationContext)).Do([&](
-      const ISerializationService&,
-      const std::string&,
-      std::unique_ptr<IDeserializationContext>&) {
-      return Status::NotImplemented;
+      const ISerializationService&, const std::string&) {
+      return std::make_tuple(Status::NotImplemented, nullptr);
     });
     service->addSerializer(std::move(serializer));
   }
 
   SECTION("if getString for _type fails") {
-    When(Method(context, getString)).Do([](const std::string&, std::string&) {
-      return Status::NotImplemented;
+    When(Method(context, getString)).Do([](const std::string&) {
+      return std::make_tuple(Status::NotImplemented, "");
     });
     When(Method(factoryInstance, createDeserializationContext)).Do([&](
-      const ISerializationService&,
-      const std::string&,
-      std::unique_ptr<IDeserializationContext>& con) {
-      con = std::make_unique<FakeDeserializationContext>(context.get());
-      return Status::OK;
+      const ISerializationService&, const std::string&) {
+      auto con = std::make_unique<FakeDeserializationContext>(context.get());
+      return std::make_tuple(Status::OK, std::move(con));
     });
     service->addSerializer(std::move(serializer));
   }
 
   SECTION("if the serializer is not found") {
-    When(Method(context, getString)).Do([](const std::string&, std::string& value) {
-      value = "content";
-      return Status::OK;
+    When(Method(context, getString)).Do([](const std::string&) {
+      return std::make_tuple(Status::OK, "content");
     });
     When(Method(factoryInstance, createDeserializationContext)).Do([&](
-      const ISerializationService&,
-      const std::string&,
-      std::unique_ptr<IDeserializationContext>& con) {
-      con = std::make_unique<FakeDeserializationContext>(context.get());
-      return Status::OK;
+      const ISerializationService&, const std::string&) {
+      auto con = std::make_unique<FakeDeserializationContext>(context.get());
+      return std::make_tuple(Status::OK, std::move(con));
     });
   }
 
+  Status result;
   std::unique_ptr<IEntity> entity;
-  auto result = service->deserialize("json", entity);
+  std::tie(result, entity) = service->deserialize("json");
 
   REQUIRE(result.isOk() == false);
 }

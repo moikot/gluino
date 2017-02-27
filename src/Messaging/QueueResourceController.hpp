@@ -8,6 +8,7 @@
 #define MESSAGING_QUEUE_RESOURCE_CONTROLLER_HPP
 
 #include "ResourceRequestHandler.hpp"
+#include "EventType.hpp"
 #include "Core/Status.hpp"
 #include "Core/Memory.hpp"
 
@@ -27,11 +28,11 @@ class QueueResourceController {
     QueueResourceController(const QueueResourceController&) = delete;
     QueueResourceController& operator=(const QueueResourceController&) = delete;
 
-    Core::Status sendEvent(std::string eventType);
-    Core::Status sendEvent(std::string eventType, std::unique_ptr<Core::IEntity> content);
+    Core::Status sendEvent(EventType eventType);
+    Core::Status sendEvent(EventType eventType, std::unique_ptr<Core::IEntity> content);
 
     template<typename T>
-    void addOnRequest(std::string requestType, T onRequest) {
+    void addOnRequest(RequestType requestType, T onRequest) {
       handlers.push_back(std::make_unique<ResourceRequestHandlerImpl<T>>(requestType, onRequest));
     }
 

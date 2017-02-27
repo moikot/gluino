@@ -10,28 +10,24 @@
 #include "ISerializationContext.hpp"
 #include "IDeserializationContext.hpp"
 
-#include "Core/IService.hpp"
-
 #include <memory>
 
 namespace Serialization {
 
-struct ISerializationService : public Core::IService {
-  virtual Core::Status serialize(
-    const Core::IEntity& object,
-    std::string& json) const = 0;
+struct ISerializationService  {
+  virtual ~ISerializationService() = default;
 
-  virtual Core::Status serialize(
-    const Core::IEntity& object,
-    ISerializationContext& context) const = 0;
+  virtual std::tuple<Core::Status, std::string>
+    serialize(const Core::IEntity& object) const = 0;
 
-  virtual Core::Status deserialize(
-    const std::string& json,
-    std::unique_ptr<Core::IEntity>& entity) const = 0;
+  virtual Core::Status
+    serialize(ISerializationContext& context, const Core::IEntity& object) const = 0;
 
-  virtual Core::Status deserialize(
-    IDeserializationContext& context,
-    std::unique_ptr<Core::IEntity>& entity) const = 0;
+  virtual std::tuple<Core::Status, std::unique_ptr<Core::IEntity>>
+    deserialize(const std::string& json) const = 0;
+
+  virtual std::tuple<Core::Status, std::unique_ptr<Core::IEntity>>
+    deserialize(const IDeserializationContext& context) const = 0;
 };
 
 }

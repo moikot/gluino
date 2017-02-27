@@ -10,32 +10,31 @@ using namespace Serialization;
 #define FIELD_CONTENT "content"
 
 Status
-RequestSerializer::serialize(const Request&, ISerializationContext&) const {
+RequestSerializer::serializeImpl(ISerializationContext&, const Request&) const {
   return Status::NotImplemented;
 }
 
-Status
-RequestSerializer::deserialize(
-  std::unique_ptr<Request>& request,
-  IDeserializationContext& context) const {
+std::tuple<Core::Status, std::unique_ptr<Messaging::Request>>
+RequestSerializer::deserializeImpl(const IDeserializationContext& context) const {
 
+  Status result;
   std::string requestType;
-  auto result = context.getString(FIELD_REQUEST_TYPE, requestType);
+  std::tie(result, requestType) = context.getString(FIELD_REQUEST_TYPE);
   if (!result.isOk())
-    return result;
+    return std::make_tuple(result, nullptr);
 
   std::string resource;
-  result = context.getString(FIELD_RESOURCE, resource);
+  std::tie(result, resource) = context.getString(FIELD_RESOURCE);
   if (!result.isOk())
-    return result;
+    return std::make_tuple(result, nullptr);
 
   std::unique_ptr<IEntity> content;
   if (context.hasKey(FIELD_CONTENT)) {
-    result = context.getEntity(FIELD_CONTENT, content);
+    tie(result, content) = context.getEntity(FIELD_CONTENT);
     if (!result.isOk())
-      return result;
+      return std::make_tuple(result, nullptr);
   }
 
-  request = std::make_unique<Request>("", requestType, resource, std::move(content));
-  return Status::OK;
+  auto request = std::make_unique<Request>("", RequestType(requestType), resource, std::move(content));
+  return std::make_tuple(Status::OK, std::move(request));
 }

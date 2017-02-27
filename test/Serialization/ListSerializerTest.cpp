@@ -33,7 +33,7 @@ TEST_CASE("can serialize a list", "[ListSerializer]") {
   });
 
   std::unique_ptr<ISerializer> serializer = std::make_unique<ListSerializer<ContentCol>>();
-  auto result = serializer->serialize(*content, context.get());
+  auto result = serializer->serialize(context.get(), *content);
 
   REQUIRE(result.isOk() == true);
   Verify(Method(context, setEntity));
@@ -51,17 +51,18 @@ TEST_CASE("list serialization fails", "[ListSerializer]") {
   auto content = std::make_unique<ContentCol>();
 
   std::unique_ptr<ISerializer> serializer = std::make_unique<ListSerializer<ContentCol>>();
-  auto result = serializer->serialize(*content, context.get());
+  auto result = serializer->serialize(context.get(), *content);
 
   REQUIRE(result.isOk() == false);
 }
 
 TEST_CASE("list deserialization is not implemented", "[ListSerializer]") {
+  Status result;
   std::unique_ptr<IEntity> entity;
   Mock<IDeserializationContext> context;
 
   std::unique_ptr<ISerializer> serializer = std::make_unique<ListSerializer<ContentCol>>();
-  auto result = serializer->deserialize(entity, context.get());
+  std::tie(result, entity) = serializer->deserialize(context.get());
 
   REQUIRE(result.getStatusCode() == StatusCode::InternalServerError);
   REQUIRE(result.getInnerStatus()->getStatusCode() == StatusCode::NotImplemented);

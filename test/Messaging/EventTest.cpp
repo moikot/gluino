@@ -18,8 +18,8 @@ TEST_CASE("Event can be constructed", "[Event]") {
   auto content = std::make_unique<Content>();
   auto contentPtr = content.get();
 
-  auto eventNoContent = std::make_unique<Event>("created", "resource");
-  auto eventWithContent = std::make_unique<Event>("created", "resource", std::move(content));
+  auto eventNoContent = std::make_unique<Event>(EventType::Created, "resource");
+  auto eventWithContent = std::make_unique<Event>(EventType::Created, "resource", std::move(content));
 
   SECTION("type is correct") {
     REQUIRE(eventNoContent->getTypeId() == "event");
@@ -27,8 +27,8 @@ TEST_CASE("Event can be constructed", "[Event]") {
   }
 
   SECTION("event type retained") {
-    REQUIRE(eventNoContent->getEventType() == "created");
-    REQUIRE(eventWithContent->getEventType() == "created");
+    REQUIRE(eventNoContent->getEventType() == EventType::Created);
+    REQUIRE(eventWithContent->getEventType() == EventType::Created);
   }
 
   SECTION("resource retained") {

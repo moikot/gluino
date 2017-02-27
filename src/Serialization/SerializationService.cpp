@@ -11,29 +11,23 @@ SerializationService::SerializationService(const IContextFactory& contextFactory
   contextFactory(contextFactory) {
 }
 
-Core::Status
-SerializationService::serialize(
-  const IEntity& entity,
-  std::string& json) const {
-
+std::tuple<Core::Status, std::string>
+SerializationService::serialize(const IEntity& entity) const {
+  Core::Status result;
   std::unique_ptr<ISerializationContext> context;
-  auto result = contextFactory.createSerializationContext(*this, context);
+  std::tie(result, context) = contextFactory.createSerializationContext(*this);
   if (!result.isOk())
-    return result;
+    return std::make_tuple(result, "");
 
-  result = serialize(entity, *context);
+  result = serialize(*context, entity);
   if (!result.isOk())
-    return result;
+    return std::make_tuple(result, "");
 
-  json = context->toString();
-  return Status::OK;
+  return std::make_tuple(Status::OK, context->toString());
 }
 
 Core::Status
-SerializationService::serialize (
-  const IEntity& entity,
-  ISerializationContext& context) const {
-
+SerializationService::serialize(ISerializationContext& context, const IEntity& entity) const {
   std::string typeId = entity.getTypeId();
   auto result = context.setString(TYPE_FIELD, typeId);
   if (!result.isOk())
@@ -44,38 +38,34 @@ SerializationService::serialize (
     return Status(StatusCode::BadRequest,
       "Unable to find a serializer for type """ + typeId + """.");
   }
-  return serializer->serialize(entity, context);
+  return serializer->serialize(context, entity);
 }
 
-Core::Status
-SerializationService::deserialize(
-  const std::string& json,
-  std::unique_ptr<IEntity>& entity) const {
-
+std::tuple<Core::Status, std::unique_ptr<IEntity>>
+SerializationService::deserialize(const std::string& json) const {
+  Core::Status result;
   std::unique_ptr<IDeserializationContext> context;
-  auto result = contextFactory.createDeserializationContext(*this, json, context);
+  std::tie(result, context) = contextFactory.createDeserializationContext(*this, json);
   if (!result.isOk())
-    return result;
+    return std::make_tuple(result, nullptr);
 
-  return deserialize(*context, entity);
+  return deserialize(*context);
 }
 
-Core::Status
-SerializationService::deserialize(
-  IDeserializationContext& context,
-  std::unique_ptr<IEntity>& entity) const {
-
+std::tuple<Core::Status, std::unique_ptr<IEntity>>
+SerializationService::deserialize(const IDeserializationContext& context) const {
+  Core::Status result;
   std::string typeId;
-  auto result = context.getString(TYPE_FIELD, typeId);
+  std::tie(result, typeId) = context.getString(TYPE_FIELD);
   if (!result.isOk())
-    return result;
+    return std::make_tuple(result, nullptr);
 
   auto serializer = getSerialzier(typeId);
   if (!serializer) {
-    return Status(StatusCode::BadRequest,
-      "Unable to find serializer for type """ + typeId + """.");
+    return std::make_tuple(Status(StatusCode::BadRequest,
+      "Unable to find serializer for type """ + typeId + """."), nullptr);
   }
-  return serializer->deserialize(entity, context);
+  return serializer->deserialize(context);
 }
 
 void
@@ -85,7 +75,6 @@ SerializationService::addSerializer(std::unique_ptr<ISerializer> serializer) {
 
 const ISerializer*
 SerializationService::getSerialzier(std::string typeId) const {
-
   auto findIter = std::find_if(serializers.begin(), serializers.end(),
     [&](const std::unique_ptr<ISerializer>& serializer){
       return serializer->getTypeId() == typeId;
