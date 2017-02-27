@@ -17,6 +17,11 @@ install:
 # install coveralls-lcov
 - gem install coveralls-lcov
 
+# blocklist
+branches:
+  except:
+  - /^exp-.*$
+
 before_script:
 - cd ${TRAVIS_BUILD_DIR}
 - lcov --directory . --zerocounters
