@@ -16,6 +16,15 @@ image: Visual Studio 2015
 clone_folder: c:\projects\gluino
 
 #---------------------------------#
+# Excluding experimental branches #
+#---------------------------------#
+
+# Blocklist
+branches:
+  except:
+  - /^exp-.*$
+
+#---------------------------------#
 #       build configuration       #
 #---------------------------------#
 
