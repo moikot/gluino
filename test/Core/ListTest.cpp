@@ -9,7 +9,7 @@ namespace {
   class Content : public Core::IEntity {
     TYPE_INFO(Content, Core::IEntity, "content")
     public:
-      Content(int i):i(i) {}
+      explicit Content(int i):i(i) {}
       int i;
   };
 
