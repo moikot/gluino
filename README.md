@@ -12,26 +12,40 @@ All the messages added into the queue are processed in the following priority: r
 
 ### Request
 The request message (Request class) is send by resource clients (QueueResourceClient class) handled by resource controllers (QueueResourceController class). Every request should contain the following information:
+
 1. Sender - the unique client id for routing the request processing result (response) back to the sender
-2. Resource - the unique id of the resource the request is made for
-3. Request type - the type of the operation to perform with the resource
-4. Content (optional) - the payload for the request
+* Resource - the unique id of the resource the request is made for
+* Request type - the type of the operation to perform with the resource
+* Content (optional) - the payload for the request
 
 For example:
 ```cpp
   auto connection = std::make_unique<ConnectionParams>("WIFI_NAME", "PASSWORD");
-  Request("clientId", RequestType::Create, "connection", std::move(connection));
+  auto request = std::make_unique<Request>("clientId", RequestType::Create, "connection", std::move(connection));
 ```
 
 ### Response
 The response message (Response class) is sent by queue resource controllers (QueueResourceController class) in the result of handling a request sent by a resource client (QueueResourceClient class). Every response should contain the following information:
+
 1. Request type - the type of the request the response corresponds to
-2. Receiver - the original request sender becomes the receiver of the response
-3. Resource - the unique id of the resource the original request was made for
-4. Content (optional) - the payload for the response
+* Receiver - the original request sender becomes the receiver of the response
+* Resource - the unique id of the resource the original request was made for
+* Content (optional) - the payload for the response
 
 For example:
 ```cpp
   auto status = std::make_unique<Status>(StatusCode::Created, "The connection was created.");
-  Response("clientId", RequestType::Create, "connection", std::move(status));
+  auto response = std::make_unique<Response>("clientId", RequestType::Create, "connection", std::move(status));
+```
+
+### Events
+The event message (Event class) is sent by queue resource controllers (QueueResourceController class) in order to notify all the queue resource clients abut some changes in a resource state. Every event should contain the following information:
+
+1. Event type - the type of the event
+* Resource - the unique id of the resource the event associated with
+* Content (optional) - the payload for the event
+
+```cpp
+  auto connection = std::make_unique<Connection>("WIFI_NAME", isConnected);
+  auto event = std::make_unique<Event>(EventType::Createed, "connection", std::move(connection));
 ```
