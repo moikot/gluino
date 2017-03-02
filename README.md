@@ -51,3 +51,28 @@ The queue resource client simplifies the request sending by automatically includ
   auto newColor = std::make_unique<Color>(r, g, b);
   colorClient->sendRequest(RequestType::Update, std::move(newColor));
 ```
+
+### Queue resource controllers
+The queue resource controller is handling requests to a particular resource. The requests can involve a modification of the resource or can be just simple read. In the former case the response should contain only the operation status and the new (modified) resource representation can be sent in the correspondent notification ore explicitly retrieved by an idempotent read request.
+
+```cpp
+  colorController = messageQueue.createController(Models::Color::TypeId());
+  colorController->addOnRequest(RequestType::Update, [=](const Color& model){
+    setColor(model);
+    colorController->sendEvent(EventType::Updated, std::make_unique<Color>(model));
+    return std::make_unique<Status>(Status::OK);
+  });
+```
+
+In case of a read request the response should contain the resource representation if the request was successful or status otherwise.
+
+```cpp
+  connectionController = messageQueue.createController(Connection::TypeId());
+  connectionController->addOnRequest(RequestType::Read, [=](){
+    if (hasConnection()) {
+      return createConnectionObject();
+    } else {
+      return std::make_unique<Status>(StatusCode::NotFound, "The connection doesn't exist.");
+    }
+  });
+```
