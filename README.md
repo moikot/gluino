@@ -1,7 +1,7 @@
 # Gluino
 A middleware library for processing requests and generating evens.
 
-This library contains a very basic implementation of a message queue and serialization abstractions. Exceptions and RTTI are not used in this library intentionally since they might not be supported by the compilers for IOT devices.
+This library contains a very basic implementation of a message queue and serialization abstractions. Exceptions and RTTI are not used intentionally since they might not be supported by the compilers for IOT devices.
 
 [![Build Status](https://api.travis-ci.org/anisimovsergey/gluino.svg?branch=master)](https://travis-ci.org/anisimovsergey/gluino?branch=master)
 [![Build status](https://ci.appveyor.com/api/projects/status/oiyjkkvbiyfy2u0h?svg=true)](https://ci.appveyor.com/project/anisimovsergey/gluino)
@@ -12,22 +12,48 @@ This library contains a very basic implementation of a message queue and seriali
 
 Clone the library
 ```shell
-git clone https://github.com/anisimovsergey/gluino.git
-cd gluino
+$ git clone https://github.com/anisimovsergey/gluino.git
+$ cd gluino
 ```
 
 Build using cmake
 ```shell
-mkdir build
-cd build
-cmake ..
-make
-./test/gluino_test
+$ mkdir build
+$ cd build
+$ cmake ..
+$ make
+$ ./test/gluino_test
 ```
 
 Reset the counters
 ```shell
-lcov --directory . --zerocounters
+$ lcov --directory . --zerocounters
+```
+
+## Core components
+
+### IEntity
+Even though RTTI is not used in this library it is till possible to do the dynamic casting using a very trivial type identification system. In order to participate in this system your class should be inherited from IEntity and use TYPE_INFO macro.
+
+```cpp
+class Color : public Core::IEntity {
+  TYPE_INFO(Color, Core::IEntity, "color")
+  public:
+    Color(uint8_t r, uint8_t g, uint8_t b);
+    ...
+};
+```
+
+### Status
+Status class is used for propagating an operation result and contains a status code, message and an optional nested status. In order to return the result of an operation with some payload you can construct a tuple.
+
+```cpp
+std::tuple<Core::Status, std::unique_ptr<Color>>
+RequestSerializer::deserializeImpl(const IDeserializationContext& context) const {
+  ...
+  auto color = std::make_unique<Color>(r, g, b);
+  return std::make_tuple(Status::OK, std::move(color));
+}
 ```
 
 ## The message queue
