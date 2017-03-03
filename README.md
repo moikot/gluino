@@ -1,8 +1,34 @@
 # Gluino
+A middleware library for processing requests and generating evens.
+
+This library contains a very basic implementation of a message queue and serialization abstractions. Exceptions and RTTI are not used in this library intentionally since they might not be supported by the compilers for IOT devices.
+
 [![Build Status](https://api.travis-ci.org/anisimovsergey/gluino.svg?branch=master)](https://travis-ci.org/anisimovsergey/gluino?branch=master)
 [![Build status](https://ci.appveyor.com/api/projects/status/oiyjkkvbiyfy2u0h?svg=true)](https://ci.appveyor.com/project/anisimovsergey/gluino)
 [![Coverage Status](https://coveralls.io/repos/github/anisimovsergey/gluino/badge.svg?branch=master)](https://coveralls.io/github/anisimovsergey/gluino?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/74ecfbf675f34a3192ee0894ba75043e)](https://www.codacy.com/app/anisimovsergey/gluino?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=anisimovsergey/gluino&amp;utm_campaign=Badge_Grade)
+
+## How to build and test
+
+Clone the library
+```shell
+git clone https://github.com/anisimovsergey/gluino.git
+cd gluino
+```
+
+Build using cmake
+```shell
+mkdir build
+cd build
+cmake ..
+make
+./test/gluino_test
+```
+
+Reset the counters
+```shell
+lcov --directory . --zerocounters
+```
 
 ## The message queue
 
@@ -33,7 +59,7 @@ The event message (Event class) is sent by queue resource controllers (QueueReso
 ```
 
 ### Queue resource client
-The queue resource client can be used to get access to a resource and perform  operations with it. A resource client is created using IMessageQueue.createClient during its creation the client gets added to the resource clients list of the queue and automatically removed when it goes out of scope.
+The queue resource client can be used to get access to a resource and perform  operations with it. A resource client is created using IMessageQueue.createClient. During its creation the client gets added to the resource clients list of the queue and automatically removed when it goes out of scope.
 
 ```cpp
   colorClient = messageQueue.createClient("SenderId", Color::TypeId());
@@ -56,7 +82,7 @@ The queue resource client simplifies the request sending by automatically includ
 The queue resource controller is handling requests to a particular resource. The requests can involve a modification of the resource or can be just simple read. In the former case the response should contain only the operation status and the new (modified) resource representation can be sent in the correspondent notification ore explicitly retrieved by an idempotent read request.
 
 ```cpp
-  colorController = messageQueue.createController(Models::Color::TypeId());
+  colorController = messageQueue.createController(Color::TypeId());
   colorController->addOnRequest(RequestType::Update, [=](const Color& model){
     setColor(model);
     colorController->sendEvent(EventType::Updated, std::make_unique<Color>(model));
@@ -78,7 +104,7 @@ In case of a read request the response should contain the resource representatio
 ```
 
 ### Serialization
-Gluino library provides a very nive abstractions for serialization and deserialization. In order to use those abstractions you need to implement the following interfaces for your platform:
+Gluino library provides a very naive abstractions for serialization and deserialization. In order to use those abstractions you need to implement the following interfaces for your platform:
 
 1. IContextFactory - responsible for creating the serialization and deserialization contexts
 * ISerializationContext - the context needed for serialization and contains methods like `setString`, `setInt` etc.
