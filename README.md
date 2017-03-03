@@ -76,3 +76,35 @@ In case of a read request the response should contain the resource representatio
     }
   });
 ```
+
+### Serialization
+Gluino library provides a very nive abstractions for serialization and deserialization. In order to use those abstractions you need to implement the following interfaces for your platform:
+
+1. IContextFactory - responsible for creating the serialization and deserialization contexts
+* ISerializationContext - the context needed for serialization and contains methods like `setString`, `setInt` etc.
+* IDeserializationContext - the context needed for deserialization and contains methods like `getString`, `getInt` etc.
+
+In order to create a serializer for your object you need to inherit from `Seializer<T>` and implement `serializeImpl` and/or `deserializeImpl`.
+
+```cpp
+Core::Status
+ColorSerializer::serializeImpl(ISerializationContext& context, const Color& status) const {
+  auto result = context.setByte("red", color.getR());
+  if (!result.isOk())
+    return result;
+  ... // Repeat for green and blue
+  return Status::OK;
+}
+
+std::tuple<Core::Status, std::unique_ptr<Color>>
+RequestSerializer::deserializeImpl(const IDeserializationContext& context) const {
+  Status result;
+  uint8_t r, g, b;
+  std::tie(result, r) = context.getByte("r");
+  if (!result.isOk())
+    return std::make_tuple(result, nullptr);
+  ... // Repeat for green and blue
+  auto color = std::make_unique<Color>(r, g, b);
+  return std::make_tuple(Status::OK, std::move(color));
+}
+```
