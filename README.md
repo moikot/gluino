@@ -45,7 +45,7 @@ class Color : public Core::IEntity {
 ```
 
 ### Status
-Status class is used for propagating an operation result and contains a status code, message and an optional nested status. In order to return the result of an operation with some payload you can construct a tuple.
+Status class is used for propagating an operation result and contains a status code, a message and an optional nested status. In order to return the result of an operation with some payload you can construct a tuple.
 
 ```cpp
 std::tuple<Core::Status, std::unique_ptr<Color>>
@@ -77,7 +77,7 @@ The response message (Response class) is sent by queue resource controllers (Que
 ```
 
 ### Events
-The event message (Event class) is sent by queue resource controllers (QueueResourceController class) in order to notify all the queue resource clients abut some changes in the resource state.
+The event message (Event class) is sent by queue resource controllers (QueueResourceController class) in order to notify all the queue resource clients about some changes in the resource state.
 
 ```cpp
   auto connection = std::make_unique<Connection>("WIFI_NAME", isConnected);
@@ -105,18 +105,18 @@ The queue resource client simplifies the request sending by automatically includ
 ```
 
 ### Queue resource controllers
-The queue resource controller is handling requests to a particular resource. The requests can involve a modification of the resource or can be just simple read. In the former case the response should contain only the operation status and the new (modified) resource representation can be sent in the correspondent notification ore explicitly retrieved by an idempotent read request.
+The queue resource controller is handling requests to a particular resource. The requests can involve a modification of the resource or can be just simple read. In the former case the response should contain only the operation status and the new (modified) resource representation can be sent in the correspondent notification or explicitly retrieved by an idempotent read request.
 
 ```cpp
   colorController = messageQueue.createController(Color::TypeId());
-  colorController->addOnRequest(RequestType::Update, [=](const Color& model){
-    setColor(model);
-    colorController->sendEvent(EventType::Updated, std::make_unique<Color>(model));
+  colorController->addOnRequest(RequestType::Update, [=](const Color& color){
+    setColor(color);
+    colorController->sendEvent(EventType::Updated, std::make_unique<Color>(color));
     return std::make_unique<Status>(Status::OK);
   });
 ```
 
-In case of a read request the response should contain the resource representation if the request was successful or status otherwise.
+In case of a read request the response should contain the resource representation if the request was successful or a status otherwise.
 
 ```cpp
   connectionController = messageQueue.createController(Connection::TypeId());
@@ -130,9 +130,9 @@ In case of a read request the response should contain the resource representatio
 ```
 
 ### Serialization
-Gluino library provides a very naive abstractions for serialization and deserialization. In order to use those abstractions you need to implement the following interfaces for your platform:
+Gluino library provides a very basic abstractions for serialization and deserialization. In order to use those abstractions you need to implement the following interfaces for your platform:
 
-1. IContextFactory - responsible for creating the serialization and deserialization contexts
+1. IContextFactory - a factory responsible for creating the serialization and deserialization contexts
 * ISerializationContext - the context needed for serialization and contains methods like `setString`, `setInt` etc.
 * IDeserializationContext - the context needed for deserialization and contains methods like `getString`, `getInt` etc.
 
