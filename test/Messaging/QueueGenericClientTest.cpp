@@ -37,6 +37,7 @@ TEST_CASE("queue generic client can send a request", "[QueueGenericClient]") {
 
   FakeMessageQueue mq(messageQueue.get());
   auto client = std::make_unique<QueueGenericClient>("clientId", mq);
+
   client->sendRequest(RequestType::Read, "resource", std::move(content));
 
   Verify(Method(messageQueue, addRequest));
@@ -61,7 +62,7 @@ TEST_CASE("queue generic client can process a response", "[QueueGenericClient]")
 
     client->setOnResponse([&](const Response& e) { eventSink.get().onResponse(e); });
 
-    Response response("receiver", RequestType::Read, "resource", std::move(content));
+    Response response("id", "receiver", RequestType::Read, "resource", std::move(content));
     client->onResponse(response);
 
     Verify(Method(eventSink, onResponse));

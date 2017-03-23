@@ -1,6 +1,7 @@
 #include "QueueResourceClient.hpp"
 #include "IMessageQueue.hpp"
 #include "Core/Memory.hpp"
+#include "Core/Identity.hpp"
 
 using namespace Core;
 using namespace Messaging;
@@ -13,16 +14,18 @@ QueueResourceClient::~QueueResourceClient() {
   messageQueue.removeClient(*this);
 }
 
-Core::Status
+std::tuple<Core::Status, std::string>
 QueueResourceClient::sendRequest(RequestType requestType) {
-  auto request = std::make_unique<Request>(clientId, requestType, resource);
-  return messageQueue.addRequest(std::move(request));
+  auto id = Identity::create();
+  auto request = std::make_unique<Request>(id, clientId, requestType, resource);
+  return std::make_tuple(messageQueue.addRequest(std::move(request)), id);
 }
 
-Core::Status
+std::tuple<Core::Status, std::string>
 QueueResourceClient::sendRequest(RequestType requestType, std::unique_ptr<IEntity> content) {
-  auto request = std::make_unique<Request>(clientId, requestType, resource, std::move(content));
-  return messageQueue.addRequest(std::move(request));
+  auto id = Identity::create();
+  auto request = std::make_unique<Request>(id, clientId, requestType, resource, std::move(content));
+  return std::make_tuple(messageQueue.addRequest(std::move(request)), id);
 }
 
 void

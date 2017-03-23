@@ -20,9 +20,12 @@ namespace {
 TEST_CASE("can serialize a response", "[ResponseSerializer]") {
   auto content = std::make_unique<Content>();
   auto contentPtr = content.get();
-  auto response = std::make_unique<Response>("rec", RequestType::Read, "res", std::move(content));
+  auto response = std::make_unique<Response>("id", "rec", RequestType::Read, "res", std::move(content));
 
   Mock<ISerializationContext> context;
+  When(Method(context, setString).Using("id", "id")).Do([](const std::string&, const std::string&) {
+    return Status::OK;
+  });
   When(Method(context, setString).Using("requestType", "read")).Do([](const std::string&, const std::string&) {
     return Status::OK;
   });
@@ -47,13 +50,25 @@ TEST_CASE("can serialize a response", "[ResponseSerializer]") {
 TEST_CASE("response serialization fails", "[ResponseSerializer]") {
   Mock<ISerializationContext> context;
 
+  SECTION("if setString for id fails") {
+    When(Method(context, setString).Using("id", "id")).Return(
+      Status::NotImplemented
+    );
+  }
+
   SECTION("if setString for requestType fails") {
+    When(Method(context, setString).Using("id", "id")).Do([](const std::string&, const std::string&) {
+      return Status::OK;
+    });
     When(Method(context, setString).Using("requestType", "read")).Return(
       Status::NotImplemented
     );
   }
 
   SECTION("if setString for resource fails") {
+    When(Method(context, setString).Using("id", "id")).Do([](const std::string&, const std::string&) {
+      return Status::OK;
+    });
     When(Method(context, setString).Using("requestType", "read")).Return(
       Status::OK
     );
@@ -63,6 +78,9 @@ TEST_CASE("response serialization fails", "[ResponseSerializer]") {
   }
 
   SECTION("if setEntity fails") {
+    When(Method(context, setString).Using("id", "id")).Do([](const std::string&, const std::string&) {
+      return Status::OK;
+    });
     When(Method(context, setString).Using("requestType", "read")).Return(
       Status::OK
     );
@@ -74,7 +92,7 @@ TEST_CASE("response serialization fails", "[ResponseSerializer]") {
     );
   }
 
-  auto response = std::make_unique<Response>("rec", RequestType::Read, "res", std::make_unique<Content>());
+  auto response = std::make_unique<Response>("id", "rec", RequestType::Read, "res", std::make_unique<Content>());
 
   std::unique_ptr<ISerializer> serializer = std::make_unique<ResponseSerializer>();
   auto result = serializer->serialize(context.get(), *response);

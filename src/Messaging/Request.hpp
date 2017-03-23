@@ -23,14 +23,28 @@ class Request : public Core::IEntity {
     /**
       Constructs a request.
     */
-    Request(std::string sender, RequestType requestType,
-    std::string resource);
+    Request(
+      std::string id,
+      std::string sender,
+      RequestType requestType,
+      std::string resource
+    );
 
     /**
       Constructs a request.
     */
-    Request(std::string sender, RequestType requestType,
-    std::string resource, std::unique_ptr<Core::IEntity> content);
+    Request(
+      std::string id,
+      std::string sender,
+      RequestType requestType,
+      std::string resource,
+      std::unique_ptr<Core::IEntity> content
+    );
+
+    /**
+      The request id.
+    */
+    std::string getId() const { return id; };
 
     /**
       The request sender.
@@ -58,6 +72,7 @@ class Request : public Core::IEntity {
     const IEntity* getContent() const { return content.get(); };
 
   private:
+    std::string     id;
     std::string     sender;
     RequestType     requestType;
     std::string     resource;

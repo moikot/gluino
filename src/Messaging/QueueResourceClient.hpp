@@ -29,8 +29,8 @@ class QueueResourceClient : public QueueClient {
 
     std::string getClientId() const override { return clientId; }
 
-    Core::Status sendRequest(RequestType requestType);
-    Core::Status sendRequest(RequestType requestType, std::unique_ptr<Core::IEntity> content);
+    std::tuple<Core::Status, std::string> sendRequest(RequestType requestType);
+    std::tuple<Core::Status, std::string> sendRequest(RequestType requestType, std::unique_ptr<Core::IEntity> content);
 
     void onResponse(const Response& response) const override;
     void onEvent(const Event& event) const override;

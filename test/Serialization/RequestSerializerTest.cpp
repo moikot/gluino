@@ -18,7 +18,7 @@ namespace {
 }
 
 TEST_CASE("request serialization is not implemented", "[RequestSerializer]") {
-  auto event = std::make_unique<Request>("sender", RequestType::Read, "res", std::make_unique<Content>());
+  auto event = std::make_unique<Request>("id", "sender", RequestType::Read, "res", std::make_unique<Content>());
 
   Mock<ISerializationContext> context;
   std::unique_ptr<ISerializer> serializer = std::make_unique<RequestSerializer>();
@@ -33,6 +33,10 @@ TEST_CASE("can deserialize a request", "[RequestSerializer]") {
   auto content = std::make_unique<Content>();
   auto contentPtr = content.get();
   Mock<IDeserializationContext> context;
+
+  When(Method(context, getString).Using("id")).Do([](const std::string&) {
+    return std::make_tuple(Status::OK, "id");
+  });
 
   When(Method(context, getString).Using("requestType")).Do([](const std::string&) {
     return std::make_tuple(Status::OK, "read");
@@ -56,6 +60,7 @@ TEST_CASE("can deserialize a request", "[RequestSerializer]") {
   REQUIRE(result.isOk() == true);
 
   auto request = castToUnique<Request>(std::move(entity));
+  REQUIRE(request->getId() == "id");
   REQUIRE(request->getRequestType() == RequestType::Read);
   REQUIRE(request->getSender() == "");
   REQUIRE(request->getResource() == "resource");
@@ -69,13 +74,25 @@ TEST_CASE("can deserialize a request", "[RequestSerializer]") {
 TEST_CASE("request deserialization fails", "[RequestSerializer]") {
   Mock<IDeserializationContext> context;
 
+  SECTION("if getString for id fails") {
+    When(Method(context, getString).Using("id")).Do([](const std::string&) {
+      return std::make_tuple(Status::NotImplemented, "");
+    });
+  }
+
   SECTION("if getString for requestType fails") {
+    When(Method(context, getString).Using("id")).Do([](const std::string&) {
+      return std::make_tuple(Status::OK, "id");
+    });
     When(Method(context, getString).Using("requestType")).Do([](const std::string&) {
       return std::make_tuple(Status::NotImplemented, "");
     });
   }
 
   SECTION("if getString for resource fails") {
+    When(Method(context, getString).Using("id")).Do([](const std::string&) {
+      return std::make_tuple(Status::OK, "id");
+    });
     When(Method(context, getString).Using("requestType")).Do([](const std::string&) {
       return std::make_tuple(Status::OK, "read");
     });
@@ -85,6 +102,9 @@ TEST_CASE("request deserialization fails", "[RequestSerializer]") {
   }
 
   SECTION("if getEntity fails") {
+    When(Method(context, getString).Using("id")).Do([](const std::string&) {
+      return std::make_tuple(Status::OK, "id");
+    });
     When(Method(context, getString).Using("requestType")).Do([](const std::string&) {
       return std::make_tuple(Status::OK, "read");
     });

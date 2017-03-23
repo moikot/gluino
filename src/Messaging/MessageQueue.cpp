@@ -121,11 +121,11 @@ MessageQueue::getRequestHandler(const Request& request) {
 void
 MessageQueue::sendResponseFor(const Request& request, std::unique_ptr<IEntity> result) {
   auto response = std::make_unique<Response>(
-		  request.getSender(),
-          request.getRequestType(),
-          request.getResource(),
-          std::move(result)
-         );
-
+    request.getId(),
+    request.getSender(),
+    request.getRequestType(),
+    request.getResource(),
+    std::move(result)
+  );
   responses.emplace(std::move(response));
 }

@@ -75,7 +75,7 @@ TEST_CASE("queue resource client can process a response", "[QueueResourceClient]
     });
     client->addOnResponse(RequestType::Read, [&](const Status& c){ return eventSink.get().onResponse(c); });
 
-    Response response("receiver", RequestType::Read, "resource", std::move(result));
+    Response response("id", "receiver", RequestType::Read, "resource", std::move(result));
     client->onResponse(response);
 
     Verify(Method(eventSink, onResponse));

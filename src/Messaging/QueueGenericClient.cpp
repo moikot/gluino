@@ -1,6 +1,7 @@
 #include "QueueGenericClient.hpp"
 #include "IMessageQueue.hpp"
 #include "Core/Memory.hpp"
+#include "Core/Identity.hpp"
 
 using namespace Core;
 using namespace Messaging;
@@ -13,10 +14,11 @@ QueueGenericClient::~QueueGenericClient() {
   messageQueue.removeClient(*this);
 }
 
-Status
+std::tuple<Core::Status, std::string>
 QueueGenericClient::sendRequest(RequestType requestType, std::string resource, std::unique_ptr<IEntity> content) {
-	auto request = std::make_unique<Request>(clientId, requestType, resource, std::move(content));
-	return messageQueue.addRequest(std::move(request));
+  auto id = Identity::create();
+	auto request = std::make_unique<Request>(id, clientId, requestType, resource, std::move(content));
+	return std::make_tuple(messageQueue.addRequest(std::move(request)), id);
 }
 
 void

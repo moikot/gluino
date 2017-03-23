@@ -4,6 +4,7 @@ using namespace Core;
 using namespace Messaging;
 using namespace Serialization;
 
+#define FIELD_ID "id"
 #define FIELD_REQUEST_TYPE "requestType"
 #define FIELD_RESOURCE "resource"
 #define FIELD_CONTENT "content"
@@ -12,7 +13,11 @@ Status
 ResponseSerializer::serializeImpl(ISerializationContext& context,
   const Response& response) const {
 
-  auto result = context.setString(FIELD_REQUEST_TYPE, response.getRequestType());
+  auto result = context.setString(FIELD_ID, response.getId());
+  if (!result.isOk())
+    return result;
+
+  result = context.setString(FIELD_REQUEST_TYPE, response.getRequestType());
   if (!result.isOk())
     return result;
 

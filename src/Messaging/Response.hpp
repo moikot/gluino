@@ -23,8 +23,18 @@ class Response : public Core::IEntity {
     /**
       Constructs a response.
     */
-    Response(std::string receiver, RequestType requestType,
-    std::string resource, std::unique_ptr<IEntity> content);
+    Response(
+      std::string id,
+      std::string receiver,
+      RequestType requestType,
+      std::string resource,
+      std::unique_ptr<IEntity> content
+    );
+
+    /**
+      The request id.
+    */
+    std::string getId() const { return id; };
 
     /**
       The response receiver.
@@ -52,6 +62,7 @@ class Response : public Core::IEntity {
     const IEntity& getContent() const { return *content; }
 
   private:
+    std::string     id;
     std::string     receiver;
     RequestType     requestType;
     std::string     resource;
