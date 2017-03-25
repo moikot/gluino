@@ -1,5 +1,5 @@
 # Gluino
-A middleware library for processing requests and generating evens.
+A tiny middleware library for processing requests and generating evens for implementing IOT application components communication.
 
 This library contains a very basic implementation of a message queue and serialization abstractions. Exceptions and RTTI are not used intentionally since they might not be supported by the compilers for IOT devices.
 
@@ -22,6 +22,10 @@ $ mkdir build
 $ cd build
 $ cmake ..
 $ make
+```
+
+Run the tests
+```shell
 $ ./test/gluino_test
 ```
 
@@ -33,7 +37,7 @@ $ lcov --directory . --zerocounters
 ## Core components
 
 ### IEntity
-Even though RTTI is not used in this library it is till possible to do the dynamic casting using a very trivial type identification system. In order to participate in this system your class should be inherited from IEntity and use TYPE_INFO macro.
+Even though RTTI is not used in this library it is still possible to do the dynamic casting using a very trivial type identification system. In order to participate in this system your class should inherit from IEntity and use TYPE_INFO macro.
 
 ```cpp
 class Color : public Core::IEntity {
@@ -65,7 +69,7 @@ The request message (Request class) is send by resource clients (QueueResourceCl
 
 ```cpp
   auto connection = std::make_unique<ConnectionParams>("WIFI_NAME", "PASSWORD");
-  auto request = std::make_unique<Request>("clientId", RequestType::Create, "connection", std::move(connection));
+  auto request = std::make_unique<Request>("requestId", "clientId", RequestType::Create, "connection", std::move(connection));
 ```
 
 ### Response
@@ -73,7 +77,7 @@ The response message (Response class) is sent by queue resource controllers (Que
 
 ```cpp
   auto status = std::make_unique<Status>(StatusCode::Created, "The connection was created.");
-  auto response = std::make_unique<Response>("clientId", RequestType::Create, "connection", std::move(status));
+  auto response = std::make_unique<Response>("requestId", "clientId", RequestType::Create, "connection", std::move(status));
 ```
 
 ### Events
