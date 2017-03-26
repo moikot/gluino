@@ -23,14 +23,14 @@ struct Identity  {
 
       @return The created identity.
     */
-    static std::string create() {
+    static std::string create(int len = 8) {
       static auto randomChar = []() -> char
       {
-          const char charset[] = "0123456789ABCDEF";
-          return charset[rand() % 15];
+          const char charset[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          return charset[rand() % 36];
       };
-      std::string str(8,0);
-      std::generate_n(str.begin(), 8, randomChar);
+      std::string str(len, 0);
+      std::generate_n(str.begin(), len, randomChar);
       return str;
     }
 };
