@@ -77,7 +77,7 @@ The resource modification can initiated by a resource client. A resource modific
 
 ![modifying resource sequence diagram](https://raw.githubusercontent.com/anisimovsergey/gluino/master/doc/request_mod_sequence_diagram.png )
 
-The diagram display the situation when the event is added to the message queue before the response but because the events have lover priority it gets propagated to the client(s) after the response.
+The diagram displays an event added to the message queue before the response but because the events have lower priority it gets propagated to the client(s) after the response.
 
 ### Request
 The request message (Request class) is send by resource clients (QueueResourceClient class) and handled by resource controllers (QueueResourceController class).
