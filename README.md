@@ -1,5 +1,5 @@
 # Gluino
-A tiny middleware library for processing requests and generating evens for implementing IOT application components communication.
+A tiny message queue library for processing requests and broadcasting evens for implementing IoT application components communication.
 
 This library contains a very basic implementation of a message queue and serialization abstractions. Exceptions and RTTI are not used intentionally since they might not be supported by the compilers for IOT devices.
 
@@ -48,7 +48,7 @@ class Color : public Core::IEntity {
 };
 ```
 
-### Status
+### Status class
 Status class is used for propagating an operation result and contains a status code, a message and an optional nested status. In order to return the result of an operation with some payload you can construct a tuple.
 
 ```cpp
@@ -61,8 +61,23 @@ RequestSerializer::deserializeImpl(const IDeserializationContext& context) const
 ```
 
 ## The message queue
+The message queue implemented in the library helps to decouple components of your application by
 
-All the messages in the system are divided into three types: requests, responses and events. Request are added to the message queue and processed in FIFO order.
+All the messages in the system are divided into three types: requests, responses and events. Requests are added to the message queue and processed in FIFO order.
+
+There are two major scenarios you can implement using the message queue.
+
+1. Reading the resource.
+The resource client is sending the read request to the message queue. The resource controller, which is responsible for managing a specified resource, is receiving the request and responds with the response message. Normally the response contains the resource as a payload but in case of an error the payload contains status with the error description. The read operation supposed to be idempotent and should not modify the resource.
+
+![reading resource sequence diagram](https://raw.githubusercontent.com/anisimovsergey/gluino/master/doc/request_read_sequence_diagram.png)
+
+2. Modifying the resource.
+The resource modification can initiated by a resource client. A resource modification request gets added to the message queue and received by a resource controller. The resource controller modifies the resource and responds to the client with the response containing the operation result. When the resource is successfully modified the event describing the modified resource is also broadcasted to all clients.
+
+![modifying resource sequence diagram](https://raw.githubusercontent.com/anisimovsergey/gluino/master/doc/request_mod_sequence_diagram.png )
+
+The diagram display the situation when the event is added to the message queue before the response but because the events have lover priority it gets propagated to the client(s) after the response.
 
 ### Request
 The request message (Request class) is send by resource clients (QueueResourceClient class) and handled by resource controllers (QueueResourceController class).
@@ -81,7 +96,7 @@ The response message (Response class) is sent by queue resource controllers (Que
 ```
 
 ### Events
-The event message (Event class) is sent by queue resource controllers (QueueResourceController class) in order to notify all the queue resource clients about some changes in the resource state.
+The event message (Event class) is sent by queue resource controllers (QueueResourceController class) in order to notify all the queue resource clients about some changes in the resource state. Normally an event is sent in the result of some successfully performed modification request.
 
 ```cpp
   auto connection = std::make_unique<Connection>("WIFI_NAME", isConnected);
@@ -89,7 +104,7 @@ The event message (Event class) is sent by queue resource controllers (QueueReso
 ```
 
 ### Queue resource client
-The queue resource client can be used to get access to a resource and perform  operations with it. A resource client is created using IMessageQueue.createClient. During its creation the client gets added to the resource clients list of the queue and automatically removed when it goes out of scope.
+The queue resource client can be used to get access to a resource and perform operations with it. A resource client is created using IMessageQueue.createClient. During its creation the client gets added to the resource clients list of the queue and automatically removed when it goes out of scope.
 
 ```cpp
   colorClient = messageQueue.createClient("SenderId", Color::TypeId());

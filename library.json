@@ -1,7 +1,7 @@
 {
   "name": "Gluino",
-  "description": "Middleware library for implementing CQRS",
-  "keywords": "async, middleware, queue, cqrs",
+  "description": "A micro message queue",
+  "keywords": "async, middleware, queue, messages",
   "authors":
   {
     "name": "Sergey Anisimov",
