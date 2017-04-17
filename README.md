@@ -1,5 +1,5 @@
 # Gluino
-A tiny message bus library for processing requests and broadcasting evens for implementing IoT application components communication.
+A tiny message queue library for processing requests and broadcasting evens for implementing IoT application components communication.
 
 This library contains a very basic implementation of a message queue and serialization abstractions. Exceptions and RTTI are not used intentionally since they might not be supported by the compilers for IOT devices.
 
@@ -68,11 +68,16 @@ All the messages in the system are divided into three types: requests, responses
 There are two major scenarios you can implement using the message queue.
 
 1. Reading the resource.
-The resource client is sending the read request to the message bus. The resource controller, which is responsible for managing a specified resource, is receiving the request and responds with the response message. Normally the response contains the resource as a payload but in case of an error the payload contains status with the error description. The read operation supposed to be idempotent and should not modify the resource.
+The resource client is sending the read request to the message queue. The resource controller, which is responsible for managing a specified resource, is receiving the request and responds with the response message. Normally the response contains the resource as a payload but in case of an error the payload contains status with the error description. The read operation supposed to be idempotent and should not modify the resource.
 
+![reading resource sequence diagram](https://raw.githubusercontent.com/anisimovsergey/gluino/master/doc/request_read_sequence_diagram.png)
 
 2. Modifying the resource.
-The resource modification can initiated by a resource client. A resource modification request gets added to the message queue and received but a resource controller. The resource controller modifies the resource and responds to the client with the response containing the operation result. When the resource is successfully modified the event describing the modified resource is also broadcasted to all clients.
+The resource modification can initiated by a resource client. A resource modification request gets added to the message queue and received by a resource controller. The resource controller modifies the resource and responds to the client with the response containing the operation result. When the resource is successfully modified the event describing the modified resource is also broadcasted to all clients.
+
+![modifying resource sequence diagram](https://raw.githubusercontent.com/anisimovsergey/gluino/master/doc/request_mod_sequence_diagram.png )
+
+The diagram display the situation when the event is added to the message queue before the response but because the events have lover priority it gets propagated to the client(s) after the response.
 
 ### Request
 The request message (Request class) is send by resource clients (QueueResourceClient class) and handled by resource controllers (QueueResourceController class).
