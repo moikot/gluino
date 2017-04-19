@@ -19,7 +19,7 @@ class ListSerializer : public Serializer<T> {
     virtual Core::Status
       serializeImpl(ISerializationContext& context, const T& list) const override {
 
-      auto result = context.setEntity("elements", list);
+      auto result = context.setList("elements", list);
       if (!result.isOk())
         return result;
 

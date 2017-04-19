@@ -26,7 +26,7 @@ TEST_CASE("can serialize a list", "[ListSerializer]") {
 
   Mock<ISerializationContext> context;
 
-  When(Method(context, setEntity)).Do([=](const std::string& key, const Core::IEntity& entity) {
+  When(Method(context, setList)).Do([=](const std::string& key, const Core::IEntity& entity) {
     REQUIRE(key == "elements");
     REQUIRE(&entity == contentPtr);
     return Status::OK;
@@ -36,14 +36,14 @@ TEST_CASE("can serialize a list", "[ListSerializer]") {
   auto result = serializer->serialize(context.get(), *content);
 
   REQUIRE(result.isOk() == true);
-  Verify(Method(context, setEntity));
+  Verify(Method(context, setList));
 }
 
 TEST_CASE("list serialization fails", "[ListSerializer]") {
   Mock<ISerializationContext> context;
 
-  SECTION("if setEntity fails") {
-    When(Method(context, setEntity)).Return(
+  SECTION("if setList fails") {
+    When(Method(context, setList)).Return(
       Status::NotImplemented
     );
   }
