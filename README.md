@@ -67,12 +67,14 @@ All the messages in the system are divided into three types: requests, responses
 
 There are two major scenarios you can implement using the message queue.
 
-1. Reading the resource.
+1. Reading a resource.
+
 The resource client is sending the read request to the message queue. The resource controller, which is responsible for managing a specified resource, is receiving the request and responds with the response message. Normally the response contains the resource as a payload but in case of an error the payload contains status with the error description. The read operation supposed to be idempotent and should not modify the resource.
 
 ![reading resource sequence diagram](https://raw.githubusercontent.com/anisimovsergey/gluino/master/doc/request_read_sequence_diagram.png)
 
-2. Modifying the resource.
+2. Modifying a resource.
+
 The resource modification can initiated by a resource client. A resource modification request gets added to the message queue and received by a resource controller. The resource controller modifies the resource and responds to the client with the response containing the operation result. When the resource is successfully modified the event describing the modified resource is also broadcasted to all clients.
 
 ![modifying resource sequence diagram](https://raw.githubusercontent.com/anisimovsergey/gluino/master/doc/request_mod_sequence_diagram.png )
