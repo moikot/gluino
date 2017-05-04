@@ -108,6 +108,6 @@ TEST_CASE("response deserialization is not implemented", "[ResponseSerializer]")
   std::unique_ptr<ISerializer> serializer = std::make_unique<ResponseSerializer>();
 
   std::tie(result, entity) = serializer->deserialize(context.get());
-  REQUIRE(result.getStatusCode() == StatusCode::InternalServerError);
-  REQUIRE(result.getInnerStatus()->getStatusCode() == StatusCode::NotImplemented);
+  REQUIRE(result.getCode() == StatusCode::InternalServerError);
+  REQUIRE(result.getInnerStatus()->getCode() == StatusCode::NotImplemented);
 }

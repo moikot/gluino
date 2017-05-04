@@ -21,7 +21,7 @@ class Status : public IEntity {
     static Status OK;
     static Status NotImplemented;
 
-    Status(); 
+    Status();
     Status(const StatusCode& statusCode, const std::string& message);
     Status(const StatusCode& statusCode, const std::string& message, Status innerStatus);
 
@@ -32,11 +32,11 @@ class Status : public IEntity {
     Status& operator=(Status && op) = default;
 
     bool isOk() const {
-      return getStatusCode() == StatusCode::OK;
+      return getCode() == StatusCode::OK;
     }
 
-    virtual StatusCode getStatusCode() const {
-      return statusCode;
+    virtual StatusCode getCode() const {
+      return code;
     }
 
     std::string getMessage() const {
@@ -48,8 +48,8 @@ class Status : public IEntity {
     }
 
   private:
-    StatusCode		  statusCode;
-    std::string		  message;
+    StatusCode      code;
+    std::string     message;
     std::unique_ptr<Status>	innerStatus;
 };
 

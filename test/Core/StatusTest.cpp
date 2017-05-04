@@ -5,11 +5,11 @@
 using namespace Core;
 
 TEST_CASE("static creators", "[Status]") {
-  SECTION("OK status status has OK status code") {
-    REQUIRE(Status::OK.getStatusCode() == StatusCode::OK);
+  SECTION("OK status has OK status code") {
+    REQUIRE(Status::OK.getCode() == StatusCode::OK);
   }
-  SECTION("NotImplemented status status has NotImplemented status code") {
-    REQUIRE(Status::NotImplemented.getStatusCode() == StatusCode::NotImplemented);
+  SECTION("NotImplemented status has NotImplemented status code") {
+    REQUIRE(Status::NotImplemented.getCode() == StatusCode::NotImplemented);
   }
 }
 
@@ -18,7 +18,7 @@ TEST_CASE("Status can be constructed", "[Status]") {
   auto status = Status(StatusCode::OK, "test");
 
   SECTION("status code retained") {
-    REQUIRE(status.getStatusCode() == StatusCode::OK);
+    REQUIRE(status.getCode() == StatusCode::OK);
   }
   SECTION("message retained") {
     REQUIRE(status.getMessage() == "test");
@@ -28,7 +28,7 @@ TEST_CASE("Status can be constructed", "[Status]") {
   }
   SECTION("inner status is retained") {
     auto outer = Status(StatusCode::NotFound, "test", status);
-    REQUIRE(outer.getInnerStatus()->getStatusCode() == StatusCode::OK);
+    REQUIRE(outer.getInnerStatus()->getCode() == StatusCode::OK);
   }
 }
 
@@ -40,7 +40,7 @@ TEST_CASE("Status copy semantic", "[Status]") {
     auto statusCopy(status);
 
     REQUIRE(status.getInnerStatus() != nullptr);
-    REQUIRE(statusCopy.getInnerStatus()->getStatusCode() == StatusCode::Created);
+    REQUIRE(statusCopy.getInnerStatus()->getCode() == StatusCode::Created);
     REQUIRE(statusCopy.getInnerStatus()->getMessage() == "inner");
   }
 
@@ -49,11 +49,11 @@ TEST_CASE("Status copy semantic", "[Status]") {
     auto status = Status(StatusCode::OK, "status", innerStaus);
 
     auto statusCopy = Status::OK;
-    REQUIRE(statusCopy.getStatusCode() == StatusCode::OK); 
+    REQUIRE(statusCopy.getCode() == StatusCode::OK);
     statusCopy = status;
 
     REQUIRE(status.getInnerStatus() != nullptr);
-    REQUIRE(statusCopy.getInnerStatus()->getStatusCode() == StatusCode::Created);
+    REQUIRE(statusCopy.getInnerStatus()->getCode() == StatusCode::Created);
     REQUIRE(statusCopy.getInnerStatus()->getMessage() == "inner");
   }
 }
@@ -66,7 +66,7 @@ TEST_CASE("Status move semantic", "[Status]") {
     auto statusCopy(std::move(status));
 
     REQUIRE(status.getInnerStatus() == nullptr);
-    REQUIRE(statusCopy.getInnerStatus()->getStatusCode() == StatusCode::Created);
+    REQUIRE(statusCopy.getInnerStatus()->getCode() == StatusCode::Created);
     REQUIRE(statusCopy.getInnerStatus()->getMessage() == "inner");
   }
 
@@ -77,7 +77,7 @@ TEST_CASE("Status move semantic", "[Status]") {
     auto statusCopy = std::move(status);
 
     REQUIRE(status.getInnerStatus() == nullptr);
-    REQUIRE(statusCopy.getInnerStatus()->getStatusCode() == StatusCode::Created);
+    REQUIRE(statusCopy.getInnerStatus()->getCode() == StatusCode::Created);
     REQUIRE(statusCopy.getInnerStatus()->getMessage() == "inner");
   }
 }

@@ -94,6 +94,6 @@ TEST_CASE("event deserialization is not implemented", "[EventSerializer]") {
   std::unique_ptr<ISerializer> serializer = std::make_unique<EventSerializer>();
 
   std::tie(result, entity) = serializer->deserialize(context.get());
-  REQUIRE(result.getStatusCode() == StatusCode::InternalServerError);
-  REQUIRE(result.getInnerStatus()->getStatusCode() == StatusCode::NotImplemented);
+  REQUIRE(result.getCode() == StatusCode::InternalServerError);
+  REQUIRE(result.getInnerStatus()->getCode() == StatusCode::NotImplemented);
 }

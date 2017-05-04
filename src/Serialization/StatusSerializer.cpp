@@ -10,7 +10,7 @@ using namespace Core;
 Core::Status
 StatusSerializer::serializeImpl(ISerializationContext& context, const Status& status) const {
 
-  auto result = context.setInt(FIELD_CODE, (int)status.getStatusCode());
+  auto result = context.setInt(FIELD_CODE, (int)status.getCode());
   if (!result.isOk())
     return result;
 

@@ -6,21 +6,19 @@ using namespace Core;
 Status Status::OK(StatusCode::OK, "OK");
 Status Status::NotImplemented(StatusCode::NotImplemented, "Not implemented.");
 
-Status::Status() :
-  statusCode(StatusCode::OK), message("OK") {
+Status::Status() : code(StatusCode::OK), message("OK") {
 }
 
-Status::Status(const StatusCode& statusCode, const std::string& message) :
-  statusCode(statusCode), message(message) {
+Status::Status(const StatusCode& code, const std::string& message) :
+  code(code), message(message) {
 }
 
-Status::Status(const StatusCode& statusCode, const std::string& message,
-             Status innerResult) :
-  statusCode(statusCode), message(message), innerStatus(std::make_unique<Status>(innerResult)) {
+Status::Status(const StatusCode& code, const std::string& message, Status innerResult) :
+  code(code), message(message), innerStatus(std::make_unique<Status>(innerResult)) {
 }
 
 Status::Status(const Status& status) :
-  statusCode(status.statusCode), message(status.message) {
+  code(status.code), message(status.message) {
   if (status.getInnerStatus()) {
     innerStatus = std::make_unique<Status>(*status.getInnerStatus());
   }
@@ -29,7 +27,7 @@ Status::Status(const Status& status) :
 Status&
 Status::operator = (const Status& status) {
   if (this != &status) {
-    statusCode = status.statusCode;
+    code = status.code;
     message = status.message;
     if (status.getInnerStatus()) {
       innerStatus = std::make_unique<Status>(*status.getInnerStatus());

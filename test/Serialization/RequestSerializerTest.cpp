@@ -24,8 +24,8 @@ TEST_CASE("request serialization is not implemented", "[RequestSerializer]") {
   std::unique_ptr<ISerializer> serializer = std::make_unique<RequestSerializer>();
 
   auto result = serializer->serialize(context.get(), *event);
-  REQUIRE(result.getStatusCode() == StatusCode::InternalServerError);
-  REQUIRE(result.getInnerStatus()->getStatusCode() == StatusCode::NotImplemented);
+  REQUIRE(result.getCode() == StatusCode::InternalServerError);
+  REQUIRE(result.getInnerStatus()->getCode() == StatusCode::NotImplemented);
 }
 
 TEST_CASE("can deserialize a request", "[RequestSerializer]") {

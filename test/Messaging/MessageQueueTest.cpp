@@ -186,7 +186,7 @@ TEST_CASE("message queue is failing to route a request if there is no controller
   Mock<EventSink> eventSink;
 
   When(Method(eventSink, onResponseStatus)).Do([=](const Status& status) {
-    REQUIRE(status.getStatusCode() == StatusCode::NotFound);
+    REQUIRE(status.getCode() == StatusCode::NotFound);
     return Status::OK;
   });
 
@@ -208,7 +208,7 @@ TEST_CASE("message queue is failing to route a request if the controller was exp
   Mock<EventSink> eventSink;
 
   When(Method(eventSink, onResponseStatus)).Do([=](const Status& status) {
-    REQUIRE(status.getStatusCode() == StatusCode::NotFound);
+    REQUIRE(status.getCode() == StatusCode::NotFound);
     return Status::OK;
   });
 

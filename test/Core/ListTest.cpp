@@ -32,7 +32,7 @@ TEST_CASE("can add IEntity", "[List]") {
   });
 
   REQUIRE(acc == 11);
-  REQUIRE(res.getStatusCode() == StatusCode::OK);
+  REQUIRE(res.getCode() == StatusCode::OK);
 }
 
 TEST_CASE("can add Content", "[List]") {
@@ -48,7 +48,7 @@ TEST_CASE("can add Content", "[List]") {
   });
 
   REQUIRE(acc == 11);
-  REQUIRE(res.getStatusCode() == StatusCode::OK);
+  REQUIRE(res.getCode() == StatusCode::OK);
 }
 
 TEST_CASE("can abort forEach", "[List]") {
@@ -67,5 +67,5 @@ TEST_CASE("can abort forEach", "[List]") {
   });
 
   REQUIRE(acc == 11);
-  REQUIRE(res.getStatusCode() == StatusCode::NotFound);
+  REQUIRE(res.getCode() == StatusCode::NotFound);
 }

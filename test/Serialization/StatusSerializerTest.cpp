@@ -32,7 +32,7 @@ TEST_CASE("can serialize a status", "[StatusSerializer]") {
 
   When(Method(context, setEntity)).Do([=](const std::string& key, const Core::IEntity& entity) {
     REQUIRE(key == "innerStatus");
-    REQUIRE(static_cast<const Status*>(&entity)->getStatusCode() == StatusCode::NotImplemented);
+    REQUIRE(static_cast<const Status*>(&entity)->getCode() == StatusCode::NotImplemented);
     return Status::OK;
   });
 
@@ -92,6 +92,6 @@ TEST_CASE("status deserialization is not implemented", "[StatusSerializer]") {
   std::unique_ptr<ISerializer> serializer = std::make_unique<StatusSerializer>();
 
   std::tie(result, entity) = serializer->deserialize(context.get());
-  REQUIRE(result.getStatusCode() == StatusCode::InternalServerError);
-  REQUIRE(result.getInnerStatus()->getStatusCode() == StatusCode::NotImplemented);
+  REQUIRE(result.getCode() == StatusCode::InternalServerError);
+  REQUIRE(result.getInnerStatus()->getCode() == StatusCode::NotImplemented);
 }
