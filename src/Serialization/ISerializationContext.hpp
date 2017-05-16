@@ -22,6 +22,8 @@ struct ISerializationContext {
   virtual Core::Status
     setInt(const std::string& key, int value) = 0;
   virtual Core::Status
+    setFloat(const std::string& key, float value) = 0;
+  virtual Core::Status
     setBool(const std::string& key, bool value) = 0;
   virtual Core::Status
     setList(const std::string& key, const Core::IList& list) = 0;

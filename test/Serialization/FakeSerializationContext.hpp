@@ -27,6 +27,10 @@ struct FakeSerializationContext : public Serialization::ISerializationContext {
     return context.setInt(key, value);
   }
 
+  virtual Core::Status setFloat(const std::string& key, float value) override {
+    return context.setFloat(key, value);
+  }
+
   virtual Core::Status setBool(const std::string& key, bool value) override {
     return context.setBool(key, value);
   }

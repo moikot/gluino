@@ -27,6 +27,10 @@ struct FakeDeserializationContext : public Serialization::IDeserializationContex
     return context.getInt(key);
   }
 
+  virtual std::tuple<Core::Status, float> getFloat(const std::string& key) const override {
+    return context.getFloat(key);
+  }
+
   virtual std::tuple<Core::Status, bool> getBool(const std::string& key) const override {
     return context.getBool(key);
   }
