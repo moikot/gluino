@@ -6,7 +6,7 @@
 using namespace Core;
 using namespace Messaging;
 
-QueueResourceClient::QueueResourceClient(std::string clientId, std::string resource, IMessageQueue& messageQueue) :
+QueueResourceClient::QueueResourceClient(const std::string& clientId, std::string resource, IMessageQueue& messageQueue) :
   clientId(clientId), resource(resource), messageQueue(messageQueue) {
 }
 

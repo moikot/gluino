@@ -22,7 +22,7 @@ typedef std::function<std::unique_ptr<Core::IEntity>(const Request&)> RequestHan
 
 class QueueResourceController {
   public:
-    QueueResourceController(std::string resource, IMessageQueue& messageQueue);
+    QueueResourceController(const std::string& resource, IMessageQueue& messageQueue);
     virtual ~QueueResourceController();
 
     QueueResourceController(const QueueResourceController&) = delete;

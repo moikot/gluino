@@ -24,20 +24,20 @@ class Request : public Core::IEntity {
       Constructs a request.
     */
     Request(
-      std::string id,
-      std::string sender,
-      RequestType requestType,
-      std::string resource
+      const std::string& id,
+      const std::string& sender,
+      const RequestType& requestType,
+      const std::string& resource
     );
 
     /**
       Constructs a request.
     */
     Request(
-      std::string id,
-      std::string sender,
-      RequestType requestType,
-      std::string resource,
+      const std::string& id,
+      const std::string& sender,
+      const RequestType& requestType,
+      const std::string& resource,
       std::unique_ptr<Core::IEntity> content
     );
 

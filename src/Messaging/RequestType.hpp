@@ -40,7 +40,7 @@ class RequestType {
   	/**
   	  Constructs an event type.
   	*/
-    explicit RequestType(std::string requestType);
+    explicit RequestType(const std::string& requestType);
 
     /**
   	  Equality operators.

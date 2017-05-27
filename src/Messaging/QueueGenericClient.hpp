@@ -19,7 +19,7 @@ struct IMessageQueue;
 
 class QueueGenericClient : public QueueClient {
   public:
-    QueueGenericClient(std::string clientId, IMessageQueue& messageQueue);
+    QueueGenericClient(const std::string& clientId, IMessageQueue& messageQueue);
     virtual ~QueueGenericClient() override;
 
     QueueGenericClient(const QueueGenericClient&) = delete;

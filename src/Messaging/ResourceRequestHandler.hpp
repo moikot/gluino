@@ -29,7 +29,7 @@ namespace Messaging {
     typename std::enable_if<Core::function_traits<T>::value == 0>::type> : public ResourceRequestHandler {
     public:
       ResourceRequestHandlerImpl(
-        RequestType requestType,
+        const RequestType& requestType,
         T onRequest) :
         requestType(requestType),
         onRequest(onRequest) {
@@ -59,7 +59,7 @@ namespace Messaging {
 
   public:
       ResourceRequestHandlerImpl(
-        RequestType requestType,
+        const RequestType& requestType,
         T onRequest) :
         requestType(requestType),
         onRequest(onRequest) {

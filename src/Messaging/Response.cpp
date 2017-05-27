@@ -3,10 +3,10 @@
 using namespace Messaging;
 
 Response::Response(
-  std::string id,
-  std::string receiver,
-  RequestType requestType,
-  std::string resource,
+  const std::string& id,
+  const std::string& receiver,
+  const RequestType& requestType,
+  const std::string& resource,
   std::unique_ptr<IEntity> content) :
   id(id),
   receiver(receiver),

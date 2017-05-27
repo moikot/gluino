@@ -13,7 +13,7 @@ Status::Status(const StatusCode& code, const std::string& message) :
   code(code), message(message) {
 }
 
-Status::Status(const StatusCode& code, const std::string& message, Status innerResult) :
+Status::Status(const StatusCode& code, const std::string& message, const Status& innerResult) :
   code(code), message(message), innerStatus(std::make_unique<Status>(innerResult)) {
 }
 

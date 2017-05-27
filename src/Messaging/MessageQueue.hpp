@@ -71,7 +71,7 @@ class MessageQueue : public IMessageQueue {
     void processResponse(const Response& response);
     void processEvent(const Event& event);
 
-    const QueueClient*  getClient(std::string clientId);
+    const QueueClient*  getClient(const std::string& clientId);
     RequestHandler      getRequestHandler(const Request& request);
 
     void sendResponseFor(const Request& request, std::unique_ptr<Core::IEntity> result);

@@ -39,7 +39,7 @@ class SerializationService : public ISerializationService {
     const IContextFactory&          contextFactory;
     std::list<std::unique_ptr<ISerializer>>  serializers;
 
-    const ISerializer* getSerialzier(std::string typeId) const;
+    const ISerializer* getSerialzier(const std::string& typeId) const;
 };
 
 }

@@ -23,12 +23,12 @@ class Event : public Core::IEntity {
   	/**
   	  Constructs an event.
   	*/
-    Event(EventType eventType, std::string resource);
+    Event(const EventType& eventType, std::string resource);
 
   	/**
   	  Constructs an event.
   	*/
-    Event(EventType eventType, std::string resource, std::unique_ptr<IEntity> content);
+    Event(const EventType& eventType, std::string resource, std::unique_ptr<IEntity> content);
 
     /**
       The event type (created, updated, deleted etc.).

@@ -29,7 +29,7 @@ namespace Messaging {
     typename std::enable_if<Core::function_traits<T>::value == 0>::type> : public ResourceEventHandler {
     public:
       ResourceEventHandlerImpl(
-        EventType eventType,
+        const EventType& eventType,
         T onEvent) :
         eventType(eventType),
         onEvent(onEvent) {
@@ -58,7 +58,7 @@ namespace Messaging {
     typedef typename Core::function_traits<T> traits;
     public:
       ResourceEventHandlerImpl(
-        EventType eventType,
+        const EventType& eventType,
         T onEvent) :
         eventType(eventType),
         onEvent(onEvent) {

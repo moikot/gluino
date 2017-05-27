@@ -74,7 +74,7 @@ SerializationService::addSerializer(std::unique_ptr<ISerializer> serializer) {
 }
 
 const ISerializer*
-SerializationService::getSerialzier(std::string typeId) const {
+SerializationService::getSerialzier(const std::string& typeId) const {
   auto findIter = std::find_if(serializers.begin(), serializers.end(),
     [&](const std::unique_ptr<ISerializer>& serializer){
       return serializer->getTypeId() == typeId;

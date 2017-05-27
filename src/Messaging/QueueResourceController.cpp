@@ -5,7 +5,7 @@
 using namespace Core;
 using namespace Messaging;
 
-QueueResourceController::QueueResourceController(std::string resource, IMessageQueue& messageQueue) :
+QueueResourceController::QueueResourceController(const std::string& resource, IMessageQueue& messageQueue) :
   resource(resource), messageQueue(messageQueue) {
 }
 

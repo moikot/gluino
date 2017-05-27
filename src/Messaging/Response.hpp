@@ -24,10 +24,10 @@ class Response : public Core::IEntity {
       Constructs a response.
     */
     Response(
-      std::string id,
-      std::string receiver,
-      RequestType requestType,
-      std::string resource,
+      const std::string& id,
+      const std::string& receiver,
+      const RequestType& requestType,
+      const std::string& resource,
       std::unique_ptr<IEntity> content
     );
 

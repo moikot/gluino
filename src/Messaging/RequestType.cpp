@@ -7,5 +7,5 @@ RequestType RequestType::Read("read");
 RequestType RequestType::Update("update");
 RequestType RequestType::Delete("delete");
 
-RequestType::RequestType(std::string requestType) : requestType(requestType) {
+RequestType::RequestType(const std::string& requestType) : requestType(requestType) {
 }

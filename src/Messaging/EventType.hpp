@@ -35,7 +35,7 @@ class EventType {
   	/**
   	  Constructs an event type.
   	*/
-    explicit EventType(std::string eventType);
+    explicit EventType(const std::string& eventType);
 
     /**
   	  Equality operators.

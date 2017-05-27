@@ -98,7 +98,7 @@ MessageQueue::processEvent(const Event& event) {
 }
 
 const QueueClient*
-MessageQueue::getClient(std::string clientId) {
+MessageQueue::getClient(const std::string& clientId) {
   for (auto& client : clients) {
     if (client->getClientId() == clientId) {
       return client;

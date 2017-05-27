@@ -6,7 +6,7 @@
 using namespace Core;
 using namespace Messaging;
 
-QueueGenericClient::QueueGenericClient(std::string clientId, IMessageQueue& messageQueue) :
+QueueGenericClient::QueueGenericClient(const std::string& clientId, IMessageQueue& messageQueue) :
   clientId(clientId), messageQueue(messageQueue) {
 }
 

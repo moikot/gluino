@@ -23,7 +23,7 @@ class Status : public IEntity {
 
     Status();
     Status(const StatusCode& statusCode, const std::string& message);
-    Status(const StatusCode& statusCode, const std::string& message, Status innerStatus);
+    Status(const StatusCode& statusCode, const std::string& message, const Status& innerStatus);
 
     Status(const Status& op);
     Status& operator=(const Status& op);

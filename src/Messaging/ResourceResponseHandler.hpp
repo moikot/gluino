@@ -26,7 +26,7 @@ namespace Messaging {
     typedef typename Core::function_traits<T> traits;
     public:
       ResourceResponseHandlerImpl(
-        RequestType requestType,
+        const RequestType& requestType,
         T onResponse) :
         requestType(requestType),
         onResponse(onResponse) {
