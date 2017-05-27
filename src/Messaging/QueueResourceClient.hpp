@@ -21,7 +21,7 @@ struct IMessageQueue;
 
 class QueueResourceClient : public QueueClient {
   public:
-    QueueResourceClient(const std::string& clientId, std::string resource, IMessageQueue& messageQueue);
+    QueueResourceClient(const std::string& clientId, const std::string& resource, IMessageQueue& messageQueue);
     virtual ~QueueResourceClient() override;
 
     QueueResourceClient(const QueueResourceClient&) = delete;

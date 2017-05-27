@@ -15,7 +15,7 @@
   "build": {
     "flags": "-Isrc"
   },
-  "version": "1.0.18",
+  "version": "1.0.20",
   "frameworks": "*",
   "platforms":"*"
 }
