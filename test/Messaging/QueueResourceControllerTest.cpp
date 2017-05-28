@@ -2,7 +2,7 @@
 
 #include "Core/Memory.hpp"
 #include "Messaging/IMessageQueue.hpp"
-#include "FakeMessageQueue.h"
+#include "FakeMessageQueue.hpp"
 
 using namespace Core;
 using namespace Messaging;
