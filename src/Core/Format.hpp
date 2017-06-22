@@ -22,14 +22,6 @@ namespace Core {
     return std::string(buf.get(), size);
   }
 
-  inline std::string ipToString(uint32_t ip) {
-      uint8_t a = static_cast<uint8_t>((ip & (0xff << 24)) >> 24);
-      uint8_t b = static_cast<uint8_t>((ip & (0xff << 16)) >> 16);
-      uint8_t c = static_cast<uint8_t>((ip & (0xff << 8)) >> 8);
-      uint8_t d = static_cast<uint8_t>(ip & 0xff);
-      return stringFormat("%hu.%hu.%hu.%hu", a, b, c, d);
-  }
-
   inline std::string toString(int val) {
     return stringFormat("%d", val);
   }

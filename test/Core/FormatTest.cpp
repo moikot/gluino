@@ -1,13 +1,8 @@
-#include "Utils/Testing.hpp" 
+#include "Utils/Testing.hpp"
 
 #include "Core/Format.hpp"
 
 using namespace Core;
-
-TEST_CASE("format IP", "[Format]") {
-  auto str = ipToString(0x01020304);
-  REQUIRE(str == "1.2.3.4");
-}
 
 TEST_CASE("format int", "[Format]") {
   auto str = toString(static_cast<int>(100));
