@@ -16,10 +16,10 @@ namespace Core {
   template<typename ... Args>
   std::string stringFormat(const std::string& format, Args ... args) {
     char buffer [1];
-    size_t size = snprintf(buffer, 0, format.c_str(), args ...);
-    std::unique_ptr<char[]> buf(new char[size + 1]);
-    snprintf(buf.get(), size + 1, format.c_str(), args ...);
-    return std::string(buf.get(), size);
+    size_t size = snprintf(buffer, 1, format.c_str(), args ...) + sizeof('\0');
+    std::unique_ptr<char[]> buf(new char[size]);
+    snprintf(buf.get(), size, format.c_str(), args ...);
+    return std::string(buf.get(), size - 1);
   }
 
   inline std::string toString(int val) {
