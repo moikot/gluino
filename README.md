@@ -1,7 +1,7 @@
 # Gluino
-A tiny message queue library for processing requests and broadcasting evens for implementing IoT application components communication.
+A tiny message queue library for processing requests and broadcasting evens. Using this library you can build an IoT application using low coupled components.
 
-This library contains a very basic implementation of a message queue and serialization abstractions. Exceptions and RTTI are not used intentionally since they might not be supported by the compilers for IOT devices.
+The library contains a very basic implementation of a message queue and serialization abstractions. Exceptions and RTTI are not used intentionally since they might not be supported by the compilers on IOT devices.
 
 [![Build Status](https://api.travis-ci.org/anisimovsergey/gluino.svg?branch=master)](https://travis-ci.org/anisimovsergey/gluino?branch=master)
 [![Build status](https://ci.appveyor.com/api/projects/status/oiyjkkvbiyfy2u0h?svg=true)](https://ci.appveyor.com/project/anisimovsergey/gluino)
@@ -37,7 +37,7 @@ $ lcov --directory . --zerocounters
 ## Core components
 
 ### IEntity
-Even though RTTI is not used in this library it is still possible to do the dynamic casting using a very basic type identification system. In order to participate in this system your class should inherit from IEntity and use TYPE_INFO macro.
+Even though RTTI is not used in this library, it is still possible to do the dynamic casting using a very basic type identification system. In order to participate in this system, your class should inherit from IEntity and use TYPE_INFO macro.
 
 ```cpp
 class Color : public Core::IEntity {
@@ -67,13 +67,13 @@ There are two major scenarios you can implement using the message queue.
 
 1. Reading a resource.
 
-The resource client is sending the read request to the message queue. The resource controller, which is responsible for managing the specified resource, is receiving the request and responds with a response message. Normally the response contains the resource representation as a payload but in case of an error the payload contains status with the error description. The read operation supposed to be idempotent and should not modify the resource.
+A resource client is sending a read request to the message queue. The resource controller, which is responsible for managing the specified resource, receives the request and responds with a response message. Normally the response contains a resource representation as a payload but in a case of an error the payload contains a status with the error description. The read operation supposed to be idempotent and should not modify the resource.
 
 ![reading resource sequence diagram](https://raw.githubusercontent.com/anisimovsergey/gluino/master/doc/request_read_sequence_diagram.png)
 
 2. Modifying a resource.
 
-The resource modification can initiated by a resource client. A resource modification request gets added to the message queue and received by a corresponding resource controller. The resource controller modifies the resource and responds to the client with a response containing an operation result. When the resource is successfully modified the event describing the modified resource is also broadcasted to all the clients.
+Resource modification can be initiated by a resource client. A resource modification request gets added to the message queue and received by a corresponding resource controller. The resource controller modifies the resource and responds to the client with a response containing an operation result. When the resource is successfully modified the event describing the modified resource is also broadcasted to all the clients.
 
 ![modifying resource sequence diagram](https://raw.githubusercontent.com/anisimovsergey/gluino/master/doc/request_mod_sequence_diagram.png )
 
@@ -124,7 +124,7 @@ The queue resource client simplifies the request sending by automatically includ
 ```
 
 ### Queue resource controllers
-The queue resource controller is handling requests to a particular resource. The requests can involve a modification of the resource or can be just simple read. In the former case the response should contain only the operation status and the new (modified) resource representation can be sent in the correspondent notification or explicitly retrieved by an idempotent read request.
+The queue resource controller is handling requests to a particular resource. The requests can involve a modification of the resource or can be just a simple read. In the former case the response should contain the operation status only and the new (modified) resource representation can be sent in the correspondent notification or explicitly retrieved by an idempotent read request.
 
 ```cpp
   colorController = messageQueue.createController(Color::TypeId());
@@ -152,8 +152,8 @@ In case of a read request the response should contain the resource representatio
 Gluino library provides a very basic abstractions for serialization and deserialization. In order to use those abstractions you need to implement the following interfaces for your platform:
 
 1. IContextFactory - a factory responsible for creating the serialization and deserialization contexts
-* ISerializationContext - the context needed for serialization and contains methods like `setString`, `setInt` etc.
-* IDeserializationContext - the context needed for deserialization and contains methods like `getString`, `getInt` etc.
+2. ISerializationContext - the context needed for serialization and contains methods like `setString`, `setInt` etc.
+3. IDeserializationContext - the context needed for deserialization and contains methods like `getString`, `getInt` etc.
 
 In order to create a serializer for your object you need to inherit from `Seializer<T>` and implement `serializeImpl` and/or `deserializeImpl`.
 
