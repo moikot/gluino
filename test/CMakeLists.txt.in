@@ -5,7 +5,7 @@ project(test-mock-download NONE)
 include(ExternalProject)
 
 ExternalProject_Add(catch
-  GIT_REPOSITORY    https://github.com/philsquared/catch.git
+  GIT_REPOSITORY    https://github.com/catchorg/Catch2.git
   GIT_TAG           master
   SOURCE_DIR        "${CMAKE_BINARY_DIR}/catch"
   BINARY_DIR        ""
