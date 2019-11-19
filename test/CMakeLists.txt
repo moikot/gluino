@@ -13,7 +13,7 @@ if(result)
   message(FATAL_ERROR "Build step for test/mock failed: ${result}") 
 endif() 
 
-include_directories(${CMAKE_BINARY_DIR}/catch/single_include)
+include_directories(${CMAKE_BINARY_DIR}/catch/single_include/catch2)
 include_directories(${CMAKE_BINARY_DIR}/fakeit/single_header/catch)
 
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
