@@ -3,16 +3,16 @@ A tiny message queue library for processing requests and broadcasting evens. Usi
 
 The library contains a very basic implementation of a message queue and serialization abstractions. Exceptions and RTTI are not used intentionally since they might not be supported by the compilers on IOT devices.
 
-[![Build Status](https://api.travis-ci.org/anisimovsergey/gluino.svg?branch=master)](https://travis-ci.org/anisimovsergey/gluino?branch=master)
-[![Build status](https://ci.appveyor.com/api/projects/status/oiyjkkvbiyfy2u0h?svg=true)](https://ci.appveyor.com/project/anisimovsergey/gluino)
-[![Coverage Status](https://coveralls.io/repos/github/anisimovsergey/gluino/badge.svg?branch=master)](https://coveralls.io/github/anisimovsergey/gluino?branch=master)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/74ecfbf675f34a3192ee0894ba75043e)](https://www.codacy.com/app/anisimovsergey/gluino?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=anisimovsergey/gluino&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.com/moikot/gluino.svg?branch=master)](https://travis-ci.com/moikot/gluino)
+[![Build status](https://ci.appveyor.com/api/projects/status/oiyjkkvbiyfy2u0h?svg=true)](https://ci.appveyor.com/project/moikot/gluino)
+[![Coverage Status](https://coveralls.io/repos/github/moikot/gluino/badge.svg?branch=master)](https://coveralls.io/github/moikot/gluino?branch=master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/74ecfbf675f34a3192ee0894ba75043e)](https://www.codacy.com/app/moikot/gluino?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=moikot/gluino&amp;utm_campaign=Badge_Grade)
 
 ## How to build and test
 
 Clone the library
 ```shell
-$ git clone https://github.com/anisimovsergey/gluino.git
+$ git clone https://github.com/moikot/gluino.git
 $ cd gluino
 ```
 
@@ -69,13 +69,13 @@ There are two major scenarios you can implement using the message queue.
 
 A resource client is sending a read request to the message queue. The resource controller, which is responsible for managing the specified resource, receives the request and responds with a response message. Normally the response contains a resource representation as a payload but in a case of an error the payload contains a status with the error description. The read operation supposed to be idempotent and should not modify the resource.
 
-![reading resource sequence diagram](https://raw.githubusercontent.com/anisimovsergey/gluino/master/doc/request_read_sequence_diagram.png)
+![reading resource sequence diagram](https://raw.githubusercontent.com/moikot/gluino/master/doc/request_read_sequence_diagram.png)
 
 2. Modifying a resource.
 
 Resource modification can be initiated by a resource client. A resource modification request gets added to the message queue and received by a corresponding resource controller. The resource controller modifies the resource and responds to the client with a response containing an operation result. When the resource is successfully modified the event describing the modified resource is also broadcasted to all the clients.
 
-![modifying resource sequence diagram](https://raw.githubusercontent.com/anisimovsergey/gluino/master/doc/request_mod_sequence_diagram.png )
+![modifying resource sequence diagram](https://raw.githubusercontent.com/moikot/gluino/master/doc/request_mod_sequence_diagram.png )
 
 The diagram displays an event added to the message queue before a response but because the events have lower priority it gets propagated to the client(s) after the response.
 
