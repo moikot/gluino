@@ -25,22 +25,22 @@ namespace Messaging {
       return queue.addEvent(*event);
     }
 
-    virtual std::unique_ptr<QueueGenericClient> createClient(std::string) {
+    virtual std::unique_ptr<QueueGenericClient> createClient(std::string) override {
       return nullptr;
     }
 
-    virtual std::unique_ptr<QueueResourceClient> createClient(std::string, std::string) {
+    virtual std::unique_ptr<QueueResourceClient> createClient(std::string, std::string) override {
       return nullptr;
     }
 
-    virtual void removeClient(const QueueClient&) {
+    virtual void removeClient(const QueueClient&) override {
     }
 
-    virtual std::unique_ptr<QueueResourceController> createController(std::string) {
+    virtual std::unique_ptr<QueueResourceController> createController(std::string) override {
       return nullptr;
     }
 
-    virtual void removeController(const QueueResourceController&) {
+    virtual void removeController(const QueueResourceController&) override {
     }
 
   private:

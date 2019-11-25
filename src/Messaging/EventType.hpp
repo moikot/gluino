@@ -40,11 +40,11 @@ class EventType {
     /**
   	  Equality operators.
   	*/
-    bool operator==(const EventType& other) {
+    bool operator==(const EventType& other) const {
       return eventType == other.eventType;
     }
 
-    bool operator!=(const EventType& other) {
+    bool operator!=(const EventType& other) const {
       return !(*this == other);
     }
 

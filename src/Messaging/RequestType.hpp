@@ -45,11 +45,11 @@ class RequestType {
     /**
   	  Equality operators.
   	*/
-    bool operator==(const RequestType& other) {
+    bool operator==(const RequestType& other) const {
       return requestType == other.requestType;
     }
 
-    bool operator!=(const RequestType& other) {
+    bool operator!=(const RequestType& other) const {
       return !(*this == other);
     }
 
