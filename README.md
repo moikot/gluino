@@ -4,9 +4,9 @@ A tiny message queue library for processing requests and broadcasting evens. Usi
 The library contains a very basic implementation of a message queue and serialization abstractions. Exceptions and RTTI are not used intentionally since they might not be supported by the compilers on IOT devices.
 
 [![Build Status](https://travis-ci.com/moikot/gluino.svg?branch=master)](https://travis-ci.com/moikot/gluino)
-[![Build status](https://ci.appveyor.com/api/projects/status/oiyjkkvbiyfy2u0h?svg=true)](https://ci.appveyor.com/project/moikot/gluino)
+[![Build status](https://ci.appveyor.com/api/projects/status/jheno0ga9blt5x92?svg=true)](https://ci.appveyor.com/project/moikot/gluino)
 [![Coverage Status](https://coveralls.io/repos/github/moikot/gluino/badge.svg?branch=master)](https://coveralls.io/github/moikot/gluino?branch=master)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/74ecfbf675f34a3192ee0894ba75043e)](https://www.codacy.com/app/moikot/gluino?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=moikot/gluino&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/37483e23a2d94a9bbc5236c664abb2d7)](https://www.codacy.com/manual/moikot/gluino?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=moikot/gluino&amp;utm_campaign=Badge_Grade)
 
 ## How to build and test
 
